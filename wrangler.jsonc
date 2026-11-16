@@ -14,5 +14,7 @@
     "binding": "ASSETS",
     "not_found_handling": "404-page",
     "run_worker_first": ["/api", "/api/*"]
-  }
+  },
+  // Required by `wrangler preview`, which Workers Builds runs on non-production (PR) branches.
+  "previews": {}
 }

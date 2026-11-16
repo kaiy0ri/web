@@ -37,7 +37,7 @@ If you break these terms or the law while using the site, and that leads to a cl
 
 ## Fair use of the site and API
 
-- Don't attack the site, overload it, or try to get around its security controls. Security researchers: please follow the [disclosure policy](/security), which includes safe harbour for good-faith testing.
+- Don't attack the site, overload it, or try to get around its security controls. Security researchers: please follow the [disclosure policy](/security/), which includes safe harbour for good-faith testing.
 - The [REST API](/docs/rest-api/) is public and read-only. Use it reasonably. I may rate-limit or block abusive traffic.
 - Content is protected by copyright. What you may and may not reuse is on the [Intellectual property](/legal/intellectual-property/) page.
 

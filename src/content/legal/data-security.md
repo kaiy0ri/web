@@ -19,7 +19,7 @@ The site is static. There's no database, no login and no server of mine to break
 - **Email.** Hosted on Proton Mail, with SPF, DKIM and DMARC on the domain to make spoofing harder. A [PGP key](/pgp.asc) is published for sensitive messages.
 - **Accounts behind the site** are protected with multi-factor authentication.
 
-More detail: [Docs](/docs/), [OWASP Top 10 mapping](/docs/owasp-top-10/), and the [stack](/stack/). Found a problem? See the [disclosure policy](/security).
+More detail: [Docs](/docs/), [OWASP Top 10 mapping](/docs/owasp-top-10/), and the [stack](/stack/). Found a problem? See the [disclosure policy](/security/).
 
 ## Honest limits
 
