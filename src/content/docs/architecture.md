@@ -78,7 +78,7 @@ The site is run from Alberta, Canada, so it's built to Canadian law first. Nothi
 | Email marketing | CASL | Opt-in consent, sender identity, working unsubscribe honoured within 10 business days | [Marketing consent](/legal/marketing-consent/) |
 | Selling online | Provincial consumer protection laws, Competition Act | Clear price and terms before payment, no hidden fees, no misleading claims | [Payments & subscriptions](/legal/payments-subscriptions/) |
 | Liability | Contract law | Limits are respected when they're clear, agreed and fair. Consumer rights can't be signed away. | [Terms & conditions](/legal/terms/) |
-| Security work | Criminal Code s. 342.1 | Never touch a system without the owner's written permission | [Terms & conditions](/legal/terms/), [Disclosure policy](/security) |
+| Security work | Criminal Code s. 342.1 | Never touch a system without the owner's written permission | [Terms & conditions](/legal/terms/), [Disclosure policy](/security/) |
 | Copyright | Copyright Act | Own or license everything published; respond to infringement notices | [Intellectual property](/legal/intellectual-property/), [Open-source licences](/legal/open-source-licenses/) |
 
 The same approach is packaged as a reusable skill for other apps: [vibecode-security-skill](https://github.com/camtoan-do/vibecode-security-skill). Canada is covered; the United States and European Union are underway.

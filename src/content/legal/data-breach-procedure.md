@@ -27,7 +27,7 @@ I follow their notices, work out whether anyone I deal with is affected, and run
 
 ## Report something
 
-If you think information connected to this site has been exposed, email [official@camtoan.me](mailto:official@camtoan.me). For vulnerabilities, see the [disclosure policy](/security).
+If you think information connected to this site has been exposed, email [official@camtoan.me](mailto:official@camtoan.me). For vulnerabilities, see the [disclosure policy](/security/).
 
 ## If this changes
 
