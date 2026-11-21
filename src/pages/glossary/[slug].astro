@@ -112,7 +112,7 @@ const next = entries[(i + 1) % entries.length];
 
     <nav class="cp-nav band" aria-label="Browse the database">
       <a class="cp-prev" href={`/glossary/${prev.slug}/`}><span class="cp-dir">← Previous</span><span class="cp-nav-name">{prev.name}</span></a>
-      <a class="pill" href="/search/">All features</a>
+      <a class="btn btn-quiet" href="/search/">All features</a>
       <a class="cp-next" href={`/glossary/${next.slug}/`}><span class="cp-dir">Next →</span><span class="cp-nav-name">{next.name}</span></a>
     </nav>
 
@@ -121,8 +121,8 @@ const next = entries[(i + 1) % entries.length];
         <h2>Not sure where to start?</h2>
         <p class="body-lg">Tell me what you're building and I'll tell you which few of these actually matter for you.</p>
         <div class="ctas">
-          <a class="pill" href={`mailto:${site.email}`}>Get in touch</a>
-          <a class="more" href="https://camtoan.me/services/">See what I offer</a>
+          <a class="btn btn-primary" href={`mailto:${site.email}`}>Get in touch</a>
+          <a class="btn btn-quiet" href="https://camtoan.me/services/">See what I offer</a>
         </div>
       </div>
     </section>
