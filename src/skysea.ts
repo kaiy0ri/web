@@ -107,7 +107,7 @@ export function startSkySea(canvas: HTMLCanvasElement) {
   let fc = new Uint8Array(0), fb = new Float32Array(0), fd = new Float32Array(0); // front clouds
   let bd = new Float32Array(0); // back cloud density
   const sx = new Float32Array(310), sy = new Float32Array(310), nx = new Float32Array(310), ny = new Float32Array(310); // the bent spine
-  const boxes = new Float32Array(8); // cell boxes of .landing-card and .tree
+  const boxes = new Float32Array(8); // cell boxes of .landing-copy and .mock
   const whalePal: string[] = [], cloudPal: string[] = [];
   let ghost = ""; // light theme only: the faint dot colour used under the card
   const glow = document.createElement("canvas"); // whale-only layer, blurred to make the glow
@@ -142,7 +142,7 @@ export function startSkySea(canvas: HTMLCanvasElement) {
   function readBoxes() {
     const r = canvas.getBoundingClientRect();
     boxes.fill(0);
-    [".landing-card", ".tree"].forEach((sel, i) => {
+    [".landing-copy", ".mock"].forEach((sel, i) => {
       const el = document.querySelector(sel);
       if (!el) return;
       const b = el.getBoundingClientRect();
@@ -267,7 +267,7 @@ export function startSkySea(canvas: HTMLCanvasElement) {
 
   function whale(headX: number, t: number) {
     const asp = ch / cw, L = whaleLen, N = Math.round(L * 2), lambda = 1.1 * cols;
-    const amp = 0.17 * rows * asp, cy = 0.5 * rows * asp;
+    const amp = 0.06 * rows * asp, cy = 0.8 * rows * asp; // swims along the lower band, under the hero content
     // Walk back from the head along the sine path in half-cell steps, so the body follows the curve.
     let x = headX;
     for (let i = 0; i <= N; i++) {

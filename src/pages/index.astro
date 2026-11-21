@@ -1,7 +1,6 @@
 ---
 import Base from "../layouts/Base.astro";
 import { site } from "../site";
-import { entries } from "../db";
 import { birds, stars } from "../sky";
 
 const earlyAccess = `mailto:${site.email}?subject=Kaiyori%20early%20access`;
@@ -15,16 +14,23 @@ const steps = [
 const pillars = [
   { name: "Fast", text: "Less time between the idea and something people can try." },
   { name: "Efficient", text: "The idea, the spec and the work live in one place, so nothing gets explained twice." },
-  { name: "Secure", text: "Security is part of the plan from day one. Start with the free security database.", href: "/search/" },
+  { name: "Secure", text: "Security is part of the plan from day one.", href: "/search/", link: "Browse the free security database" },
   { name: "Cheap", text: "Built to be affordable for solo makers and small teams. Pricing is not set yet." },
   { name: "Smooth", text: "Plain English, few clicks and no setup maze." },
 ];
-const tree = [
-  { href: "/#how", name: "how/", note: "the path from idea to MVP" },
-  { href: "/search/", name: "search/", note: `${entries.length} security features, searchable in plain words` },
-  { href: "/products/", name: "products/", note: "checklist, rules pack and launch review" },
-  { href: "/docs/", name: "docs/", note: "how this site is built and secured" },
-  { href: "/changelog/", name: "changelog/", note: "every change, in plain English" },
+const stages = [
+  { name: "Idea", state: "done" },
+  { name: "Spec", state: "done" },
+  { name: "Build", state: "now" },
+  { name: "Secure", state: "" },
+  { name: "Ship", state: "" },
+];
+const tasks = [
+  { name: "Draft the reminder email", state: "done" },
+  { name: "List unpaid invoices each morning", state: "done" },
+  { name: "Send one reminder after day 3", state: "now" },
+  { name: "Check what the form accepts", state: "" },
+  { name: "Write the launch note", state: "" },
 ];
 ---
 
@@ -37,48 +43,84 @@ const tree = [
     </div>
 
     <div class="landing-inner">
-      <div class="landing-card glass stagger">
-        <p class="eyebrow">{site.brand.name} · early access</p>
+      <div class="landing-copy stagger">
         <h1>{site.headline.split("\n").map((line) => <span>{line}</span>)}</h1>
-        <p class="lead">{site.brand.description}</p>
+        <p class="lead">Kaiyori takes a product idea to a working MVP. Fast, cheap, secure and smooth.</p>
         <div class="ctas">
-          <a class="pill glass glass-tint" href={earlyAccess}>Get early access <span aria-hidden="true">→</span></a>
-          <a class="pill glass" href="#how">How it works</a>
+          <a class="btn btn-primary" href={earlyAccess}>Get early access <span aria-hidden="true">→</span></a>
+          <a class="btn btn-quiet" href="#how">How it works</a>
         </div>
       </div>
 
-      <nav class="tree glass reveal" aria-label="What's on this site">
-        <p class="tree-root">kamllistos.com/</p>
-        <ul>
-          {tree.map((t) => (
-            <li><a href={t.href}>{t.name}</a> <span>{t.note}</span></li>
-          ))}
-        </ul>
-      </nav>
+      <figure class="mock reveal">
+        <div class="mock-ui" aria-hidden="true">
+          <div class="mock-bar">
+            <span class="mock-name">Late-invoice reminders</span>
+            <span class="mock-badge">Building</span>
+          </div>
+          <ol class="mock-stages">
+            {stages.map((st) => <li class={st.state}>{st.name}</li>)}
+          </ol>
+          <div class="mock-body">
+            <div class="mock-spec">
+              <p class="mock-cap">Spec</p>
+              <p class="mock-h">Problem</p>
+              <p>Freelancers forget to chase unpaid invoices.</p>
+              <p class="mock-h">MVP</p>
+              <p>A daily check, and one friendly reminder email per late invoice.</p>
+              <p class="mock-h">Not in v1</p>
+              <p>Payments and multiple currencies.</p>
+            </div>
+            <div class="mock-tasks">
+              <p class="mock-cap">Tasks</p>
+              <ul>
+                {tasks.map((t) => <li class={t.state}><span class="mock-check"></span>{t.name}</li>)}
+              </ul>
+            </div>
+          </div>
+        </div>
+        <figcaption>Illustrative example of one project. Not real data.</figcaption>
+      </figure>
     </div>
   </section>
 
   <section class="sec" id="how">
     <div class="sec-inner">
-      <h2>From idea to MVP in five moves</h2>
+      <h2>From a rough idea to something people can try</h2>
       <p class="sec-lead">{site.brand.name} is in development. This is the path it is being built around.</p>
-      <ol class="how">
+      <ol class="path">
         {steps.map((st) => (
-          <li class="how-step reveal"><h3>{st.name}</h3><p>{st.text}</p></li>
+          <li class="path-step reveal"><h3>{st.name}</h3><p>{st.text}</p></li>
         ))}
       </ol>
     </div>
   </section>
 
   <section class="sec">
-    <div class="sec-inner">
-      <h2>Built around five things</h2>
-      <ul class="pillars reveal">
+    <div class="sec-inner why">
+      <div class="why-head">
+        <h2>Made for people who ship</h2>
+        <p class="sec-lead">Small teams and solo makers do not need another heavy tool. They need the next step to be obvious.</p>
+      </div>
+      <dl class="why-list">
         {pillars.map((p) => (
-          <li><h3>{p.name}</h3><p>{p.text}{p.href && <> <a href={p.href}>Open it</a>.</>}</p></li>
+          <div class="why-item reveal">
+            <dt>{p.name}</dt>
+            <dd>{p.text}{p.href && <> <a href={p.href}>{p.link}</a>.</>}</dd>
+          </div>
         ))}
-      </ul>
-      <p class="sec-note">{site.brand.name} ({site.brand.pronounce}). {site.brand.meaning}</p>
+      </dl>
+    </div>
+  </section>
+
+  <section class="sec">
+    <div class="sec-inner closing">
+      <div class="closing-copy">
+        <h2>Kaiyori is still being built</h2>
+        <p class="sec-lead">Get in touch to ask for early access.</p>
+        <p class="sec-note">{site.brand.name} ({site.brand.pronounce}). {site.brand.meaning}</p>
+      </div>
+      <a class="btn btn-primary" href={earlyAccess}>Get early access <span aria-hidden="true">→</span></a>
     </div>
   </section>
 </Base>
