@@ -1,6 +1,6 @@
 {
   "info": {
-    "name": "Kamllistos API",
+    "name": "Kaiyori API",
     "description": "Public read-only API behind kamllistos.com. Docs: https://kamllistos.com/docs/rest-api/",
     "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
   },
