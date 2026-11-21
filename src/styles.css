@@ -943,3 +943,14 @@ footer .f-cols h2 { margin: 0 0 10px; font: 400 11px/1 var(--mono); letter-spaci
 .nav { font-family: var(--sans); }
 .nav .theme { width: max-content; flex: none; }
 .nav .theme button { white-space: nowrap; flex: none; }
+
+/* ---- Inner pages: line them up with the home page. ---- */
+h1, h2, h3 { text-wrap: balance; }
+/* Hero padding sits inside its max-width, so widen it by the gutter to share a left edge with the cards below. */
+.hero { max-width: calc(1080px + 2 * var(--gutter)); }
+.hero.db-hero { max-width: 1240px; }
+.hero:not(.db-hero) + .band { padding-top: 0; }
+.band > h2.center, .band > p.center { max-width: 1080px; margin-inline: auto; text-align: left; }
+.band > p.center { margin-top: 2rem; }
+.changelog { max-width: 1080px; grid-template-columns: minmax(0, 820px); }
+.cl-day li { font: 15px/1.55 var(--sans); }
