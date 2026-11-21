@@ -10,8 +10,8 @@ export const site = {
   brand: {
     name: "Kaiyori",
     pronounce: "kai-YO-ri",
-    description: "Kaiyori turns a product idea into a working MVP — fast, cheap, secure and smooth. Product management for people who ship.",
-    meaning: "From the Japanese より (yori), “more than” — always a step better.",
+    description: "Kaiyori turns a product idea into a working MVP: fast, cheap, secure and smooth. Product management for people who ship.",
+    meaning: "From the Japanese より (yori), “more than”. Always a step better.",
     product: "feature-lookup",
   },
 
