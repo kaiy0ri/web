@@ -804,3 +804,99 @@ a.db-card:hover, a.tile:hover, a.product-card:hover, a.db-area:hover, .cp-prev:h
   footer { border-radius: var(--r-md); }
 }
 .entry-note { margin: 0; padding: 10px 18px 14px; max-width: none; border-top: 1px solid var(--pane-edge); }
+
+/* ---- Kaiyori brand layer: logo mark, header with dropdowns, big footer, landing sections. Last on purpose. ---- */
+.logo { display: block; flex: none; border-radius: 8px; }
+.logo-bg { fill: var(--accent); }
+.logo-whale { fill: var(--bg); }
+.logo-spout { stroke: var(--bg); stroke-width: 1.4; stroke-linecap: round; fill: none; }
+.logo-eye { fill: var(--accent); }
+
+/* Header: brand left, menu centre, theme + call to action right. */
+.nav.glass .nav-inner { display: grid; grid-template-columns: auto 1fr auto; align-items: center; }
+.nav .nav-brand { display: inline-flex; align-items: center; gap: 9px; font: 800 16px var(--sans); letter-spacing: -.02em; color: var(--ink); }
+.nav-brand::before { content: none; }
+.nav-menu { display: flex; align-items: center; justify-content: center; gap: 2px; }
+.nav-dd { position: relative; }
+.nav-dd summary, .nav .nav-plain {
+  display: inline-flex; align-items: center; padding: 8px 12px; border-radius: 999px; cursor: pointer; list-style: none;
+  font-size: clamp(13px, .55rem + .5vw, 14px); color: var(--ink); text-decoration: none; white-space: nowrap;
+}
+.nav-dd summary::-webkit-details-marker { display: none; }
+.nav-dd summary::after {
+  content: ""; width: 6px; height: 6px; margin: -3px 0 0 8px; border: solid currentColor; border-width: 0 1.5px 1.5px 0; transform: rotate(45deg); transition: transform .2s;
+}
+.nav-dd[open] summary::after { transform: rotate(225deg); margin-top: 3px; }
+.nav-dd summary:hover, .nav-dd[open] summary, .nav .nav-plain:hover { color: var(--accent); }
+.nav-dd summary:focus-visible, .nav a:focus-visible, .site-footer a:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+.nav-panel {
+  position: absolute; z-index: 20; top: calc(100% + 12px); left: 0; min-width: 220px; padding: 8px; display: grid; gap: 2px; border-radius: 22px;
+  background: color-mix(in srgb, var(--bg) 96%, transparent); box-shadow: 0 0 0 1px var(--line), 0 22px 44px -18px var(--glass-shade);
+}
+.nav .nav-panel a { padding: 10px 14px; border-radius: 14px; font-size: 14px; }
+.nav .nav-panel a:hover { background: color-mix(in srgb, var(--accent) 14%, transparent); }
+.nav .nav-end { gap: 10px; justify-self: end; }
+.nav.glass .theme button { padding: 4px 9px; font-size: 11px; }
+.nav .nav-cta { padding: 9px 18px; border-radius: 999px; background: var(--accent); color: #140d0a; font-weight: 700; font-size: 14px; }
+.nav .nav-cta:hover { color: #140d0a; background: color-mix(in srgb, var(--accent) 82%, white); }
+@media (max-width: 860px) {
+  .nav.glass .nav-inner { grid-template-columns: 1fr auto; row-gap: 4px; padding: 8px 10px 8px 14px; }
+  .nav-end { display: contents; }
+  .nav .nav-brand { grid-area: 1 / 1; }
+  .nav .theme { grid-area: 1 / 2; order: 0; margin-left: 0; }
+  .nav-menu { grid-area: 2 / 1; justify-content: flex-start; margin-left: -8px; }
+  .nav .nav-cta { grid-area: 2 / 2; }
+  .nav-dd { position: static; }
+  .nav-dd summary, .nav .nav-plain { padding: 8px 8px; }
+  .nav-panel { left: 8px; right: 8px; top: calc(100% + 8px); }
+}
+@media (max-width: 480px) {
+  .nav-menu { grid-area: 2 / 1 / 3 / 3; justify-content: space-between; margin-right: -8px; }
+  .nav .nav-cta { grid-area: 3 / 1 / 4 / 3; justify-content: center; text-align: center; margin-bottom: 4px; }
+  html { scroll-padding-top: 150px; }
+}
+
+/* Footer: logo and socials, four link columns, then the small print. */
+footer.site-footer { display: block; text-align: left; padding: clamp(24px, 4vw, 44px) var(--gutter) 20px; font-family: var(--sans); }
+.f-top, .f-bottom { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 14px 24px; }
+.f-top { padding-bottom: 22px; border-bottom: 1px solid var(--rule); }
+.f-brand { display: inline-flex; align-items: center; gap: 10px; color: var(--ink); font-weight: 800; font-size: 19px; letter-spacing: -.02em; text-decoration: none; }
+footer .f-brand:hover { color: var(--ink); }
+.f-social { display: flex; gap: 8px; }
+.f-social a { display: grid; place-items: center; min-width: 38px; height: 38px; padding: 0 10px; border-radius: 12px; box-shadow: inset 0 0 0 1px var(--rule); }
+.f-social a:hover { box-shadow: inset 0 0 0 1px var(--accent); }
+.f-cols { display: grid; grid-template-columns: repeat(4, 1fr); gap: 28px 24px; padding: clamp(24px, 3.5vw, 36px) 0; }
+.f-cols a { display: block; padding: 5px 0; font-size: 14px; text-decoration: none; }
+footer .f-cols h2 { margin: 0 0 10px; font: 400 11px/1 var(--mono); letter-spacing: .12em; text-transform: uppercase; color: var(--accent); }
+.f-bottom { padding-top: 18px; border-top: 1px solid var(--rule); font: 12px var(--mono); }
+.f-whale { margin: 0; font: 10px/1.15 var(--mono); color: var(--accent); }
+@media (max-width: 860px) { .f-cols { grid-template-columns: repeat(2, 1fr); } }
+@media (max-width: 480px) { .f-cols { grid-template-columns: 1fr; } }
+
+/* Landing sections under the sky card: the path from idea to MVP, then the five things Kaiyori is built around. */
+.sec { padding: clamp(40px, 7vw, 88px) var(--gutter) 0; }
+.sec-inner { max-width: 1080px; margin: 0 auto; }
+.sec h2 { margin-bottom: .6rem; }
+.sec-lead { margin: 0 0 28px; max-width: 60ch; color: var(--muted); }
+.how { list-style: none; margin: 0; padding: 0; display: grid; gap: var(--gap); grid-template-columns: repeat(5, 1fr); }
+.how-step { padding: clamp(18px, 2vw, 24px); }
+.how-step::before { content: ""; display: block; width: 22px; height: 3px; margin-bottom: 14px; background: var(--accent); }
+.how-step h3 { font-size: 18px; margin-bottom: .4rem; }
+.how-step p { margin: 0; color: var(--muted); font-size: 15px; line-height: 1.45; }
+.pillars { list-style: none; margin: 28px 0 0; padding: 22px 0; display: grid; grid-template-columns: repeat(5, 1fr); }
+.pillars li { padding: 4px clamp(14px, 2vw, 24px); }
+.pillars li + li { border-left: 1px solid var(--rule); }
+.pillars h3 { font-size: 18px; margin-bottom: .35rem; }
+.pillars p { margin: 0; color: var(--muted); font-size: 14px; line-height: 1.45; }
+.pillars a { color: var(--accent); }
+.sec-note { margin: 22px 0 0; font: 12px/1.6 var(--mono); color: var(--muted); }
+@media (max-width: 960px) {
+  .how { grid-template-columns: repeat(2, 1fr); }
+  .how-step:last-child { grid-column: 1 / -1; }
+  .pillars { grid-template-columns: 1fr; padding: 8px 0; }
+  .pillars li { padding: 14px clamp(16px, 3vw, 24px); }
+  .pillars li + li { border-left: 0; border-top: 1px solid var(--rule); }
+}
+@media (max-width: 520px) { .how { grid-template-columns: 1fr; } }
+.nav .theme { width: max-content; flex: none; }
+.nav .theme button { white-space: nowrap; flex: none; }

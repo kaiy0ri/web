@@ -1,7 +1,7 @@
 {
   "openapi": "3.1.0",
   "info": {
-    "title": "Kamllistos API",
+    "title": "Kaiyori API",
     "version": "1.0.0",
     "description": "Small, public, read-only REST API behind kamllistos.com. No authentication, no user data. GET only.",
     "contact": {

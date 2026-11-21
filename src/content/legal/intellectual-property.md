@@ -8,7 +8,7 @@ updated: 2026-11-09
 
 ## What's mine
 
-Unless stated otherwise, the text, design, security feature database, documentation and code on kamllistos.com are © Cam Toan Do. "Kamllistos" is the name the site and its products are published under.
+Unless stated otherwise, the text, design, security feature database, documentation and code on kamllistos.com are © Cam Toan Do. "Kaiyori" is the name the site and its products are published under.
 
 ## What you may do
 
@@ -21,7 +21,7 @@ Unless stated otherwise, the text, design, security feature database, documentat
 
 - Republishing the database, or large parts of the site, as your own.
 - Reselling or redistributing paid products.
-- Using the Kamllistos name or logo in a way that suggests I endorse or am part of your product.
+- Using the Kaiyori name or logo in a way that suggests I endorse or am part of your product.
 
 Ask at [official@camtoan.me](mailto:official@camtoan.me). I usually say yes to reasonable requests.
 

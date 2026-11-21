@@ -10,7 +10,7 @@ export async function GET() {
     "",
     `> ${site.brand.description}`,
     "",
-    `${site.brand.name} (${site.brand.pronounce}) is run by ${site.name}, a cybersecurity coordinator. Everything is written in plain English for people without a security team. Owner's personal site: https://camtoan.me`,
+    `${site.brand.name} (${site.brand.pronounce}) is a product-management SaaS in early access (not launched yet), built by ${site.name}. It turns an idea into an MVP. This site also hosts a free security feature database, written in plain English. Owner's personal site: https://camtoan.me`,
     "",
     "## Main pages",
     "",

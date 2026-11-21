@@ -2,17 +2,16 @@
 export const site = {
   name: "Cam Toan Do",
   role: "Microsoft 365 Security & Governance Specialist",
-  headline: "Security.\nMade simple.",
-  tagline: "Microsoft 365 security and governance for small businesses — I find and fix the gaps in the tools you already pay for, in plain English.",
+  headline: "Idea to MVP.\nEven better.",
+  tagline: "A SaaS for product management: turn an idea into a working MVP, fast, cheap, secure and smooth. Early access, in development.",
   email: "official@camtoan.me",
 
-  // Studio/brand the site and its products live under.
+  // The SaaS brand (early access, not launched). The site stays on kamllistos.com for now.
   brand: {
-    name: "Kamllistos",
-    pronounce: "kam-LEES-tos",
-    description: "Small, useful security tools for people without a security team. Start with the free, searchable security feature database.",
-    meaning:
-      "A play on my name, Cam, and the Greek Κάλλιστος (kállistos) — “most excellent.” It's the banner the tools and products here live under.",
+    name: "Kaiyori",
+    pronounce: "kai-YO-ri",
+    description: "Kaiyori turns a product idea into a working MVP — fast, cheap, secure and smooth. Product management for people who ship.",
+    meaning: "From the Japanese より (yori), “more than” — always a step better.",
     product: "feature-lookup",
   },
 

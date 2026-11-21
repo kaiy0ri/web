@@ -37,6 +37,16 @@
     el.title = `Last update: ${then.toLocaleString()}`;
   }
 
+  // --- Header dropdowns (<details>): only one open at a time; close on outside click, Escape or choosing a link ---
+  const dds = [...document.querySelectorAll(".nav-dd")];
+  dds.forEach((d) => d.addEventListener("toggle", () => { if (d.open) dds.forEach((o) => { if (o !== d) o.open = false; }); }));
+  document.addEventListener("click", (e) => dds.forEach((d) => { if (d.open && (!d.contains(e.target) || e.target.closest(".nav-panel a"))) d.open = false; }));
+  document.addEventListener("keydown", (e) => {
+    if (e.key !== "Escape") return;
+    const open = dds.find((d) => d.open);
+    if (open) { open.open = false; open.querySelector("summary").focus(); }
+  });
+
   // --- Copy buttons: <button data-copy="id-of-element"> copies that element's text ---
   document.addEventListener("click", async (e) => {
     const btn = e.target.closest("[data-copy]");

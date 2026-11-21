@@ -34,6 +34,7 @@ kamllistos.com is a **static site**. Every page is built ahead of time into plai
 | Part | What it does | Where it lives |
 | --- | --- | --- |
 | Pages | Astro turns text and data into plain HTML and CSS at build time | `src/pages/`, `src/layouts/` |
+| Header, footer and logo | One shared layout: dropdown menu (no script needed to open it), big link footer, whale logo mark | `src/layouts/Base.astro`, `src/components/Logo.astro` |
 | Site text | Names, headline and contact details | `src/site.ts` |
 | Security feature database | The data behind the search page and the glossary pages | `src/db.json` |
 | Docs and legal pages | Written in Markdown | `src/content/docs/`, `src/content/legal/` |

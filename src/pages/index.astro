@@ -4,7 +4,23 @@ import { site } from "../site";
 import { entries } from "../db";
 import { birds, stars } from "../sky";
 
+const earlyAccess = `mailto:${site.email}?subject=Kaiyori%20early%20access`;
+const steps = [
+  { name: "Shape the idea", text: "Turn a rough idea into a clear problem, a user and a goal." },
+  { name: "Spec the MVP", text: "Cut it down to the smallest version worth building, written in plain English." },
+  { name: "Build", text: "Break the spec into tasks and follow them from first commit to a working product." },
+  { name: "Secure", text: "Check the basics before launch, with the free security database on this site." },
+  { name: "Ship", text: "Release it, learn from real use and decide what comes next." },
+];
+const pillars = [
+  { name: "Fast", text: "Less time between the idea and something people can try." },
+  { name: "Efficient", text: "The idea, the spec and the work live in one place, so nothing gets explained twice." },
+  { name: "Secure", text: "Security is part of the plan from day one. Start with the free security database.", href: "/search/" },
+  { name: "Cheap", text: "Built to be affordable for solo makers and small teams. Pricing is not set yet." },
+  { name: "Smooth", text: "Plain English, few clicks and no setup maze." },
+];
 const tree = [
+  { href: "/#how", name: "how/", note: "the path from idea to MVP" },
   { href: "/search/", name: "search/", note: `${entries.length} security features, searchable in plain words` },
   { href: "/products/", name: "products/", note: "checklist, rules pack and launch review" },
   { href: "/docs/", name: "docs/", note: "how this site is built and secured" },
@@ -12,7 +28,7 @@ const tree = [
 ];
 ---
 
-<Base title={`${site.brand.name} — security, made simple`} description="Small, useful security tools for people without a security team. Start with the free, searchable security feature database.">
+<Base title={`${site.brand.name}: idea to MVP, even better`} description={site.brand.description}>
   <section class="landing">
     <div class="sky" aria-hidden="true">
       {stars.map((s) => <span class="star">{s}</span>)}
@@ -22,12 +38,12 @@ const tree = [
 
     <div class="landing-inner">
       <div class="landing-card glass stagger">
-        <p class="eyebrow">{site.brand.name} · {site.brand.pronounce}</p>
+        <p class="eyebrow">{site.brand.name} · early access</p>
         <h1>{site.headline.split("\n").map((line) => <span>{line}</span>)}</h1>
-        <p class="lead">Small, useful security tools for people without a security team.</p>
+        <p class="lead">{site.brand.description}</p>
         <div class="ctas">
-          <a class="pill glass glass-tint" href="/search/">Search {entries.length} security features</a>
-          <a class="pill glass" href="/products/">See products</a>
+          <a class="pill glass glass-tint" href={earlyAccess}>Get early access <span aria-hidden="true">→</span></a>
+          <a class="pill glass" href="#how">How it works</a>
         </div>
       </div>
 
@@ -39,6 +55,30 @@ const tree = [
           ))}
         </ul>
       </nav>
+    </div>
+  </section>
+
+  <section class="sec" id="how">
+    <div class="sec-inner">
+      <h2>From idea to MVP in five moves</h2>
+      <p class="sec-lead">{site.brand.name} is in development. This is the path it is being built around.</p>
+      <ol class="how">
+        {steps.map((st) => (
+          <li class="how-step reveal"><h3>{st.name}</h3><p>{st.text}</p></li>
+        ))}
+      </ol>
+    </div>
+  </section>
+
+  <section class="sec">
+    <div class="sec-inner">
+      <h2>Built around five things</h2>
+      <ul class="pillars reveal">
+        {pillars.map((p) => (
+          <li><h3>{p.name}</h3><p>{p.text}{p.href && <> <a href={p.href}>Open it</a>.</>}</p></li>
+        ))}
+      </ul>
+      <p class="sec-note">{site.brand.name} ({site.brand.pronounce}). {site.brand.meaning}</p>
     </div>
   </section>
 </Base>

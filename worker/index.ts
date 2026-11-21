@@ -1,4 +1,4 @@
-// Kamllistos public REST API — runs on Cloudflare Workers for /api/* only.
+// Kaiyori public REST API — runs on Cloudflare Workers for /api/* only.
 // Everything else on kamllistos.com is served as static files.
 // Read-only by design: GET/HEAD/OPTIONS only, no user data, no secrets, strict input validation.
 import { entries, categories, searchText } from "../src/db";
@@ -56,7 +56,7 @@ async function route(req: Request, env: Env): Promise<Response> {
   const path = url.pathname.replace(/\/+$/, "") || "/";
 
   if (path === "/api") {
-    return json({ name: "Kamllistos API", docs: `${SITE}/docs/rest-api/`, openapi: `${SITE}/openapi.json`, endpoints: ENDPOINTS });
+    return json({ name: "Kaiyori API", docs: `${SITE}/docs/rest-api/`, openapi: `${SITE}/openapi.json`, endpoints: ENDPOINTS });
   }
 
   if (path === "/api/health") {
