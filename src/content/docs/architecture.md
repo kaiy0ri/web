@@ -24,7 +24,7 @@ kamllistos.com is a **static site**. Every page is built ahead of time into plai
 
 ## What happens when the site changes
 
-1. **A change is committed** to the [repository](https://github.com/kamllistos/web). The commit message becomes an entry on the [changelog](/changelog/).
+1. **A change is committed** to the [repository](https://github.com/kaiy0ri/web). The commit message becomes an entry on the [changelog](/changelog/).
 2. **GitHub Actions builds the site** and runs the build checks: no inline code that the security policy would block, no broken links, a valid `security.txt`, all legal pages present. [CodeQL](/docs/codeql/) scans the code.
 3. **Cloudflare builds and deploys** what's on `main` to its worldwide network.
 4. **Live checks run** against the real site: it's up, HTTPS and security headers are right, key pages load, the certificate is valid, email records are intact. They run again every hour.

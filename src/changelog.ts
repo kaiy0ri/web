@@ -11,7 +11,7 @@ export interface Change {
   url: string;
 }
 
-const REPO = "kamllistos/web";
+const REPO = "kaiy0ri/web";
 const commitUrl = (sha: string) => `https://github.com/${REPO}/commit/${sha}`;
 // Only the first line is public; drop merge commits and tooling noise.
 const keep = (msg: string) => msg && !/^Merge (branch|pull request)/.test(msg);

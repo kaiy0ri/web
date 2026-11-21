@@ -27,7 +27,7 @@ Ask at [official@camtoan.me](mailto:official@camtoan.me). I usually say yes to r
 
 ## The source code
 
-The site's code is public on [GitHub](https://github.com/kamllistos/web) so anyone can verify how it's built. Public is not the same as open source: no open-source licence has been applied to this repository, so the code stays all rights reserved. See [Open-source licences](/legal/open-source-licenses/).
+The site's code is public on [GitHub](https://github.com/kaiy0ri/web) so anyone can verify how it's built. Public is not the same as open source: no open-source licence has been applied to this repository, so the code stays all rights reserved. See [Open-source licences](/legal/open-source-licenses/).
 
 ## Paid products
 

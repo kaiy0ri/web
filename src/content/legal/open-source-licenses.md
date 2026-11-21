@@ -17,7 +17,7 @@ This site exists because of other people's open-source work. The main pieces:
 | [Upptime](https://github.com/upptime/upptime) | The status page | MIT |
 | [Newman](https://github.com/postmanlabs/newman) | Running the hourly API tests | Apache-2.0 |
 
-Astro brings in many smaller packages. The complete, exact list is in the repository's [`package-lock.json`](https://github.com/kamllistos/web/blob/main/package-lock.json), and each package carries its own licence file. These licences ask that their copyright notices be kept, and they are.
+Astro brings in many smaller packages. The complete, exact list is in the repository's [`package-lock.json`](https://github.com/kaiy0ri/web/blob/main/package-lock.json), and each package carries its own licence file. These licences ask that their copyright notices be kept, and they are.
 
 No fonts or images are loaded from third parties. The site uses fonts already on your device.
 
