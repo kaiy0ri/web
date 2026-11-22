@@ -3,15 +3,11 @@ import "../styles.css";
 import { site } from "../site";
 import { getChanges } from "../changelog";
 import Logo from "../components/Logo.astro";
+import { whaleArt } from "../skysea";
 
 const latest = (await getChanges())[0];
 const earlyAccess = `mailto:${site.email}?subject=Kaiyori%20early%20access`;
-const whale = [
-  "   .  '  .",
-  " .-'\"\"\"-.__",
-  "( o      __)>",
-  " '-.___.-'",
-].join("\n");
+const whale = whaleArt(56, 1); // the sky whale from src/skysea.ts, drawn as text at build time, a little taller
 
 interface Props {
   title?: string;
@@ -138,7 +134,7 @@ const graph = JSON.stringify(ld ? [org, ld] : org).replace(/</g, "\\u003c");
         </div>
       </div>
       <div class="f-bottom">
-        <pre class="f-whale" aria-hidden="true">{whale}</pre>
+        <pre class="f-whale" aria-hidden="true" set:html={whale} />
         <span>© {new Date().getFullYear()} {site.brand.name} · built by {site.name}</span>
         {latest && <a class="updated" href="/changelog/" data-updated={latest.date}>Last update: {new Date(latest.date).toLocaleDateString("en-US", { dateStyle: "medium", timeZone: "America/Edmonton" })}</a>}
       </div>

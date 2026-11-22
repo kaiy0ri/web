@@ -84,6 +84,53 @@ function body(u: number, y: number) {
   return true;
 }
 
+// The same whale as text, for the footer: rendered once at build time (src/layouts/Base.astro), so no script runs.
+// len = length in characters; asp = how many character widths one line counts for. The real ratio of a mono font is
+// about 1.9; a smaller value draws the whale taller, which reads better at footer size.
+// Returns HTML: runs of dim and mid-bright characters are wrapped in <i class="w1|w2"> so the body keeps its shading.
+export function whaleArt(len: number, asp = 1.9) {
+  const H = len * 0.1, cols = len + 2, rows = Math.ceil((3 * H) / asp) + 6;
+  const ch = Array.from({ length: rows }, () => Array<string>(cols).fill(" "));
+  const lv = Array.from({ length: rows }, () => new Float32Array(cols)); // brightness 0..1
+  const key = Array.from({ length: rows }, () => new Float32Array(cols));
+  const top = 1.25 * H + 4 * asp; // room above the back for the spout
+  const arc = (u: number) => -0.05 * len * Math.sin(Math.PI * u); // a gentle swimming curve
+  minRow = Math.max(1 / 6, asp / H); minDot = Math.max(0.014, 0.5 / len);
+  const put = (X: number, Y: number, c: string, b: number, k: number) => {
+    const x = Math.round(X), y = Math.round((Y + top) / asp);
+    if (x < 0 || y < 0 || x >= cols || y >= rows || (ch[y][x] !== " " && k <= key[y][x])) return;
+    ch[y][x] = c; lv[y][x] = b; key[y][x] = k;
+  };
+  const d = 0.25 / H;
+  for (let u = 0; u <= 1; u += 0.25 / len) { // head at the right, like the sky whale swimming right
+    for (let y = u > 0.84 ? -1.4 : -dorsal(u); y <= (u > 0.84 ? 1.4 : ventral(u)); y += d) {
+      if (body(u, y)) put((1 - u) * len + 0.5, arc(u) + y * H, String.fromCharCode(sc), sb, sk + sb);
+    }
+  }
+  for (let al = 0; al <= 2.4; al += d) { // pectoral flipper, back and down from under the throat
+    const w = 0.4 * (1 - al / 2.4) + 0.07;
+    for (let ac = -w; ac <= w; ac += d) {
+      const u = 0.24 + (al * 0.73 - ac * 0.68) / 10, y = 0.95 + al * 0.68 + ac * 0.73;
+      put((1 - u) * len + 0.5, arc(u) + y * H, ac < 0 ? "S" : "X", 0.85, 0.6);
+    }
+  }
+  const bx = 0.86 * len + 0.5, by = arc(0.14) - 0.7 * H; // spout over the blowhole
+  ([[-2, -3, ".", 0.4], [0, -3.2, "'", 0.5], [2, -3, ".", 0.4], [-1, -2, "'", 0.7], [1, -2, "'", 0.7], [0, -1, ":", 0.9]] as const)
+    .forEach(([dx, dy, c, b]) => put(bx + dx, by + dy * asp, c, b, 9));
+  const rowsOut = ch.map((r, y) => ({ r, y })).filter(({ r }) => r.some((c) => c !== " "));
+  const left = Math.min(...rowsOut.map(({ r }) => r.findIndex((c) => c !== " ")));
+  return rowsOut.map(({ r, y }) => {
+    let out = "", open = 0;
+    const end = r.length - [...r].reverse().findIndex((c) => c !== " ");
+    for (let x = left; x < end; x++) {
+      const b = lv[y][x], tier = r[x] === " " ? open : b < 0.45 ? 1 : b < 0.72 ? 2 : 3;
+      if (tier !== open) { if (open && open < 3) out += "</i>"; if (tier < 3) out += `<i class="w${tier}">`; open = tier; }
+      out += r[x];
+    }
+    return out + (open && open < 3 ? "</i>" : "");
+  }).join("\n");
+}
+
 export function startSkySea(canvas: HTMLCanvasElement) {
   const ctx = canvas.getContext("2d");
   if (!ctx) { canvas.remove(); return; }
