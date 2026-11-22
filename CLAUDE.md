@@ -24,7 +24,7 @@ Owner has no coding background: explain plainly, keep things simple, be honest.
 - Changelog: generated from Git history (`src/changelog.ts`) → `/changelog`, `/changelog.json`, footer "days since update" (computed in `public/site.js`)
 - Public docs: `src/content/docs/*.md` → `/docs/` (start with `architecture.md` — keep it in step when the structure changes); stack list `src/stack.ts` → `/stack/` (statuses must stay honest)
 - Legal & privacy: `src/content/legal/*.md` → `/legal/` (14 pages, each marked `in-effect` or `standby`; every page ends with an "If this changes" plan). `check-build.mjs` fails if a form, cookie or third-party embed appears before the legal pages are updated.
-- Icons: `public/favicon.svg` + `icon.png`, `icon-48.png`, `apple-touch-icon.png` (stepped-K mark on orange; `apple-touch-icon.png` is full-bleed with square corners because iOS rounds it). Regenerate PNGs from the SVG with `sharp` if the mark changes. `og.png` is a simple dark 1200x630 card with the mark, name and headline
+- Icons: `public/favicon.svg` + `icon.png`, `icon-48.png`, `apple-touch-icon.png` (stepped-K mark on orange; `apple-touch-icon.png` is full-bleed with square corners because iOS rounds it). Regenerate PNGs from the SVG with `sharp` if the mark changes, and bump the `?v=` on the icon links in `Base.astro` so browsers drop the cached old icon. `og.png` is a simple dark 1200x630 card with the mark, name and headline
 
 ## Rules
 - Run `npm run build && npm run check:build` before pushing.
