@@ -17,7 +17,7 @@
         for (const el of els) {
           const r = el.getBoundingClientRect();
           const a = Math.atan2(ev.clientY - (r.top + r.height / 2), ev.clientX - (r.left + r.width / 2));
-          el.style.setProperty("--glint", `${Math.round((a * 180) / Math.PI + 270)}deg`);
+          el.style.setProperty("--glint", `${Math.round((a * 180) / Math.PI + 90)}deg`); // CSS angles start at the top
         }
         ev = null;
       });
@@ -94,13 +94,13 @@
     f.append(make("feBlend", { in: "rg", in2: "b", mode: "screen" }));
     defs.append(f);
 
-    // Blur first, then bend: blurring after the lens would smear the colour fringe away.
-    const css = `blur(${cs.getPropertyValue("--glass-blur").trim() || "2px"}) url(#${id}) saturate(1.8)`;
-    el.style.backdropFilter = css;
+    // styles.css puts this between the blur and the saturate on the glass layer (::after).
+    el.style.setProperty("--lens", `url(#${id})`);
   }
 
-  // Glass inside glass only sees its parent's fill, so bending it would be wasted work.
-  const lenses = els.filter((el) => !el.parentElement.closest(".glass"));
+  // Glass inside glass mostly shows its parent's fill, so bending it would be wasted work. The header's dropdowns are
+  // the exception: they hang below the header, over the page.
+  const lenses = els.filter((el) => !el.parentElement.closest(".glass") || el.matches(".nav-panel"));
   const pending = new Set();
   const ro = new ResizeObserver((entries) => {
     for (const e of entries) pending.add(e.target);

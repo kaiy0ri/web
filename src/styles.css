@@ -348,52 +348,64 @@ footer .updated { background: none; color: var(--accent-text); border: 1px solid
   .nav-links { width: 100%; gap: .4rem .9rem; font-size: 13px; }
 }
 
-/* ---- Liquid glass (nav capsule, landing card, buttons). ----
-   A clear, thick-looking lens: light fill, bright rim that turns toward the pointer, inner glow, soft depth
-   shadow, springy hover. public/glass.js adds the real bending of the backdrop at the rim (Chromium);
-   without it this is frosted glass. Hand-built so the strict Content-Security-Policy holds — no library. */
+/* ---- Liquid glass (header, menus, panes). ----
+   A clear, thick-looking lens. The glass itself is drawn by ::after, a layer under the content: blur and saturate
+   the backdrop, then a light tint, a soft sheen from above, and an inner rim (light on the top-left edge, a faint
+   shade on the bottom-right). ::before is the specular ring: bright on the side facing the pointer, faintly on the
+   far side, following the rounded shape. public/glass.js adds the real bending of the backdrop at the rim (Chromium)
+   by setting --lens; without it (Firefox, Safari) this is frosted glass with the same rim and highlight.
+   The backdrop sits on the pseudo-element, not the box, so glass inside glass (the header's dropdowns) still sees
+   the page. Hand-built so the strict Content-Security-Policy holds — no library. */
 :root {
-  --glass-fill: rgba(255, 255, 255, .04); --glass-rim: rgba(255, 255, 255, .95); --glass-rim-dim: rgba(255, 255, 255, .28);
-  --glass-glow: rgba(255, 255, 255, .14); --glass-shade: rgba(29, 29, 29, .22);
+  --glass-fill: rgba(255, 255, 255, .34); --glass-rim: rgba(255, 255, 255, 1); --glass-rim-dim: rgba(255, 255, 255, .55);
+  --glass-hi: rgba(255, 255, 255, .7); --glass-lo: rgba(29, 29, 29, .07); --glass-edge: rgba(29, 29, 29, .09);
+  --glass-glow: rgba(255, 255, 255, .45); --glass-shade: rgba(29, 29, 29, .2);
 }
 @media (prefers-color-scheme: dark) {
   :root:not([data-theme="light"]) {
-    --glass-fill: rgba(255, 255, 255, .012); --glass-rim: rgba(255, 255, 255, .55); --glass-rim-dim: rgba(255, 255, 255, .1);
-    --glass-glow: rgba(255, 255, 255, .06); --glass-shade: rgba(0, 0, 0, .65);
+    --glass-fill: rgba(26, 26, 24, .42); --glass-rim: rgba(255, 255, 255, .5); --glass-rim-dim: rgba(255, 255, 255, .16);
+    --glass-hi: rgba(255, 255, 255, .16); --glass-lo: rgba(0, 0, 0, .4); --glass-edge: rgba(255, 255, 255, .07);
+    --glass-glow: rgba(255, 255, 255, .05); --glass-shade: rgba(0, 0, 0, .6);
   }
 }
 :root[data-theme="dark"] {
-  --glass-fill: rgba(255, 255, 255, .012); --glass-rim: rgba(255, 255, 255, .55); --glass-rim-dim: rgba(255, 255, 255, .1);
-  --glass-glow: rgba(255, 255, 255, .06); --glass-shade: rgba(0, 0, 0, .65);
+  --glass-fill: rgba(26, 26, 24, .42); --glass-rim: rgba(255, 255, 255, .5); --glass-rim-dim: rgba(255, 255, 255, .16);
+  --glass-hi: rgba(255, 255, 255, .16); --glass-lo: rgba(0, 0, 0, .4); --glass-edge: rgba(255, 255, 255, .07);
+  --glass-glow: rgba(255, 255, 255, .05); --glass-shade: rgba(0, 0, 0, .6);
 }
 .glass-defs { position: absolute; width: 0; height: 0; }
 .glass {
-  --glint: 135deg; --glass-blur: 0px;
-  isolation: isolate; border: 0; border-radius: 40px; background: var(--glass-fill);
-  backdrop-filter: blur(2px) saturate(1.6); -webkit-backdrop-filter: blur(2px) saturate(1.6);
+  --glint: 315deg; --glass-blur: 6px; --lens: saturate(1);
+  isolation: isolate; border: 0; border-radius: 40px; background: none !important;
+  backdrop-filter: none; -webkit-backdrop-filter: none;
   /* The rest of the site is flat (no shadows); glass is the one place depth is allowed. */
-  box-shadow:
-    inset 0 1px 1px var(--glass-rim), inset 0 -1px 1px var(--glass-rim-dim), inset 0 0 26px var(--glass-glow),
-    0 1px 2px rgba(0, 0, 0, .1), 0 22px 50px -14px var(--glass-shade) !important;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, .08), 0 22px 50px -16px var(--glass-shade) !important;
 }
-/* Rim: a hairline ring, bright where the light hits and again faintly on the far side. */
-.glass::before {
-  content: ""; position: absolute; inset: 0; border-radius: inherit; padding: 1.2px; pointer-events: none;
-  background: linear-gradient(var(--glint), var(--glass-rim), transparent 32%, transparent 68%, var(--glass-rim-dim));
-  -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0); -webkit-mask-composite: xor;
-  mask: linear-gradient(#000 0 0) content-box exclude, linear-gradient(#000 0 0);
-}
-/* Sheen: a soft highlight pooled near the top-left, under the content. */
 .glass::after {
   content: ""; position: absolute; inset: 0; z-index: -1; border-radius: inherit; pointer-events: none;
-  background: radial-gradient(120% 90% at 18% -20%, var(--glass-glow), transparent 60%);
+  /* Blur first, then bend (--lens): bending after the blur keeps the colour fringe at the rim crisp. */
+  backdrop-filter: blur(var(--glass-blur)) var(--lens) saturate(1.8);
+  background: radial-gradient(130% 70% at 30% -10%, var(--glass-glow), transparent 55%), var(--glass-fill);
+  box-shadow:
+    inset 0 0 0 .5px var(--glass-edge), inset 1px 1.5px 1px -.5px var(--glass-hi), inset -1px -1.5px 1px -.5px var(--glass-lo),
+    inset 0 -10px 24px -18px var(--glass-lo);
+}
+/* Older Safari only knows the prefixed name. Kept in its own block: the CSS minifier merges the two otherwise. */
+@supports (-webkit-backdrop-filter: none) and (not (backdrop-filter: none)) {
+  .glass::after { -webkit-backdrop-filter: blur(var(--glass-blur)) saturate(1.8); }
+}
+.glass::before {
+  content: ""; position: absolute; inset: 0; border-radius: inherit; padding: 1px; pointer-events: none;
+  background: conic-gradient(from var(--glint), var(--glass-rim), transparent 70deg 110deg, var(--glass-rim-dim) 180deg, transparent 250deg 290deg, var(--glass-rim));
+  -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0); -webkit-mask-composite: xor;
+  mask: linear-gradient(#000 0 0) content-box exclude, linear-gradient(#000 0 0);
 }
 
 /* Nav: a floating capsule instead of a bar glued to the top edge. */
 .nav.glass {
   top: 12px; width: min(1080px, calc(100% - 24px)); margin: 12px auto 0; border-radius: 999px;
   /* page text scrolls under the menu, so it is kept slightly frosted so links stay readable, but clear */
-  background: color-mix(in srgb, var(--bg) 32%, transparent); border: 0; --glass-bezel: 20px; --glass-blur: 2.5px;
+  --glass-fill: color-mix(in srgb, var(--bg) 42%, transparent); border: 0; --glass-bezel: 20px; --glass-blur: 8px;
 }
 .nav.glass .nav-inner { max-width: none; height: 52px; padding: 0 12px 0 22px; }
 .nav-brand { white-space: nowrap; }
@@ -491,8 +503,10 @@ body {
 .tile, .product-card, .stack-card, .cl-day, .doc pre, .doc table, footer, footer.glass {
   background: var(--pane); border: 0; border-radius: var(--r-md); box-shadow: var(--pane-shadow) !important;
 }
-.pane.glass { position: relative; --glass-bezel: 14px; }
-.pane.glass::after { display: none; }
+/* Once glass.js makes a box a pane, its fill moves onto the glass layer; the outer shadow stays light. */
+.pane.glass { position: relative; --glass-bezel: 14px; --glass-blur: 1.5px; --glass-fill: var(--pane); --glass-glow: transparent; }
+.glass.pane { box-shadow: 0 1px 2px rgba(0, 0, 0, .05), 0 16px 34px -20px var(--glass-shade) !important; }
+a.tile.glass:hover, a.product-card.glass:hover { box-shadow: 0 0 0 1.5px var(--accent), 0 16px 34px -18px var(--glass-shade) !important; }
 .products, .stack-grid, .tiles { gap: var(--gap); grid-template-columns: repeat(auto-fit, minmax(min(100%, 250px), 1fr)); }
 .tile, .product-card, .stack-card, .cl-day { padding: clamp(18px, 2.4vw, 26px); }
 .doc table { border-collapse: separate; border-spacing: 0; }
@@ -566,16 +580,22 @@ a.tile:hover, a.product-card:hover {
 .nav-dd[open] summary::after { transform: rotate(225deg); margin-top: 3px; }
 .nav-dd summary:hover, .nav-dd[open] summary, .nav .nav-plain:hover { color: var(--accent-text); }
 .nav-dd summary:focus-visible, .nav a:focus-visible, .site-footer a:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+/* Dropdowns are glass too, frosted harder than the header because they sit over the headline. */
 .nav-panel {
   position: absolute; z-index: 20; top: calc(100% + 12px); left: 0; min-width: 220px; padding: 8px; display: grid; gap: 2px; border-radius: 22px;
-  background: color-mix(in srgb, var(--bg) 96%, transparent); box-shadow: 0 0 0 1px var(--line), 0 22px 44px -18px var(--glass-shade);
+  --glass-fill: color-mix(in srgb, var(--bg) 62%, transparent); --glass-blur: 18px; --glass-bezel: 16px;
 }
 .nav .nav-panel a { padding: 10px 14px; border-radius: 14px; font-size: 14px; }
 .nav .nav-panel a:hover { background: color-mix(in srgb, var(--accent) 14%, transparent); }
 .nav .nav-end { gap: 10px; justify-self: end; }
 .nav.glass .theme button { padding: 4px 9px; font-size: 11px; }
-.nav .nav-cta { padding: 9px 18px; border-radius: 999px; background: var(--accent); color: #140d0a; font-weight: 700; font-size: 14px; }
-.nav .nav-cta:hover { color: #140d0a; background: color-mix(in srgb, var(--accent) 82%, white); }
+/* Call to action: tinted glass, a solid orange lens with a light top edge and a soft shade at the bottom. */
+.nav .nav-cta {
+  padding: 9px 18px; border-radius: 999px; color: #140d0a; font-weight: 700; font-size: 14px;
+  background: linear-gradient(180deg, color-mix(in srgb, var(--accent) 80%, white), var(--accent) 55%);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, .5), inset 0 -1px 1px rgba(0, 0, 0, .14), 0 6px 16px -8px var(--accent);
+}
+.nav .nav-cta:hover { color: #140d0a; background: linear-gradient(180deg, color-mix(in srgb, var(--accent) 65%, white), color-mix(in srgb, var(--accent) 85%, white) 55%); }
 @media (max-width: 860px) {
   .nav.glass .nav-inner { grid-template-columns: 1fr auto; row-gap: 4px; padding: 8px 10px 8px 14px; }
   .nav-end { display: contents; }
@@ -635,6 +655,8 @@ footer .f-cols h2 { margin: 0 0 10px; font: 400 11px/1 var(--mono); letter-spaci
 
 /* Product mock: an illustrative idea-to-ship project, built from plain HTML. */
 .mock { margin: 0; padding: clamp(14px, 1.8vw, 22px); border-radius: var(--r-md); background: var(--pane); font-family: var(--sans); --glass-bezel: 18px; }
+/* The sky moves behind the mock: frost it harder and tint it closer to the page so its text reads cleanly. */
+.mock.glass { --glass-blur: 14px; --glass-bezel: 18px; --glass-fill: color-mix(in srgb, var(--bg) 58%, transparent); --glass-glow: var(--glass-hi); }
 .mock-ui { color: var(--ink); font-size: 14px; line-height: 1.45; }
 .mock-bar { display: flex; align-items: center; justify-content: space-between; gap: 12px; padding-bottom: 14px; border-bottom: 1px solid var(--rule); }
 .mock-name { font-weight: 750; font-size: 16px; letter-spacing: -.01em; }
@@ -644,7 +666,11 @@ footer .f-cols h2 { margin: 0 0 10px; font: 400 11px/1 var(--mono); letter-spaci
 .mock-stages { display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); gap: 4px; }
 .mock-stages [role="tab"] { min-width: 0; padding: 8px 0; border: 0; border-radius: 999px; background: none; font: 600 12.5px/1 var(--sans); color: var(--muted); outline: 1px solid var(--rule); outline-offset: -1px; transition: background .2s, color .2s, outline-color .2s; }
 .mock-stages .past { color: var(--ink); }
-.mock-stages [aria-selected="true"] { background: var(--ink); color: var(--bg); outline: 0; }
+/* Selected stage: a small solid lens with a light top edge. */
+.mock-stages [aria-selected="true"] {
+  background: linear-gradient(180deg, color-mix(in srgb, var(--ink) 82%, var(--bg)), var(--ink)); color: var(--bg); outline: 0;
+  box-shadow: inset 0 1px 0 color-mix(in srgb, var(--bg) 30%, transparent), 0 4px 12px -6px var(--glass-shade);
+}
 .tabs-on .mock-stages [role="tab"] { cursor: pointer; }
 .tabs-on .mock-stages [aria-selected="false"]:hover { color: var(--ink); outline: 1px solid var(--accent); outline-offset: -1px; }
 .mock-stages [role="tab"]:focus-visible, .mock-go:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
