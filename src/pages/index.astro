@@ -5,11 +5,11 @@ import { birds, stars } from "../sky";
 
 const earlyAccess = `mailto:${site.email}?subject=Kaiyori%20early%20access`;
 const steps = [
-  { name: "Shape the idea", text: "Turn a rough idea into a clear problem, a user and a goal." },
-  { name: "Spec the MVP", text: "Cut it down to the smallest version worth building, written in plain English." },
-  { name: "Build", text: "Break the spec into tasks and follow them from first commit to a working product." },
-  { name: "Secure", text: "Check the basics before launch." },
-  { name: "Ship", text: "Release it, learn from real use and decide what comes next." },
+  { name: "Idea", text: "Capture the rough idea, then turn it into a clear problem, a user and a goal." },
+  { name: "Spec", text: "Cut it down to the smallest version worth building, written in plain English." },
+  { name: "Build", text: "Break the spec into tasks and tick them off, from first commit to a working product." },
+  { name: "Secure", text: "Check the basics before launch: what forms accept, where secrets live, which packages need updates." },
+  { name: "Ship", text: "Release it, collect the first feedback and decide what comes next." },
 ];
 const pillars = [
   { name: "Fast", text: "Less time between the idea and something people can try." },
@@ -166,12 +166,13 @@ const checks = [
   <section class="sec" id="how">
     <div class="sec-inner">
       <h2>From a rough idea to something people can try</h2>
-      <p class="sec-lead">{site.brand.name} is in development. This is the path it is being built around.</p>
+      <p class="sec-lead">{site.brand.name} is in development. This is the loop it is being built around.</p>
       <ol class="path">
         {steps.map((st) => (
           <li class="path-step reveal"><h3>{st.name}</h3><p>{st.text}</p></li>
         ))}
       </ol>
+      <p class="path-loop reveal">Then round again. Feedback from Ship becomes the next idea, so each version is a step better than the last.</p>
     </div>
   </section>
 
