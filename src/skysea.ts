@@ -58,8 +58,8 @@ function ventral(u: number) { // the lower jaw and throat sit much deeper than t
 
 // What one whale-local point looks like. Sets sc (character), sb (brightness 0..1), sk (priority) and returns false if empty.
 let sc = 0, sb = 0, sk = 0;
-let minRow = 0.17, minDot = 0.01; // grooves and details are never thinner than one cell
-function body(u: number, y: number) {
+// minRow / minDot: grooves and details are never thinner than one cell (each caller passes its own grid's values).
+function body(u: number, y: number, minRow: number, minDot: number) {
   let half = 0;
   if (u > 0.84) { // wide forked flukes, with a notch in the middle
     const t = (u - 0.84) / 0.16;
@@ -85,17 +85,23 @@ function body(u: number, y: number) {
 }
 
 // The same whale as text, for the footer: rendered once at build time (src/layouts/Base.astro), so no script runs.
-// len = length in characters; asp = how many character widths one line counts for. The real ratio of a mono font is
-// about 1.9; a smaller value draws the whale taller, which reads better at footer size.
+// len = length in characters; asp = how many character widths one line counts for: line-height / glyph advance, so
+// 1.15 / 0.6 = 1.92 for the footer's CSS (the hero grid's ratio). A wrong value stretches or squashes the whale.
 // Returns HTML: runs of dim and mid-bright characters are wrapped in <i class="w1|w2"> so the body keeps its shading.
-export function whaleArt(len: number, asp = 1.9) {
-  const H = len * 0.1, cols = len + 2, rows = Math.ceil((3 * H) / asp) + 6;
+export function whaleArt(len: number, asp = 1.15 / 0.6) {
+  const H = len * 0.1, pad = Math.ceil(H), cols = len + 2 * pad, rows = Math.ceil((4 * H) / asp) + 8; // pad: room for the tilted flukes
   const ch = Array.from({ length: rows }, () => Array<string>(cols).fill(" "));
   const lv = Array.from({ length: rows }, () => new Float32Array(cols)); // brightness 0..1
   const key = Array.from({ length: rows }, () => new Float32Array(cols));
   const top = 1.25 * H + 4 * asp; // room above the back for the spout
-  const arc = (u: number) => -0.05 * len * Math.sin(Math.PI * u); // a gentle swimming curve
-  minRow = Math.max(1 / 6, asp / H); minDot = Math.max(0.014, 0.5 / len);
+  // A gentle swimming curve plus the hero's tail beat, frozen where its still frame is (t = 0), so the flukes tilt the same way.
+  const arc = (u: number) => -0.05 * len * Math.sin(Math.PI * u) + 0.07 * len * u * u * Math.sin(2 * Math.PI * u * 1.1);
+  // Like the hero, depth y is laid along the spine's normal, so where the tail bends the flukes turn with it.
+  const at = (u: number, y: number) => {
+    const sl = (arc(u + 0.001) - arc(u - 0.001)) / 0.002, m = Math.hypot(len, sl); // spine slope; x runs head-ward as u falls
+    return [(1 - u) * len + 0.5 + pad + (y * H * sl) / m, arc(u) + (y * H * len) / m] as const;
+  };
+  const minRow = Math.max(1 / 6, asp / H), minDot = Math.max(0.014, 0.5 / len);
   const put = (X: number, Y: number, c: string, b: number, k: number) => {
     const x = Math.round(X), y = Math.round((Y + top) / asp);
     if (x < 0 || y < 0 || x >= cols || y >= rows || (ch[y][x] !== " " && k <= key[y][x])) return;
@@ -104,17 +110,17 @@ export function whaleArt(len: number, asp = 1.9) {
   const d = 0.25 / H;
   for (let u = 0; u <= 1; u += 0.25 / len) { // head at the right, like the sky whale swimming right
     for (let y = u > 0.84 ? -1.4 : -dorsal(u); y <= (u > 0.84 ? 1.4 : ventral(u)); y += d) {
-      if (body(u, y)) put((1 - u) * len + 0.5, arc(u) + y * H, String.fromCharCode(sc), sb, sk + sb);
+      if (body(u, y, minRow, minDot)) put(...at(u, y), String.fromCharCode(sc), sb, sk + sb);
     }
   }
   for (let al = 0; al <= 2.4; al += d) { // pectoral flipper, back and down from under the throat
     const w = 0.4 * (1 - al / 2.4) + 0.07;
     for (let ac = -w; ac <= w; ac += d) {
       const u = 0.24 + (al * 0.73 - ac * 0.68) / 10, y = 0.95 + al * 0.68 + ac * 0.73;
-      put((1 - u) * len + 0.5, arc(u) + y * H, ac < 0 ? "S" : "X", 0.85, 0.6);
+      put(...at(u, y), ac < 0 ? "S" : "X", 0.85, 0.6);
     }
   }
-  const bx = 0.86 * len + 0.5, by = arc(0.14) - 0.7 * H; // spout over the blowhole
+  const [bx, by] = at(0.14, -0.7); // spout over the blowhole
   ([[-2, -3, ".", 0.4], [0, -3.2, "'", 0.5], [2, -3, ".", 0.4], [-1, -2, "'", 0.7], [1, -2, "'", 0.7], [0, -1, ":", 0.9]] as const)
     .forEach(([dx, dy, c, b]) => put(bx + dx, by + dy * asp, c, b, 9));
   const rowsOut = ch.map((r, y) => ({ r, y })).filter(({ r }) => r.some((c) => c !== " "));
@@ -149,6 +155,7 @@ export function startSkySea(canvas: HTMLCanvasElement) {
   // ---- state that only changes on resize ----
   let cols = 0, rows = 0, cw = 8, ch = 10, dpr = 1, fs = 10, cssW = 0, cssH = 0, mono = "monospace";
   let whaleLen = 70, H = 7; // whale length in cells; H in cell widths
+  let minRow = 0.17, minDot = 0.01; // this grid's thinnest groove and dot, for body()
   let bc = new Uint8Array(0), bb = new Float32Array(0); // back clouds
   let wc = new Uint8Array(0), wb = new Float32Array(0), wk = new Float32Array(0); // whale + spray
   let fc = new Uint8Array(0), fb = new Float32Array(0), fd = new Float32Array(0); // front clouds
@@ -335,7 +342,7 @@ export function startSkySea(canvas: HTMLCanvasElement) {
       const u = i / N;
       const lo = u > 0.84 ? -1.4 : -dorsal(u), hi = u > 0.84 ? 1.4 : ventral(u);
       for (let y = lo; y <= hi; y += dy) {
-        if (body(u, y)) splat(sx[i] + y * H * nx[i], sy[i] + y * H * ny[i], sc, sb, sk);
+        if (body(u, y, minRow, minDot)) splat(sx[i] + y * H * nx[i], sy[i] + y * H * ny[i], sc, sb, sk);
       }
     }
     // Pectoral flipper: long, knobbly edge, rooted under the throat, pointing back and down.

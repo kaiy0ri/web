@@ -629,11 +629,14 @@ footer .f-brand:hover { color: var(--ink); }
 .f-cols a { display: block; padding: 5px 0; font-size: 14px; text-decoration: none; }
 footer .f-cols h2 { margin: 0 0 10px; font: 400 11px/1 var(--mono); letter-spacing: .12em; text-transform: uppercase; color: var(--accent-text); }
 .f-bottom { padding-top: 18px; border-top: 1px solid var(--rule); font: 12px var(--mono); }
-/* The sky whale in miniature (whaleArt in src/skysea.ts): dim and mid characters keep the body's shading. */
-.f-whale { margin: 0; font: 5.5px/1.14 var(--mono); color: var(--accent); }
+/* The sky whale in miniature (whaleArt in src/skysea.ts): dim and mid characters keep the body's shading. It gets its own
+   row. Cells match the hero sky (9px, line-height 1.15, the ratio whaleArt draws for) and shrink only to keep all
+   98 columns (58.8em) inside the footer. */
+.f-bottom { container-type: inline-size; }
+.f-whale { flex: 0 0 100%; margin: 0 0 6px; font: min(9px, 100cqi / 59)/1.15 var(--mono); color: var(--accent); }
 .f-whale i { font-style: normal; }
-.f-whale .w1 { opacity: .42; }
-.f-whale .w2 { opacity: .7; }
+.f-whale .w1 { opacity: .55; } /* the hero's floor on paper, so the belly still shows in the light theme */
+.f-whale .w2 { opacity: .78; }
 @media (max-width: 860px) { .f-cols { grid-template-columns: repeat(2, 1fr); } }
 @media (max-width: 480px) { .f-cols { grid-template-columns: 1fr; } }
 
