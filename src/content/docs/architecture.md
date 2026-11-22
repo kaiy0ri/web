@@ -40,7 +40,7 @@ kamllistos.com is a **static site**. Every page is built ahead of time into plai
 | Changelog | Generated from the Git history | `src/changelog.ts` |
 | REST API | Read-only JSON on `/api`, answering GET requests only | `worker/index.ts` |
 | Security headers | Content-Security-Policy, HSTS and the rest | `public/_headers` |
-| Browser scripts | Theme toggle, the glass effect (bends the page behind the header, menus and boxes in Chromium browsers; other browsers get frosted glass), small page behaviours. No third-party scripts. | `public/*.js` |
+| Browser scripts | Theme toggle, the glass effect on the header (bends the page behind it in Chromium browsers; other browsers get frosted glass; content boxes are plain surfaces), small page behaviours. No third-party scripts. | `public/*.js` |
 | Home page whale | The sky (clouds and whale) is drawn in ASCII by a small hand-written canvas script, no library. The footer shows the same whale as plain text, rendered once when the site is built | `src/skysea.ts` |
 
 ## What sits around the site
