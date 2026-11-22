@@ -10,8 +10,6 @@ const MOVE_TICKS = 300; // one crossing takes 30 seconds
 const CYCLE_TICKS = 340; // then a 4 second gap before the next pass
 const FADE = 0.18; // whale brightness left under the card and tree
 const CLOUD_FADE = 0.4; // same, for clouds
-const RIM_PX = 56; // band inside the card and tree that the glass lens bends (it samples up to about 47px in)
-const RIM_KEEP = 0.5; // sky brightness in that band: enough to see it bend, soft enough not to streak
 
 // ---- small helpers ----
 const clamp = (v: number, a: number, b: number) => (v < a ? a : v > b ? b : v);
@@ -192,7 +190,7 @@ export function startSkySea(canvas: HTMLCanvasElement) {
     }
   }
 
-  // Where the glass card and the tree are, in cells, so the whale can fade behind them.
+  // Where the hero text and the product example are, in cells, so the whale can fade behind them.
   function readBoxes() {
     const r = canvas.getBoundingClientRect();
     boxes.fill(0);
@@ -212,16 +210,6 @@ export function startSkySea(canvas: HTMLCanvasElement) {
       if (d < 2) t = Math.max(t, 1 - d / 2);
     }
     return t;
-  }
-
-  // True just inside a box's edge, where the glass lens bends the backdrop.
-  function onRim(x: number, y: number) {
-    for (let i = 0; i < 8; i += 4) {
-      if (boxes[i + 2] === 0) continue;
-      const dx = Math.min(x - boxes[i], boxes[i + 2] - x) * cw, dy = Math.min(y - boxes[i + 1], boxes[i + 3] - y) * ch;
-      if (dx > 0 && dy > 0 && Math.min(dx, dy) < RIM_PX) return true;
-    }
-    return false;
   }
 
   function resize() {
@@ -413,22 +401,21 @@ export function startSkySea(canvas: HTMLCanvasElement) {
         if (wc[i]) { c = wc[i]; b = wb[i]; isWhale = true; }
         if (fc[i] && (fd[i] > 0.35 || !wc[i])) { c = fc[i]; b = fb[i]; isWhale = false; } // front clouds hide the whale
         if (!c) continue;
-        const rim = onRim(x + 0.5, y + 0.5), cv = cover(x + 0.5, y + 0.5);
-        // The rim keeps real glyphs (dimmed) so the lens has something to bend and split into colour.
-        if (light && cv === 1 && !rim) {
+        const cv = cover(x + 0.5, y + 0.5);
+        if (light && cv === 1) {
           // On paper, faded glyphs still read as noise behind the text: show only a faint dotted outline, no glow.
           if (b < 0.25) continue;
           if (ghost !== lastStyle) g.fillStyle = lastStyle = ghost;
           g.fillText(b > 0.55 ? ":" : ".", x * cw, y * ch);
           continue;
         }
-        b *= rim ? RIM_KEEP : 1 - (isWhale ? 1 - FADE : 1 - CLOUD_FADE) * cv;
+        b *= 1 - (isWhale ? 1 - FADE : 1 - CLOUD_FADE) * cv;
         const lvl = Math.round(b * (LEVELS - 1));
         if (lvl <= 0) continue;
         const style = isWhale ? whalePal[lvl] : cloudPal[lvl];
         if (style !== lastStyle) g.fillStyle = lastStyle = style;
         g.fillText(glyphs[c], x * cw, y * ch);
-        if (isWhale && gg && !rim) { gg.fillStyle = style; gg.fillText(glyphs[c], x * cw, y * ch); }
+        if (isWhale && gg) { gg.fillStyle = style; gg.fillText(glyphs[c], x * cw, y * ch); }
       }
     }
     { // soft glow: the finished frame, blurred, added back on top

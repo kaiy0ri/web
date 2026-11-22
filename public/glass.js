@@ -1,16 +1,14 @@
-// Liquid glass. Every .glass element becomes a thick lens: whatever sits behind it bends at the rim,
-// colours split slightly at the edge, and the rim light turns toward the pointer.
+// Liquid glass for the navigation layer (the header and its menus; see styles.css). The header becomes a thick lens:
+// whatever sits behind it bends at the rim and colours split slightly at the edge. On every .glass element the rim
+// light turns toward the pointer.
 // External file because the strict Content-Security-Policy allows no inline code. No library.
 (() => {
-  // Panes (cards, tiles, code boxes, the footer) are glass too; the class is added here so the markup stays plain.
-  const PANES = ".tile, .product-card, .stack-card, .cl-day, .doc pre, .doc table, .mock, footer";
-  document.querySelectorAll(PANES).forEach((el) => el.classList.add("glass", "pane"));
   const els = [...document.querySelectorAll(".glass")];
   if (!els.length) return;
   const reduce = matchMedia("(prefers-reduced-motion: reduce)").matches;
 
   // --- Rim light: the bright edge faces the pointer, like light catching real glass. ---
-  if (!reduce) {
+  if (!reduce && !matchMedia("(prefers-reduced-transparency: reduce), (prefers-contrast: more)").matches) {
     let ev = null;
     addEventListener("pointermove", (e) => {
       if (!ev) requestAnimationFrame(() => {
@@ -98,17 +96,7 @@
     el.style.setProperty("--lens", `url(#${id})`);
   }
 
-  // Glass inside glass mostly shows its parent's fill, so bending it would be wasted work. The header's dropdowns are
-  // the exception: they hang below the header, over the page.
-  const lenses = els.filter((el) => !el.parentElement.closest(".glass") || el.matches(".nav-panel"));
-  const pending = new Set();
-  const ro = new ResizeObserver((entries) => {
-    for (const e of entries) pending.add(e.target);
-    requestAnimationFrame(() => { pending.forEach(apply); pending.clear(); });
-  });
-  // Only build a lens once its element scrolls near the screen: some pages have many cards.
-  const io = new IntersectionObserver((entries) => {
-    for (const e of entries) if (e.isIntersecting) { io.unobserve(e.target); ro.observe(e.target); }
-  }, { rootMargin: "300px" });
-  lenses.forEach((el) => io.observe(el));
+  // Only outermost glass gets a lens: the menus share the header's material without stacking a second lens on it.
+  const ro = new ResizeObserver((entries) => requestAnimationFrame(() => entries.forEach((e) => apply(e.target))));
+  els.filter((el) => !el.parentElement.closest(".glass")).forEach((el) => ro.observe(el));
 })();

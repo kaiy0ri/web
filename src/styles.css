@@ -291,7 +291,7 @@ h3 { font-weight: 750; letter-spacing: -.02em; }
 .more { font-weight: 400; color: var(--ink); }
 
 /* Nav: translucent bar with a hairline, like camtoan.me's header. */
-.nav { background: color-mix(in srgb, var(--bg) 88%, transparent); border-bottom: 1px solid var(--rule); backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px); }
+.nav { background: color-mix(in srgb, var(--bg) 88%, transparent); border-bottom: 1px solid var(--rule); }
 .nav a { color: var(--ink); font-weight: 400; font-size: 13px; }
 .nav a:hover { color: var(--accent-text); text-decoration: none; }
 .nav-brand { padding: 0; background: none; border: 0; font: 700 14px var(--mono); letter-spacing: -.01em; }
@@ -348,51 +348,52 @@ footer .updated { background: none; color: var(--accent-text); border: 1px solid
   .nav-links { width: 100%; gap: .4rem .9rem; font-size: 13px; }
 }
 
-/* ---- Liquid glass (header, menus, panes). ----
-   A clear, thick-looking lens. The glass itself is drawn by ::after, a layer under the content: blur and saturate
-   the backdrop, then a light tint, a soft sheen from above, and an inner rim (light on the top-left edge, a faint
-   shade on the bottom-right). ::before is the specular ring: bright on the side facing the pointer, faintly on the
-   far side, following the rounded shape. public/glass.js adds the real bending of the backdrop at the rim (Chromium)
-   by setting --lens; without it (Firefox, Safari) this is frosted glass with the same rim and highlight.
-   The backdrop sits on the pseudo-element, not the box, so glass inside glass (the header's dropdowns) still sees
-   the page. Hand-built so the strict Content-Security-Policy holds — no library. */
+/* ---- Liquid glass: the navigation layer only (the header and its menus). ----
+   Following Apple's "Adopting Liquid Glass": glass is a functional layer for navigation and controls that floats
+   above content, used sparingly, never stacked on itself. Content (cards, the product example, the footer) is a plain
+   surface. The glass is drawn by ::after, a layer under the content: blur, bend (--lens) and saturate the backdrop,
+   then a tint, a soft sheen from above and an inner rim. ::before is the specular ring that turns toward the pointer.
+   public/glass.js builds the bending lens for the header (Chromium); elsewhere it is frosted glass with the same rim.
+   The menus share the header's material without a lens of their own, so they read as the header opening, not as a
+   second pane. Hand-built so the strict Content-Security-Policy holds: no library. */
 :root {
-  --glass-fill: rgba(255, 255, 255, .34); --glass-rim: rgba(255, 255, 255, 1); --glass-rim-dim: rgba(255, 255, 255, .55);
-  --glass-hi: rgba(255, 255, 255, .7); --glass-lo: rgba(29, 29, 29, .07); --glass-edge: rgba(29, 29, 29, .09);
-  --glass-glow: rgba(255, 255, 255, .45); --glass-shade: rgba(29, 29, 29, .2);
+  --glass-fill: color-mix(in srgb, var(--bg) 74%, transparent); --glass-rim: rgba(255, 255, 255, 1); --glass-rim-dim: rgba(255, 255, 255, .55);
+  --glass-hi: rgba(255, 255, 255, .7); --glass-lo: rgba(29, 29, 29, .07); --glass-edge: rgba(29, 29, 29, .1);
+  --glass-glow: rgba(255, 255, 255, .4); --glass-shade: rgba(29, 29, 29, .18);
 }
 @media (prefers-color-scheme: dark) {
   :root:not([data-theme="light"]) {
-    --glass-fill: rgba(26, 26, 24, .42); --glass-rim: rgba(255, 255, 255, .5); --glass-rim-dim: rgba(255, 255, 255, .16);
-    --glass-hi: rgba(255, 255, 255, .16); --glass-lo: rgba(0, 0, 0, .4); --glass-edge: rgba(255, 255, 255, .07);
-    --glass-glow: rgba(255, 255, 255, .05); --glass-shade: rgba(0, 0, 0, .6);
+    --glass-rim: rgba(255, 255, 255, .45); --glass-rim-dim: rgba(255, 255, 255, .14);
+    --glass-hi: rgba(255, 255, 255, .14); --glass-lo: rgba(0, 0, 0, .4); --glass-edge: rgba(255, 255, 255, .08);
+    --glass-glow: rgba(255, 255, 255, .04); --glass-shade: rgba(0, 0, 0, .55);
   }
 }
 :root[data-theme="dark"] {
-  --glass-fill: rgba(26, 26, 24, .42); --glass-rim: rgba(255, 255, 255, .5); --glass-rim-dim: rgba(255, 255, 255, .16);
-  --glass-hi: rgba(255, 255, 255, .16); --glass-lo: rgba(0, 0, 0, .4); --glass-edge: rgba(255, 255, 255, .07);
-  --glass-glow: rgba(255, 255, 255, .05); --glass-shade: rgba(0, 0, 0, .6);
+  --glass-rim: rgba(255, 255, 255, .45); --glass-rim-dim: rgba(255, 255, 255, .14);
+  --glass-hi: rgba(255, 255, 255, .14); --glass-lo: rgba(0, 0, 0, .4); --glass-edge: rgba(255, 255, 255, .08);
+  --glass-glow: rgba(255, 255, 255, .04); --glass-shade: rgba(0, 0, 0, .55);
 }
 .glass-defs { position: absolute; width: 0; height: 0; }
 .glass {
-  --glint: 315deg; --glass-blur: 6px; --lens: saturate(1);
-  isolation: isolate; border: 0; border-radius: 40px; background: none !important;
-  backdrop-filter: none; -webkit-backdrop-filter: none;
-  /* The rest of the site is flat (no shadows); glass is the one place depth is allowed. */
-  box-shadow: 0 1px 2px rgba(0, 0, 0, .08), 0 22px 50px -16px var(--glass-shade) !important;
+  --glint: 315deg; --glass-blur: 16px; --lens: saturate(1);
+  isolation: isolate; border: 0; background: none !important;
+  /* The blur lives on ::after, never on the box: a blurred box would cut its menus' blur off from the page. */
+  /* The rest of the site is flat; the floating navigation layer is the one place depth is allowed. */
+  box-shadow: 0 1px 2px rgba(0, 0, 0, .08), 0 18px 40px -18px var(--glass-shade) !important;
 }
 .glass::after {
   content: ""; position: absolute; inset: 0; z-index: -1; border-radius: inherit; pointer-events: none;
   /* Blur first, then bend (--lens): bending after the blur keeps the colour fringe at the rim crisp. */
-  backdrop-filter: blur(var(--glass-blur)) var(--lens) saturate(1.8);
+  backdrop-filter: blur(var(--glass-blur)) var(--lens) saturate(1.5);
   background: radial-gradient(130% 70% at 30% -10%, var(--glass-glow), transparent 55%), var(--glass-fill);
+  /* !important: the flat camtoan.me layer above removes every shadow. */
   box-shadow:
     inset 0 0 0 .5px var(--glass-edge), inset 1px 1.5px 1px -.5px var(--glass-hi), inset -1px -1.5px 1px -.5px var(--glass-lo),
-    inset 0 -10px 24px -18px var(--glass-lo);
+    inset 0 -10px 24px -18px var(--glass-lo) !important;
 }
 /* Older Safari only knows the prefixed name. Kept in its own block: the CSS minifier merges the two otherwise. */
 @supports (-webkit-backdrop-filter: none) and (not (backdrop-filter: none)) {
-  .glass::after { -webkit-backdrop-filter: blur(var(--glass-blur)) saturate(1.8); }
+  .glass::after { -webkit-backdrop-filter: blur(var(--glass-blur)) saturate(1.5); }
 }
 .glass::before {
   content: ""; position: absolute; inset: 0; border-radius: inherit; padding: 1px; pointer-events: none;
@@ -402,35 +403,10 @@ footer .updated { background: none; color: var(--accent-text); border: 1px solid
 }
 
 /* Nav: a floating capsule instead of a bar glued to the top edge. */
-.nav.glass {
-  top: 12px; width: min(1080px, calc(100% - 24px)); margin: 12px auto 0; border-radius: 999px;
-  /* page text scrolls under the menu, so it is kept slightly frosted so links stay readable, but clear */
-  --glass-fill: color-mix(in srgb, var(--bg) 42%, transparent); border: 0; --glass-bezel: 20px; --glass-blur: 8px;
-}
-.nav.glass .nav-inner { max-width: none; height: 52px; padding: 0 12px 0 22px; }
+.nav.glass { top: 12px; width: min(1080px, calc(100% - 24px)); margin: 12px auto 0; --glass-bezel: 20px; }
 .nav-brand { white-space: nowrap; }
 .nav.glass .theme { border-color: var(--line); border-radius: 999px; overflow: hidden; }
-.nav.glass .theme button + button { border-left-color: var(--line); }
 html { scroll-padding-top: 88px; }
-
-/* Glass buttons: clear capsule, or tinted with the accent for the main action. */
-.pill.glass { position: relative; border-radius: 999px; padding: 12px 22px; color: var(--ink); background: var(--glass-fill); }
-.pill.glass:hover { background: var(--glass-fill); color: var(--accent-text); }
-/* Primary button: same clear glass as the others, with an orange tint so it still reads as the main action. */
-.pill.glass-tint { background: color-mix(in srgb, var(--accent) 22%, transparent); color: var(--ink); }
-.pill.glass-tint:hover { background: color-mix(in srgb, var(--accent) 34%, transparent); color: var(--ink); }
-
-@media (prefers-reduced-motion: no-preference) {
-  /* Springy, slightly overshooting — the "liquid" part. */
-  .glass { transition: transform .45s cubic-bezier(.34, 1.56, .64, 1), box-shadow .3s; }
-  /* No grow-on-hover for the landing card: scaling a lensed element shows the backdrop edge as a green line at the rim. */
-  .pill.glass:hover { transform: scale(1.06); }
-  .pill.glass:active { transform: scale(.96); }
-}
-@media (max-width: 600px) {
-  .nav.glass { border-radius: 30px; }
-  .nav.glass .nav-inner { height: auto; padding: 10px 16px; }
-}
 
 /* ---- Landing page: ASCII sky over grid paper, a glass card, and an ASCII site tree. ---- */
 .landing {
@@ -471,23 +447,22 @@ html { scroll-padding-top: 88px; }
   @keyframes birds-pass { 0% { translate: -130% 0; } 55%, 100% { translate: 100vw -70px; } }
 }
 
-/* ==== Glass everywhere, fluid sizing. ====
-   Last on purpose: it restyles the older flat components (cards, chips, inputs, badges, footer) as glass panes and
+/* ==== Surfaces and fluid sizing. ====
+   Last on purpose: it restyles the older flat components (cards, chips, badges, footer) as plain surfaces and
    capsules without touching their markup, and swaps fixed pixel sizes for ones that flow with the window width.
-   Panes are real glass too: public/glass.js adds .glass.pane to them and builds each lens only once it nears the
-   screen. They keep a denser fill and a lighter shadow than the big glass surfaces so text stays easy to read. */
+   Content boxes are not glass: a solid surface a step off the page with a hairline edge, so text reads cleanly. */
 :root {
   --r-lg: clamp(24px, 3.2vw, 40px); --r-md: clamp(16px, 2vw, 24px);
   --gutter: clamp(14px, 3.5vw, 40px); --gap: clamp(10px, 1.4vw, 16px);
-  --pane: rgba(255, 255, 255, .3); --pane-edge: rgba(29, 29, 29, .08); --pane-rim: rgba(255, 255, 255, .95);
-  --pane-shadow: inset 0 1px 0 var(--pane-rim), inset 0 0 0 1px var(--pane-edge), 0 1px 2px rgba(0, 0, 0, .05), 0 16px 34px -20px var(--glass-shade);
+  --pane: color-mix(in srgb, var(--bg), white 55%); --pane-edge: rgba(29, 29, 29, .12);
+  --pane-shadow: inset 0 0 0 1px var(--pane-edge);
 }
 @media (prefers-color-scheme: dark) {
-  :root:not([data-theme="light"]) { --pane: rgba(255, 255, 255, .045); --pane-edge: rgba(255, 255, 255, .09); --pane-rim: rgba(255, 255, 255, .16); }
+  :root:not([data-theme="light"]) { --pane: color-mix(in srgb, var(--bg), white 4%); --pane-edge: rgba(255, 255, 255, .1); }
 }
-:root[data-theme="dark"] { --pane: rgba(255, 255, 255, .045); --pane-edge: rgba(255, 255, 255, .09); --pane-rim: rgba(255, 255, 255, .16); }
+:root[data-theme="dark"] { --pane: color-mix(in srgb, var(--bg), white 4%); --pane-edge: rgba(255, 255, 255, .1); }
 
-/* Grid paper runs behind every page, so glass always has something to show through. */
+/* Grid paper runs behind every page. */
 body {
   font-size: clamp(14px, .82rem + .22vw, 16px);
   background-image: linear-gradient(var(--rule) 1px, transparent 1px), linear-gradient(90deg, var(--rule) 1px, transparent 1px);
@@ -499,21 +474,17 @@ body {
 .prose { padding: clamp(48px, 7vw, 72px) var(--gutter) clamp(56px, 8vw, 96px); }
 .landing-inner { padding: clamp(32px, 6vw, 72px) var(--gutter) clamp(48px, 7vw, 88px); }
 
-/* Panes: every box. */
-.tile, .product-card, .stack-card, .cl-day, .doc pre, .doc table, footer, footer.glass {
+/* Surfaces: every content box. */
+.tile, .product-card, .stack-card, .cl-day, .doc pre, .doc table, footer {
   background: var(--pane); border: 0; border-radius: var(--r-md); box-shadow: var(--pane-shadow) !important;
 }
-/* Once glass.js makes a box a pane, its fill moves onto the glass layer; the outer shadow stays light. */
-.pane.glass { position: relative; --glass-bezel: 14px; --glass-blur: 1.5px; --glass-fill: var(--pane); --glass-glow: transparent; }
-.glass.pane { box-shadow: 0 1px 2px rgba(0, 0, 0, .05), 0 16px 34px -20px var(--glass-shade) !important; }
-a.tile.glass:hover, a.product-card.glass:hover { box-shadow: 0 0 0 1.5px var(--accent), 0 16px 34px -18px var(--glass-shade) !important; }
 .products, .stack-grid, .tiles { gap: var(--gap); grid-template-columns: repeat(auto-fit, minmax(min(100%, 250px), 1fr)); }
 .tile, .product-card, .stack-card, .cl-day { padding: clamp(18px, 2.4vw, 26px); }
 .doc table { border-collapse: separate; border-spacing: 0; }
 .doc th, .doc td { border-width: 0 0 1px; }
 .doc td code, .doc th code { white-space: normal; overflow-wrap: anywhere; }
 .prose code { word-break: normal; overflow-wrap: anywhere; }
-footer, footer.glass { width: min(1080px, calc(100% - 24px)); margin: clamp(24px, 5vw, 64px) auto 16px; padding: 18px var(--gutter); border-radius: var(--r-lg); }
+footer { width: min(1080px, calc(100% - 24px)); margin: clamp(24px, 5vw, 64px) auto 16px; padding: 18px var(--gutter); border-radius: var(--r-lg); }
 
 /* Capsules: every control and badge. */
 .pill, .theme, .status,
@@ -523,13 +494,13 @@ footer, footer.glass { width: min(1080px, calc(100% - 24px)); margin: clamp(24px
 }
 .theme { padding: 3px; gap: 2px; }
 .theme button { border-radius: 999px; padding: 5px 11px; font-size: clamp(11px, .6rem + .25vw, 12px); }
-.theme button + button, .nav.glass .theme button + button { border-left: 0; }
-.pill { border: 0; padding: 12px 22px; box-shadow: inset 0 1px 0 rgba(255, 255, 255, .28), 0 12px 26px -14px var(--glass-shade) !important; }
+.theme button + button { border-left: 0; }
+.pill { border: 0; padding: 12px 22px; box-shadow: none !important; }
 .status, .product-badge { padding: 2px 10px; }
 
 /* Link cards rise a little on hover and get an accent ring. */
 a.tile:hover, a.product-card:hover {
-  box-shadow: var(--pane-shadow), 0 0 0 1.5px var(--accent) !important;
+  box-shadow: inset 0 0 0 1.5px var(--accent) !important;
 }
 @media (prefers-reduced-motion: no-preference) {
   a.tile, a.product-card, .pill { transition: transform .35s cubic-bezier(.16, 1, .3, 1), box-shadow .25s, background .2s, color .2s; }
@@ -540,14 +511,15 @@ a.tile:hover, a.product-card:hover {
 
 /* Menu: text and gaps shrink smoothly with the window; when it still cannot fit on one row, the brand and theme
    switch share the first row and the links get a full row of their own. Nothing is ever squeezed or cut off. */
+/* Concentric corners: controls sit 8px in from the header's edge, so its radius is theirs (20px) plus 8. */
 .nav.glass { border-radius: 28px; }
-.nav.glass .nav-inner { height: auto; min-height: 52px; padding: 6px 10px 6px clamp(14px, 2vw, 22px); gap: clamp(.6rem, 1.6vw, 1.4rem); }
+.nav.glass .nav-inner { max-width: none; height: auto; min-height: 52px; padding: 8px 8px 8px clamp(14px, 2vw, 22px); gap: clamp(.6rem, 1.6vw, 1.4rem); }
 .nav a { font-size: clamp(12px, .55rem + .55vw, 14px); white-space: nowrap; }
 .nav-brand { font-size: clamp(13px, .6rem + .6vw, 15px); }
 .nav-links { gap: clamp(.7rem, 1.9vw, 1.5rem); }
 .nav-end { gap: clamp(.6rem, 1.6vw, 1.4rem); }
 @media (max-width: 720px) {
-  .nav.glass .nav-inner { flex-wrap: wrap; row-gap: 4px; padding: 8px 10px 8px 16px; }
+  .nav.glass .nav-inner { flex-wrap: wrap; row-gap: 4px; padding: 8px 8px 8px 16px; }
   .nav-end { display: contents; }
   .nav .theme { order: 2; margin-left: auto; }
   .nav-links { order: 3; flex: 1 0 100%; width: auto; flex-wrap: nowrap; justify-content: space-between; gap: 0; padding: 2px 8px 4px 0; }
@@ -580,16 +552,23 @@ a.tile:hover, a.product-card:hover {
 .nav-dd[open] summary::after { transform: rotate(225deg); margin-top: 3px; }
 .nav-dd summary:hover, .nav-dd[open] summary, .nav .nav-plain:hover { color: var(--accent-text); }
 .nav-dd summary:focus-visible, .nav a:focus-visible, .site-footer a:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
-/* Dropdowns are glass too, frosted harder than the header because they sit over the headline. */
+/* Menus are the header opening downward: the same glass material and rim, hung just below it, growing out of its
+   button. No lens of their own (glass.js skips them), so there is never a second lens stacked on the header.
+   They sit over the page headline, so the fill is denser. Corners: 22px = the 14px link radius + 8px padding. */
 .nav-panel {
-  position: absolute; z-index: 20; top: calc(100% + 12px); left: 0; min-width: 220px; padding: 8px; display: grid; gap: 2px; border-radius: 22px;
-  --glass-fill: color-mix(in srgb, var(--bg) 62%, transparent); --glass-blur: 18px; --glass-bezel: 16px;
+  position: absolute; z-index: 20; top: calc(100% + 14px); left: 0; min-width: 220px; padding: 8px; display: grid; gap: 2px; border-radius: 22px;
+  --glass-fill: color-mix(in srgb, var(--bg) 86%, transparent); --glass-blur: 24px; transform-origin: 24px -14px;
+}
+@media (prefers-reduced-motion: no-preference) {
+  .nav-dd[open] .nav-panel { animation: panel-open .24s cubic-bezier(.16, 1, .3, 1); }
+  /* Transform only: opacity below 1 would cut the menu's blur off from the page while it opens. */
+  @keyframes panel-open { from { transform: translateY(-8px) scale(.94); } }
 }
 .nav .nav-panel a { padding: 10px 14px; border-radius: 14px; font-size: 14px; }
 .nav .nav-panel a:hover { background: color-mix(in srgb, var(--accent) 14%, transparent); }
 .nav .nav-end { gap: 10px; justify-self: end; }
 .nav.glass .theme button { padding: 4px 9px; font-size: 11px; }
-/* Call to action: tinted glass, a solid orange lens with a light top edge and a soft shade at the bottom. */
+/* Call to action: a solid orange capsule on the glass (not glass itself), with a light top edge. */
 .nav .nav-cta {
   padding: 9px 18px; border-radius: 999px; color: #140d0a; font-weight: 700; font-size: 14px;
   background: linear-gradient(180deg, color-mix(in srgb, var(--accent) 80%, white), var(--accent) 55%);
@@ -597,7 +576,7 @@ a.tile:hover, a.product-card:hover {
 }
 .nav .nav-cta:hover { color: #140d0a; background: linear-gradient(180deg, color-mix(in srgb, var(--accent) 65%, white), color-mix(in srgb, var(--accent) 85%, white) 55%); }
 @media (max-width: 860px) {
-  .nav.glass .nav-inner { grid-template-columns: 1fr auto; row-gap: 4px; padding: 8px 10px 8px 14px; }
+  .nav.glass .nav-inner { grid-template-columns: 1fr auto; row-gap: 4px; padding: 8px 8px 8px 14px; }
   .nav-end { display: contents; }
   .nav .nav-brand { grid-area: 1 / 1; }
   .nav .theme { grid-area: 1 / 2; order: 0; margin-left: 0; }
@@ -605,12 +584,12 @@ a.tile:hover, a.product-card:hover {
   .nav .nav-cta { grid-area: 2 / 2; }
   .nav-dd { position: static; }
   .nav-dd summary, .nav .nav-plain { padding: 8px 8px; }
-  .nav-panel { left: 8px; right: 8px; top: calc(100% + 8px); }
+  .nav-panel { left: 8px; right: 8px; top: calc(100% + 8px); transform-origin: 50% -8px; }
 }
 @media (max-width: 480px) {
   /* Two short rows on phones: brand + CTA, then the menu. The theme follows the OS here (Auto). */
   .nav .theme { display: none; }
-  .nav .nav-cta { grid-area: 1 / 2; padding: 7px 14px; font-size: 13px; }
+  .nav .nav-cta { grid-area: 1 / 2; padding: 9px 14px; font-size: 13px; }
   .nav .nav-brand { font-size: 17px; gap: 8px; }
   .nav-menu { grid-area: 2 / 1 / 3 / 3; justify-content: space-between; margin-right: -8px; }
   html { scroll-padding-top: 110px; }
@@ -657,9 +636,8 @@ footer .f-cols h2 { margin: 0 0 10px; font: 400 11px/1 var(--mono); letter-spaci
 .btn-quiet:hover { color: var(--accent-text); }
 
 /* Product mock: an illustrative idea-to-ship project, built from plain HTML. */
-.mock { margin: 0; padding: clamp(14px, 1.8vw, 22px); border-radius: var(--r-md); background: var(--pane); font-family: var(--sans); --glass-bezel: 18px; }
-/* The sky moves behind the mock: frost it harder and tint it closer to the page so its text reads cleanly. */
-.mock.glass { --glass-blur: 14px; --glass-bezel: 18px; --glass-fill: color-mix(in srgb, var(--bg) 58%, transparent); --glass-glow: var(--glass-hi); }
+/* A content card, so a solid surface: the sky stops at its edge and its text reads cleanly. */
+.mock { margin: 0; padding: clamp(14px, 1.8vw, 22px); border-radius: var(--r-md); background: var(--pane); box-shadow: var(--pane-shadow) !important; font-family: var(--sans); }
 .mock-ui { color: var(--ink); font-size: 14px; line-height: 1.45; }
 .mock-bar { display: flex; align-items: center; justify-content: space-between; gap: 12px; padding-bottom: 14px; border-bottom: 1px solid var(--rule); }
 .mock-name { font-weight: 750; font-size: 16px; letter-spacing: -.01em; }
@@ -669,7 +647,7 @@ footer .f-cols h2 { margin: 0 0 10px; font: 400 11px/1 var(--mono); letter-spaci
 .mock-stages { display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); gap: 4px; }
 .mock-stages [role="tab"] { min-width: 0; padding: 8px 0; border: 0; border-radius: 999px; background: none; font: 600 12.5px/1 var(--sans); color: var(--muted); outline: 1px solid var(--rule); outline-offset: -1px; transition: background .2s, color .2s, outline-color .2s; }
 .mock-stages .past { color: var(--ink); }
-/* Selected stage: a small solid lens with a light top edge. */
+/* Selected stage: a solid ink capsule with a light top edge. A plain control inside content, not glass. */
 .mock-stages [aria-selected="true"] {
   background: linear-gradient(180deg, color-mix(in srgb, var(--ink) 82%, var(--bg)), var(--ink)); color: var(--bg); outline: 0;
   box-shadow: inset 0 1px 0 color-mix(in srgb, var(--bg) 30%, transparent), 0 4px 12px -6px var(--glass-shade);
