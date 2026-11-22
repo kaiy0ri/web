@@ -160,16 +160,6 @@ footer { background: var(--ink); color: var(--paper); font-size: 14px; font-weig
 footer a { color: var(--paper); }
 .sep { margin: 0 0.5rem; opacity: 0.6; }
 
-kbd { border: 2px solid var(--ink); padding: 0 6px; font-size: 13px; background: var(--surface); }
-.chips { display: flex; flex-wrap: wrap; justify-content: center; gap: 10px; max-width: 1080px; margin: 1.5rem auto 0; }
-.chip {
-  font: inherit; font-size: 14px; font-weight: 800; cursor: pointer; padding: 6px 12px;
-  background: var(--surface); color: var(--ink); border: var(--border); box-shadow: 3px 3px 0 var(--ink);
-  transition: transform 0.1s ease, box-shadow 0.1s ease;
-}
-.chip:hover { transform: translate(-1px, -1px); }
-.chip[aria-pressed="true"] { background: var(--yellow); color: var(--on-color); transform: translate(3px, 3px); box-shadow: 0 0 0 var(--ink); }
-
 /* Motion: things pop in one by one, and on scroll (CSS only, respects reduced motion). */
 @media (prefers-reduced-motion: no-preference) {
   .stagger > * { animation: pop 0.7s cubic-bezier(0.16, 1, 0.3, 1) backwards; }
@@ -203,39 +193,7 @@ kbd { border: 2px solid var(--ink); padding: 0 6px; font-size: 13px; background:
 /* Text sitting directly on a bright band is always black, in light and dark mode. */
 .band-gray > .center { color: var(--on-color); }
 
-/* Marquee */
-.marquee { overflow: hidden; border-bottom: var(--border); background: var(--yellow); }
-.marquee-track { display: flex; width: max-content; gap: 10px; padding: 10px; }
-.marquee-item {
-  flex: none; white-space: nowrap; font-weight: 800; font-size: 14px; padding: 6px 12px;
-  background: var(--surface); color: var(--ink); border: 2px solid var(--ink); box-shadow: 3px 3px 0 var(--ink);
-  text-decoration: none;
-}
-.marquee-item:hover { background: var(--pink); color: var(--on-color); }
-
-@media (prefers-reduced-motion: no-preference) {
-  .marquee-track { animation: marquee 150s linear infinite; }
-  .marquee:hover .marquee-track,
-  .marquee:focus-within .marquee-track { animation-play-state: paused; }
-  @keyframes marquee {
-    from { transform: translateX(0); }
-    to { transform: translateX(-50%); }
-  }
-}
-
-/* Per-concept pages (/glossary/<slug>/). */
-.crumbs { max-width: 720px; margin: 0 auto; padding: 24px 1rem 0; font-weight: 800; font-size: 14px; }
-.crumbs a { text-decoration: none; }
-.crumbs a:hover { text-decoration: underline; }
-.crumbs span { margin: 0 6px; opacity: 0.5; }
-.cp-nav { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 16px; max-width: 1080px; margin: 0 auto; }
-.cp-prev, .cp-next { display: flex; flex-direction: column; gap: 2px; text-decoration: none; font-weight: 800; max-width: 42%; }
-.cp-next { text-align: right; margin-left: auto; }
-.cp-dir { font-size: 13px; color: var(--muted); }
-.cp-nav-name { font-size: 15px; }
-
 .footer-sep { opacity: 0.5; margin: 0 4px; }
-
 
 /* Products page: product cards. */
 .products { max-width: 1080px; margin: 0 auto; display: grid; gap: 22px; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); }
@@ -331,9 +289,6 @@ h3 { font-weight: 750; letter-spacing: -.02em; }
 .pill:hover { transform: none; background: var(--accent); border-color: var(--accent); color: #fff; }
 .pill:active { transform: none; }
 .more { font-weight: 400; color: var(--ink); }
-.chip { font: 13px var(--mono); border: 1px solid var(--line); transition: border-color .15s; }
-.chip:hover { transform: none; border-color: var(--ink); }
-.chip[aria-pressed="true"] { transform: none; background: var(--ink); color: var(--bg); border-color: var(--ink); }
 
 /* Nav: translucent bar with a hairline, like camtoan.me's header. */
 .nav { background: color-mix(in srgb, var(--bg) 88%, transparent); border-bottom: 1px solid var(--rule); backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px); }
@@ -358,9 +313,6 @@ h3 { font-weight: 750; letter-spacing: -.02em; }
 .hero .ctas { justify-content: flex-start; }
 .band, .band-gray, .band-dark, .stats-band { background: transparent; color: var(--ink); border-top: 1px solid var(--rule); }
 .band-dark .eyebrow { color: var(--accent-text); }
-.marquee { background: transparent; border-bottom: 1px solid var(--rule); }
-.marquee-item { font: 12px var(--mono); border: 1px solid var(--line); }
-.marquee-item:hover { background: none; color: var(--accent-text); border-color: var(--accent); }
 
 /* Cards: hairline boxes; hover turns the border accent. No lift, no float. */
 .tile, .cert, .step, .stat, .product-card, .stack-card, .cl-day {
@@ -382,7 +334,6 @@ h3 { font-weight: 750; letter-spacing: -.02em; }
 .doc th { background: transparent; color: var(--ink); font-family: var(--mono); font-weight: 400; text-transform: uppercase; font-size: 12px; letter-spacing: .08em; }
 .doc pre { background: transparent; color: var(--ink); border: 1px solid var(--line); }
 .prose hr { border-top: 1px solid var(--rule); }
-kbd { border: 1px solid var(--line); font-family: var(--mono); }
 
 /* Footer: quiet, small, separated by a hairline. */
 footer { background: transparent; color: var(--muted); border-top: 1px solid var(--rule); font: 12px var(--mono); padding: 2rem 1rem; }
@@ -397,161 +348,7 @@ footer .updated { background: none; color: var(--accent-text); border: 1px solid
   .nav-links { width: 100%; gap: .4rem .9rem; font-size: 13px; }
 }
 
-/* ---- Security feature database (home page) ---- */
-.db-hero { padding: 96px 1rem 72px; }
-.db-hero h1 { max-width: 15ch; margin: 18px 0 20px; }
-.db-hero .lead { max-width: 58ch; margin-bottom: 32px; }
-.db-search-wrap { position: relative; max-width: 760px; }
-.db-search {
-  width: 100%; padding: 22px 64px 22px 58px; font: 400 clamp(16px, 2.2vw, 21px) var(--mono);
-  background: var(--bg); color: var(--ink); border: 1px solid var(--ink); border-radius: 0; outline: none;
-  -webkit-appearance: none; appearance: none;
-}
-.db-search::placeholder { color: var(--muted); opacity: 1; }
-.db-search::-webkit-search-cancel-button { display: none; }
-.db-search:focus { border-color: var(--accent); }
-.db-search-ico { position: absolute; left: 22px; top: 50%; transform: translateY(-50%); color: var(--muted); pointer-events: none; transition: color .2s; }
-.db-search-wrap:focus-within .db-search-ico { color: var(--accent-text); }
-.db-keys { position: absolute; right: 18px; top: 50%; transform: translateY(-50%); }
-/* Accent bar that sweeps under the box while it has focus. */
-.db-search-wrap::after { content: ""; position: absolute; left: 0; right: 0; bottom: -1px; height: 3px; background: var(--accent); transform: scaleX(0); transform-origin: left; transition: transform .45s cubic-bezier(.2, .9, .2, 1); }
-.db-search-wrap:focus-within::after { transform: scaleX(1); }
-.db-tip { margin: 16px 0 0; font-size: 13px; color: var(--muted); }
-.db-tip a { color: var(--ink); }
-
-.db-marquee .marquee-item { font-style: italic; }
-.db-band { max-width: 1240px; margin: 0 auto; padding: 40px 1rem 96px; border-top: 0; }
-.db-bar { position: sticky; top: 60px; z-index: 5; padding: 14px 0; margin-bottom: 26px; background: color-mix(in srgb, var(--bg) 92%, transparent); backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px); border-bottom: 1px solid var(--rule); }
-.db-chips { justify-content: flex-start; margin: 0; gap: 8px; max-width: none; }
-.chip { padding: 6px 11px; background: var(--bg); color: var(--ink); }
-.chip-n { color: var(--muted); margin-left: 4px; font-size: 11px; }
-.chip[aria-pressed="true"] .chip-n { color: inherit; opacity: .6; }
-.chip-must { border-color: var(--accent); }
-.db-tools { display: flex; flex-wrap: wrap; align-items: center; gap: 10px 18px; margin-top: 12px; font-size: 13px; }
-.db-count { margin: 0 auto 0 0; color: var(--muted); }
-.db-sort { display: flex; border: 1px solid var(--line); }
-.db-sort button, .db-surprise, .linkish { font: 12px var(--mono); padding: 5px 10px; background: none; color: var(--ink); border: 0; cursor: pointer; }
-.db-sort button + button { border-left: 1px solid var(--line); }
-.db-sort button[aria-pressed="true"] { background: var(--ink); color: var(--bg); }
-.db-surprise { border: 1px solid var(--line); transition: border-color .15s, color .15s; }
-.db-surprise:hover { border-color: var(--accent); color: var(--accent-text); }
-.linkish { padding: 0; font: inherit; text-decoration: underline; text-underline-offset: 3px; }
-
-.db-grid { display: grid; gap: 0; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); border-top: 1px solid var(--line); border-left: 1px solid var(--line); }
-.db-card {
-  position: relative; display: flex; flex-direction: column; gap: 8px; min-height: 236px; padding: 20px 20px 18px;
-  color: var(--ink); text-decoration: none; background: var(--bg);
-  border-right: 1px solid var(--line); border-bottom: 1px solid var(--line); overflow: hidden;
-  transition: background .2s;
-}
-.db-card[hidden] { display: none; }
-.db-card::before { content: ""; position: absolute; left: 0; top: 0; bottom: 0; width: 3px; background: var(--accent); transform: scaleY(0); transform-origin: top; transition: transform .3s cubic-bezier(.2, .9, .2, 1); }
-.db-card:hover, .db-card:focus-visible { color: var(--ink); background: color-mix(in srgb, var(--accent) 5%, var(--bg)); }
-.db-card:hover::before, .db-card:focus-visible::before { transform: scaleY(1); }
-.db-card:focus-visible { outline-offset: -3px; }
-/* Specimen: the unsafe thing, struck out; flips to the fix on hover. */
-.db-spec { position: relative; display: block; height: 22px; overflow: hidden; font: 12px/22px var(--mono); }
-.db-spec s, .db-spec b { position: absolute; inset: 0; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; font-weight: 400; transition: transform .35s cubic-bezier(.2, .9, .2, 1), opacity .35s; }
-.db-spec s { color: var(--muted); text-decoration-color: var(--accent); }
-.db-spec b { color: var(--accent-text); transform: translateY(100%); opacity: 0; }
-.db-card:hover .db-spec s, .db-card:focus-visible .db-spec s { transform: translateY(-100%); opacity: 0; }
-.db-card:hover .db-spec b, .db-card:focus-visible .db-spec b { transform: none; opacity: 1; }
-.db-meta { display: flex; justify-content: space-between; gap: 8px; font: 11px var(--mono); text-transform: uppercase; letter-spacing: .08em; color: var(--muted); }
-.db-pri { padding: 1px 6px; border: 1px solid var(--line); }
-.pri-must { color: var(--accent-text); border-color: var(--accent); }
-.db-name { margin-top: 6px; font: 750 22px/1.1 var(--sans); letter-spacing: -.025em; }
-.db-one { font: 14px/1.5 var(--sans); color: var(--muted); }
-.db-stops { margin-top: auto; padding-top: 8px; font-size: 12px; color: var(--muted); border-top: 1px dashed var(--rule); }
-
-.db-empty { padding: 48px 0; max-width: 60ch; }
-.db-empty-big { font: 800 clamp(2rem, 4vw, 3rem)/1 var(--sans); letter-spacing: -.035em; margin: 0 0 12px; }
-
-.db-areas { max-width: 1240px; margin: 0 auto; padding: 72px 1rem 96px; }
-.db-area-grid { margin-top: 24px; display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: 0; border-top: 1px solid var(--line); }
-.db-area { display: grid; gap: 6px; padding: 22px 18px 22px 0; border-bottom: 1px solid var(--line); text-decoration: none; color: var(--ink); transition: padding .25s cubic-bezier(.2, .9, .2, 1); }
-.db-area:hover { padding-left: 12px; }
-.db-area-n { font-size: 12px; color: var(--accent-text); }
-.db-area-name { font: 750 20px/1.15 var(--sans); letter-spacing: -.02em; }
-.db-area-tag { font: 14px/1.45 var(--sans); color: var(--muted); }
-.db-area-count { font-size: 12px; color: var(--muted); }
-.db-area:hover .db-area-count { color: var(--accent-text); }
-
-@media (prefers-reduced-motion: no-preference) {
-  .db-card.enter { animation: db-in .5s cubic-bezier(.2, .9, .2, 1) backwards; animation-delay: calc(var(--i, 0) * 28ms); }
-  @keyframes db-in { from { opacity: 0; transform: translateY(14px); } }
-  .db-search-ico { animation: db-blink 2.4s ease-in-out 1.2s 2; }
-  @keyframes db-blink { 50% { color: var(--accent-text); } }
-}
-@media (max-width: 600px) {
-  .db-hero { padding: 56px 1rem 48px; }
-  .db-search { padding: 18px 16px 18px 50px; }
-  .db-search-ico { left: 16px; }
-  .db-keys { display: none; }
-  .db-bar { position: static; }
-  .db-chips { flex-wrap: nowrap; overflow-x: auto; padding-bottom: 4px; scrollbar-width: none; }
-  .chip { flex: none; }
-  .db-grid { grid-template-columns: 1fr; }
-  .db-card { min-height: 0; }
-}
-
-/* ---- Security feature database (entry page) ---- */
-.entry-head { padding: 88px 1rem 64px; }
-.entry-inner { max-width: 980px; margin: 0 auto; }
-.entry-inner .crumbs { max-width: none; margin: 0; padding: 0; font-weight: 400; font-size: 12px; color: var(--muted); }
-.entry-inner .crumbs a { color: var(--ink); }
-.entry-badges { display: flex; flex-wrap: wrap; gap: 8px; margin: 18px 0 0; font: 11px var(--mono); text-transform: uppercase; letter-spacing: .08em; }
-.entry-cwe { padding: 1px 6px; border: 1px solid var(--line); color: var(--ink); text-decoration: none; }
-.entry-cwe:hover { border-color: var(--accent); color: var(--accent-text); }
-.entry-head h1 { margin: 16px 0 12px; max-width: 18ch; }
-.entry-aka { margin: 0 0 22px; font-size: 13px; color: var(--muted); }
-.entry-head .lead { max-width: 60ch; }
-.entry-stops { margin: 22px 0 0; max-width: 70ch; font: 15px/1.55 var(--sans); }
-.entry-stops span { margin-right: 8px; font: 11px var(--mono); text-transform: uppercase; letter-spacing: .1em; color: var(--accent-text); }
-
-.entry-body { max-width: 980px; margin: 0 auto; padding: 0 1rem 72px; }
-.entry-sec { padding: 40px 0; border-top: 1px solid var(--rule); }
-.entry-sec h2 { font-size: clamp(1.5rem, 2.6vw, 2.1rem); margin: 0 0 20px; }
-.entry-n { margin-right: 10px; font: 13px var(--mono); color: var(--accent-text); vertical-align: middle; letter-spacing: 0; }
-.entry-explain { max-width: 68ch; font: 17px/1.65 var(--sans); }
-.entry-said-label { margin: 26px 0 10px; font-size: 12px; color: var(--muted); text-transform: uppercase; letter-spacing: .08em; }
-.entry-said { display: flex; flex-wrap: wrap; gap: 8px; margin: 0; }
-.entry-said a { padding: 5px 10px; font-size: 13px; color: var(--ink); text-decoration: none; border: 1px solid var(--line); transition: border-color .15s, color .15s; }
-.entry-said a:hover { border-color: var(--accent); color: var(--accent-text); }
-
-.entry-parts { counter-reset: part; list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); border-top: 1px solid var(--line); border-left: 1px solid var(--line); }
-.entry-parts li { counter-increment: part; display: grid; gap: 6px; padding: 18px; border-right: 1px solid var(--line); border-bottom: 1px solid var(--line); }
-.entry-parts li::before { content: counter(part, decimal-leading-zero); font-size: 11px; color: var(--accent-text); }
-.entry-parts b { font: 700 17px/1.2 var(--sans); }
-.entry-parts span { font: 14px/1.5 var(--sans); color: var(--muted); }
-
-.entry-sec-top { display: flex; flex-wrap: wrap; align-items: baseline; justify-content: space-between; gap: 12px; }
-.copy-btn { font: 12px var(--mono); padding: 5px 10px; background: none; color: var(--ink); border: 1px solid var(--line); cursor: pointer; transition: border-color .15s, color .15s; }
-.copy-btn:hover, .copy-btn.copied { border-color: var(--accent); color: var(--accent-text); }
-.entry-prompt, .entry-code pre { margin: 0; padding: 18px 20px; font: 13px/1.6 var(--mono); border: 1px solid var(--line); background: color-mix(in srgb, var(--ink) 3%, var(--bg)); }
-.entry-prompt { white-space: pre-wrap; }
-.entry-code pre { overflow-x: auto; }
-.entry-code + .entry-code { margin-top: 24px; }
-.entry-code-top { display: flex; justify-content: space-between; align-items: center; margin-bottom: -1px; padding: 6px 6px 6px 12px; border: 1px solid var(--line); }
-.entry-stack { font-size: 12px; text-transform: uppercase; letter-spacing: .08em; color: var(--muted); }
-.entry-note { margin: 10px 0 0; max-width: 70ch; font: 14px/1.5 var(--sans); color: var(--muted); }
-
-.entry-verify, .entry-refs { list-style: none; margin: 0; padding: 0; }
-.entry-verify li { position: relative; padding: 10px 0 10px 26px; border-bottom: 1px dashed var(--rule); font: 15px/1.55 var(--sans); }
-.entry-verify li::before { content: ""; position: absolute; left: 0; top: 17px; width: 10px; height: 10px; border: 1px solid var(--accent); }
-.entry-refs li { padding: 6px 0; }
-.entry-refs a { color: var(--ink); }
-.entry-refs a:hover { color: var(--accent-text); }
-
-.entry-related { max-width: 1240px; margin: 0 auto; }
-.entry-related .db-grid { margin-top: 20px; }
-
-@media (max-width: 600px) {
-  .entry-head { padding: 48px 1rem 40px; }
-  .entry-sec { padding: 28px 0; }
-  .entry-prompt, .entry-code pre { padding: 14px; font-size: 12px; }
-}
-
-/* ---- Liquid glass (nav capsule, landing card, buttons, search filter bar). ----
+/* ---- Liquid glass (nav capsule, landing card, buttons). ----
    A clear, thick-looking lens: light fill, bright rim that turns toward the pointer, inner glow, soft depth
    shadow, springy hover. public/glass.js adds the real bending of the backdrop at the rim (Chromium);
    without it this is frosted glass. Hand-built so the strict Content-Security-Policy holds — no library. */
@@ -610,7 +407,6 @@ html { scroll-padding-top: 88px; }
 /* Primary button: same clear glass as the others, with an orange tint so it still reads as the main action. */
 .pill.glass-tint { background: color-mix(in srgb, var(--accent) 22%, transparent); color: var(--ink); }
 .pill.glass-tint:hover { background: color-mix(in srgb, var(--accent) 34%, transparent); color: var(--ink); }
-.db-bar.glass { top: 76px; border-radius: 30px; padding: 14px 16px; border: 0; background: color-mix(in srgb, var(--bg) 60%, transparent); --glass-bezel: 16px; --glass-blur: 7px; }
 
 @media (prefers-reduced-motion: no-preference) {
   /* Springy, slightly overshooting — the "liquid" part. */
@@ -622,7 +418,6 @@ html { scroll-padding-top: 88px; }
 @media (max-width: 600px) {
   .nav.glass { border-radius: 30px; }
   .nav.glass .nav-inner { height: auto; padding: 10px 16px; }
-  .db-bar.glass { top: auto; }
 }
 
 /* ---- Landing page: ASCII sky over grid paper, a glass card, and an ASCII site tree. ---- */
@@ -689,76 +484,44 @@ body {
 .hero, .landing { background-image: none; }
 .hero { padding: clamp(56px, 9vw, 120px) var(--gutter) clamp(40px, 7vw, 96px); }
 .band, .band-gray { padding: clamp(40px, 7vw, 88px) var(--gutter); border-top: 0; }
-.db-hero { padding: clamp(48px, 8vw, 96px) var(--gutter) clamp(36px, 6vw, 72px); }
-.db-band { padding: clamp(24px, 4vw, 40px) var(--gutter) clamp(48px, 8vw, 96px); }
-.db-areas { padding: clamp(40px, 6vw, 72px) var(--gutter) clamp(48px, 8vw, 96px); border-top: 0; }
-.entry-head { padding: clamp(40px, 7vw, 88px) var(--gutter) clamp(32px, 5vw, 64px); }
-.entry-body { padding: 0 var(--gutter) clamp(40px, 6vw, 72px); }
 .prose { padding: clamp(48px, 7vw, 72px) var(--gutter) clamp(56px, 8vw, 96px); }
 .landing-inner { padding: clamp(32px, 6vw, 72px) var(--gutter) clamp(48px, 7vw, 88px); }
-.marquee { border-bottom: 0; }
 
 /* Panes: every box. */
-.db-card, .tile, .product-card, .stack-card, .cl-day, .entry-parts li, .entry-prompt, .entry-code, .doc pre, .doc table,
-.db-area, .cp-prev, .cp-next, footer, footer.glass {
+.tile, .product-card, .stack-card, .cl-day, .doc pre, .doc table, footer, footer.glass {
   background: var(--pane); border: 0; border-radius: var(--r-md); box-shadow: var(--pane-shadow) !important;
 }
 .pane.glass { position: relative; --glass-bezel: 14px; }
 .pane.glass::after { display: none; }
-/* Search cards already use ::before for the orange hover bar; keep that bar instead of the rim line. */
-.db-card.glass::before { inset: 0 auto 0 0; width: 3px; padding: 0; border-radius: 0; background: var(--accent); -webkit-mask: none; mask: none; }
-.db-grid, .entry-parts { gap: var(--gap); border: 0; grid-template-columns: repeat(auto-fill, minmax(min(100%, 260px), 1fr)); }
-.db-area-grid { gap: var(--gap); border: 0; grid-template-columns: repeat(auto-fill, minmax(min(100%, 220px), 1fr)); }
 .products, .stack-grid, .tiles { gap: var(--gap); grid-template-columns: repeat(auto-fit, minmax(min(100%, 250px), 1fr)); }
-.db-card { min-height: 0; padding: clamp(16px, 2vw, 22px); }
-.db-card:hover, .db-card:focus-visible { background: var(--pane); }
-.db-area, .db-area:hover { padding: 18px 20px; }
 .tile, .product-card, .stack-card, .cl-day { padding: clamp(18px, 2.4vw, 26px); }
-.entry-code { overflow: hidden; }
-.entry-code-top { margin: 0; border: 0; border-bottom: 1px solid var(--pane-edge); padding: 8px 8px 8px 18px; }
-.entry-code pre { border: 0; background: none; }
 .doc table { border-collapse: separate; border-spacing: 0; }
 .doc th, .doc td { border-width: 0 0 1px; }
 .doc td code, .doc th code { white-space: normal; overflow-wrap: anywhere; }
 .prose code { word-break: normal; overflow-wrap: anywhere; }
-.cp-prev, .cp-next { padding: 12px 18px; }
 footer, footer.glass { width: min(1080px, calc(100% - 24px)); margin: clamp(24px, 5vw, 64px) auto 16px; padding: 18px var(--gutter); border-radius: var(--r-lg); }
 
 /* Capsules: every control and badge. */
-.pill, .chip, .marquee-item, .copy-btn, .db-surprise, .db-sort, .theme, .entry-said a, .entry-cwe, .db-pri, .status,
+.pill, .theme, .status,
 .product-badge, footer .updated, .updated-big .updated, .step-num { border-radius: 999px; }
-.chip, .marquee-item, .copy-btn, .db-surprise, .db-sort, .theme, .entry-said a, .entry-cwe {
+.theme {
   background: var(--pane); border: 0; box-shadow: var(--pane-shadow) !important;
 }
-.chip { padding: 7px 14px; }
-.chip[aria-pressed="true"] { background: var(--ink); color: var(--bg); }
-.chip-must { box-shadow: var(--pane-shadow), inset 0 0 0 1.5px var(--accent) !important; }
-.marquee-item, .entry-said a { padding: 7px 14px; }
-.copy-btn, .db-surprise { padding: 7px 14px; }
-.db-sort, .theme { padding: 3px; gap: 2px; }
-.db-sort button, .theme button { border-radius: 999px; padding: 5px 11px; font-size: clamp(11px, .6rem + .25vw, 12px); }
-.db-sort button + button, .theme button + button, .nav.glass .theme button + button { border-left: 0; }
+.theme { padding: 3px; gap: 2px; }
+.theme button { border-radius: 999px; padding: 5px 11px; font-size: clamp(11px, .6rem + .25vw, 12px); }
+.theme button + button, .nav.glass .theme button + button { border-left: 0; }
 .pill { border: 0; padding: 12px 22px; box-shadow: inset 0 1px 0 rgba(255, 255, 255, .28), 0 12px 26px -14px var(--glass-shade) !important; }
-.db-pri, .status, .product-badge, .entry-cwe { padding: 2px 10px; }
-kbd { border: 0; border-radius: 8px; padding: 2px 8px; background: var(--pane); box-shadow: var(--pane-shadow) !important; }
-
-/* Search box: a glass capsule with the real lens (it carries the .glass class). */
-.db-search-wrap.glass { border-radius: 999px; --glass-bezel: 22px; --glass-blur: 3px; }
-.db-search-wrap.glass::after { inset: 0; height: auto; transform: none; transition: none; background: radial-gradient(120% 90% at 18% -20%, var(--glass-glow), transparent 60%); }
-.db-search-wrap.glass:focus-within { outline: 2px solid var(--accent); outline-offset: 2px; }
-.db-search { background: transparent; border: 0; border-radius: 999px; font-size: clamp(16px, .8rem + .6vw, 21px); padding: clamp(15px, 2vw, 22px) 64px clamp(15px, 2vw, 22px) 60px; }
-.db-search:focus-visible { outline: 0; }
-.db-bar.glass { border-radius: var(--r-md); }
+.status, .product-badge { padding: 2px 10px; }
 
 /* Link cards rise a little on hover and get an accent ring. */
-a.db-card:hover, a.tile:hover, a.product-card:hover, a.db-area:hover, .cp-prev:hover, .cp-next:hover {
+a.tile:hover, a.product-card:hover {
   box-shadow: var(--pane-shadow), 0 0 0 1.5px var(--accent) !important;
 }
 @media (prefers-reduced-motion: no-preference) {
-  a.db-card, a.tile, a.product-card, a.db-area, .cp-prev, .cp-next, .chip, .pill, .marquee-item { transition: transform .35s cubic-bezier(.16, 1, .3, 1), box-shadow .25s, background .2s, color .2s; }
-  a.db-card:hover, a.tile:hover, a.product-card:hover, a.db-area:hover, .cp-prev:hover, .cp-next:hover { transform: translateY(-3px); }
-  .chip:hover, .pill:hover, .marquee-item:hover { transform: scale(1.04); }
-  .pill:active, .chip:active { transform: scale(.96); }
+  a.tile, a.product-card, .pill { transition: transform .35s cubic-bezier(.16, 1, .3, 1), box-shadow .25s, background .2s, color .2s; }
+  a.tile:hover, a.product-card:hover { transform: translateY(-3px); }
+  .pill:hover { transform: scale(1.04); }
+  .pill:active { transform: scale(.96); }
 }
 
 /* Menu: text and gaps shrink smoothly with the window; when it still cannot fit on one row, the brand and theme
@@ -777,15 +540,8 @@ a.db-card:hover, a.tile:hover, a.product-card:hover, a.db-area:hover, .cp-prev:h
   .nav a { font-size: clamp(12px, 3.4vw, 14px); }
   html { scroll-padding-top: 116px; }
   .landing { margin-top: 0; padding-top: 0; }
-  .db-bar.glass { position: static; }
-  .db-chips { flex-wrap: nowrap; overflow-x: auto; padding: 4px 2px 8px; scrollbar-width: none; }
-  .chip { flex: none; }
-  .cp-nav { flex-direction: column; align-items: stretch; }
-  .cp-prev, .cp-next { max-width: none; }
-  .cp-next { text-align: left; margin-left: 0; }
   footer { border-radius: var(--r-md); }
 }
-.entry-note { margin: 0; padding: 10px 18px 14px; max-width: none; border-top: 1px solid var(--pane-edge); }
 
 /* ---- Kaiyori brand layer: logo mark, header with dropdowns, big footer, landing sections. Last on purpose. ---- */
 .logo { display: block; flex: none; border-radius: 8px; }
@@ -948,8 +704,6 @@ footer .f-cols h2 { margin: 0 0 10px; font: 400 11px/1 var(--mono); letter-spaci
 h1, h2, h3 { text-wrap: balance; }
 /* Hero padding sits inside its max-width, so widen it by the gutter to share a left edge with the cards below. */
 .hero { max-width: calc(1080px + 2 * var(--gutter)); }
-.hero.db-hero { max-width: 1240px; }
-.hero:not(.db-hero) + .band { padding-top: 0; }
 .band > h2.center, .band > p.center { max-width: 1080px; margin-inline: auto; text-align: left; }
 .band > p.center { margin-top: 2rem; }
 .changelog { max-width: 1080px; grid-template-columns: minmax(0, 820px); }

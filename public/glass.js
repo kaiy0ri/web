@@ -3,7 +3,7 @@
 // External file because the strict Content-Security-Policy allows no inline code. No library.
 (() => {
   // Panes (cards, tiles, code boxes, the footer) are glass too; the class is added here so the markup stays plain.
-  const PANES = ".db-card, .tile, .product-card, .stack-card, .cl-day, .entry-parts li, .entry-prompt, .entry-code, .doc pre, .doc table, .db-area, .cp-prev, .cp-next, .mock, footer";
+  const PANES = ".tile, .product-card, .stack-card, .cl-day, .doc pre, .doc table, .mock, footer";
   document.querySelectorAll(PANES).forEach((el) => el.classList.add("glass", "pane"));
   const els = [...document.querySelectorAll(".glass")];
   if (!els.length) return;
@@ -106,7 +106,7 @@
     for (const e of entries) pending.add(e.target);
     requestAnimationFrame(() => { pending.forEach(apply); pending.clear(); });
   });
-  // Only build a lens once its element scrolls near the screen: the search page has 70 cards.
+  // Only build a lens once its element scrolls near the screen: some pages have many cards.
   const io = new IntersectionObserver((entries) => {
     for (const e of entries) if (e.isIntersecting) { io.unobserve(e.target); ro.observe(e.target); }
   }, { rootMargin: "300px" });

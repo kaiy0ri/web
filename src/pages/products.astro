@@ -3,22 +3,15 @@ import Base from "../layouts/Base.astro";
 import { site } from "../site";
 ---
 
-<Base title={`Products — ${site.brand.name}`} description="Small, useful security tools for people without a security team: the free feature database, a checklist, a rules pack and a launch review.">
+<Base title={`Products — ${site.brand.name}`} description="Small, useful security tools for people without a security team: a launch checklist, a rules pack and a launch review.">
   <section class="hero stagger">
     <p class="eyebrow">Products</p>
     <h1>Built under<span>{site.brand.name}.</span></h1>
-    <p class="lead">Small, useful security tools for people without a security team. Start with the free security feature database, then grab the checklist, the rules pack or a review.</p>
+    <p class="lead">Small, useful security tools for people without a security team. Start with the free launch checklist, then grab the rules pack or a review.</p>
   </section>
 
   <section class="band">
     <div class="products">
-      <a class="product-card live reveal" href="/search/">
-        <span class="product-badge live">Live</span>
-        <h3>{site.brand.product}</h3>
-        <p>A searchable database of security features to add to a web app — what each one stops, how to build it, a prompt for your AI tool, and how to check it works.</p>
-        <span class="more">Open it</span>
-      </a>
-
       <a class="product-card live reveal" href="https://camtoan.gumroad.com/l/launch-checklist" rel="noopener">
         <span class="product-badge live">Free</span>
         <h3>Launch Security Checklist</h3>

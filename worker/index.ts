@@ -1,15 +1,11 @@
 // Kaiyori public REST API — runs on Cloudflare Workers for /api/* only.
 // Everything else on kamllistos.com is served as static files.
 // Read-only by design: GET/HEAD/OPTIONS only, no user data, no secrets, strict input validation.
-import { entries, categories, searchText } from "../src/db";
-
 interface Env {
   ASSETS: { fetch(req: Request | string): Promise<Response> };
 }
 
 const SITE = "https://kamllistos.com";
-const MAX_QUERY = 64;
-const MAX_RESULTS = 50;
 
 const HEADERS: Record<string, string> = {
   "Content-Type": "application/json; charset=utf-8",
@@ -47,8 +43,6 @@ async function readChangelog(env: Env, origin: string) {
 const ENDPOINTS = [
   { method: "GET", path: "/api/health", description: "Service status and current version." },
   { method: "GET", path: "/api/changelog?limit=20", description: "Recent site changes from Git history (limit 1–100)." },
-  { method: "GET", path: "/api/glossary?q=mfa&category=auth", description: "Search the security feature database (q up to 64 chars, both optional)." },
-  { method: "GET", path: "/api/glossary/categories", description: "List feature categories." },
 ];
 
 async function route(req: Request, env: Env): Promise<Response> {
@@ -70,38 +64,6 @@ async function route(req: Request, env: Env): Promise<Response> {
     const { updated, changes } = await readChangelog(env, url.origin);
     const daysSince = updated ? Math.floor((Date.now() - Date.parse(updated)) / 864e5) : null;
     return json({ updated, daysSince, count: Math.min(limit, changes.length), changes: changes.slice(0, limit) });
-  }
-
-  if (path === "/api/glossary/categories") {
-    return json({
-      count: categories.length,
-      categories: categories.map((c) => ({ id: c.id, name: c.name, short: c.short, tagline: c.tagline, features: c.count })),
-    });
-  }
-
-  if (path === "/api/glossary") {
-    const q = (url.searchParams.get("q") ?? "").trim().toLowerCase();
-    const category = url.searchParams.get("category");
-    if (q.length > MAX_QUERY) return error(400, "query_too_long", `q must be at most ${MAX_QUERY} characters.`);
-    if (category !== null && !categories.some((c) => c.id === category)) {
-      return error(400, "unknown_category", "Unknown category. See /api/glossary/categories.");
-    }
-    const terms = q.split(/\s+/).filter(Boolean);
-    const matches = entries.filter(
-      (e) => (category === null || e.category === category) && terms.every((t) => searchText(e).includes(t)),
-    );
-    return json({
-      query: q || null,
-      category,
-      total: matches.length,
-      results: matches.slice(0, MAX_RESULTS).map((e) => ({
-        name: e.name,
-        description: e.oneLiner,
-        category: e.category,
-        priority: e.priority,
-        url: `${SITE}/glossary/${e.slug}/`,
-      })),
-    });
   }
 
   return error(404, "not_found", "No such endpoint. See /api for the list.");

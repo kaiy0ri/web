@@ -46,20 +46,4 @@
     const open = dds.find((d) => d.open);
     if (open) { open.open = false; open.querySelector("summary").focus(); }
   });
-
-  // --- Copy buttons: <button data-copy="id-of-element"> copies that element's text ---
-  document.addEventListener("click", async (e) => {
-    const btn = e.target.closest("[data-copy]");
-    const src = btn && document.getElementById(btn.dataset.copy);
-    if (!src) return;
-    const label = btn.textContent;
-    try {
-      await navigator.clipboard.writeText(src.textContent.trim());
-      btn.textContent = "Copied ✓";
-    } catch {
-      btn.textContent = "Select & copy";
-    }
-    btn.classList.add("copied");
-    setTimeout(() => { btn.textContent = label; btn.classList.remove("copied"); }, 1600);
-  });
 })();
