@@ -775,3 +775,17 @@ h1, h2, h3 { text-wrap: balance; }
 .band > p.center { margin-top: 2rem; }
 .changelog { max-width: 1080px; grid-template-columns: minmax(0, 820px); }
 .cl-day li { font: 15px/1.55 var(--sans); }
+
+/* ---- Accessibility settings for the glass (last on purpose). ----
+   Reduce transparency or more contrast: the header and its menus become solid, the scroll edge becomes a plain band
+   under the header, and with more contrast every edge is drawn in full ink. Only the unprefixed backdrop-filter is
+   reset here: the minifier drops it when both names sit together, and older Safari's blur is hidden by the solid fill. */
+@media (prefers-reduced-transparency: reduce), (prefers-contrast: more) {
+  .glass::after { backdrop-filter: none; background: var(--bg); box-shadow: inset 0 0 0 1px var(--line) !important; }
+  .glass::before { display: none; }
+  body::before { height: calc(var(--edge) - 16px); background: var(--bg); backdrop-filter: none; -webkit-mask: none; mask: none; }
+}
+@media (prefers-contrast: more) {
+  .glass::after { box-shadow: inset 0 0 0 1.5px var(--ink) !important; }
+  .tile, .product-card, .stack-card, .cl-day, .doc pre, .doc table, footer, .mock, .theme { box-shadow: inset 0 0 0 1px var(--ink) !important; }
+}
