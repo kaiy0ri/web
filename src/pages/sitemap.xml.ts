@@ -1,7 +1,7 @@
 // Sitemap for search engines. scripts/check-build.mjs fails if a built page is missing here.
 import { getCollection } from "astro:content";
 
-const STATIC = ["/", "/products/", "/docs/", "/changelog/", "/stack/", "/legal/", "/security/"];
+const STATIC = ["/", "/docs/", "/changelog/", "/stack/", "/legal/", "/security/"];
 
 export async function GET() {
   const docs = (await getCollection("docs")).map((d) => `/docs/${d.id}/`);

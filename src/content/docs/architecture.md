@@ -2,7 +2,7 @@
 title: Architecture
 description: How this site is put together, from a change in Git to a page in your browser.
 order: 0
-updated: 2026-11-22
+updated: 2026-11-24
 ---
 
 ## The big picture
@@ -52,7 +52,6 @@ kamllistos.com is a **static site**. Every page is built ahead of time into plai
 | Proton Mail | Email, with SPF, DKIM and DMARC on the domain |
 | Upptime | The [status page](https://status.camtoan.me), which checks uptime every 5 minutes |
 | camtoan.me | The owner's personal site, a separate repo on GitHub Pages. The blog and services pages live there; old `/blog` and `/services` links redirect to them. |
-| Gumroad | Checkout for products. Payments never touch this site. |
 
 Each one is labelled honestly on the [stack](/stack/) page. What each can see about visitors is on [Third-party disclosure](/legal/third-party-disclosure/).
 

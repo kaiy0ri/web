@@ -13,7 +13,6 @@ export async function GET() {
     "",
     "## Main pages",
     "",
-    "- [Products](https://kamllistos.com/products/): checklist, rules pack and launch review",
     "- [Public API](https://kamllistos.com/openapi.json): read-only JSON API for site status and the changelog (GET /api/health, /api/changelog)",
     "- [Changelog](https://kamllistos.com/changelog/): every change in plain English",
     "",

@@ -6,16 +6,18 @@
 /blog             https://camtoan.me/blog/          301
 /services         https://camtoan.me/services/      301
 /services/        https://camtoan.me/services/      301
-/features         /products/               301
-/features/        /products/               301
+/features         /                        301
+/features/        /                        301
 /favicon.ico      /icon-48.png             301
 
-# The security feature database (search and glossary pages) was removed. Its checklist and rules live on as products.
-/search           /products/               301
-/search/          /products/               301
-/glossary         /products/               301
-/glossary/        /products/               301
+# Removed pages: the old security feature database (search, glossary) and the products page built from it.
+/products         /                        301
+/products/        /                        301
+/search           /                        301
+/search/          /                        301
+/glossary         /                        301
+/glossary/        /                        301
 
 # Splats last: every rule after a splat counts toward the 100 dynamic-rule cap.
 /blog/*           https://camtoan.me/blog/:splat    301
-/glossary/*       /products/               301
+/glossary/*       /                        301
