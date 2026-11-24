@@ -12,11 +12,9 @@ const steps = [
   { name: "Ship", text: "Release it, collect the first feedback and decide what comes next." },
 ];
 const pillars = [
-  { name: "Fast", text: "Less time between the idea and something people can try." },
-  { name: "Efficient", text: "The idea, the spec and the work live in one place, so nothing gets explained twice." },
-  { name: "Secure", text: "Security is part of the plan from day one." },
-  { name: "Cheap", text: "Meant to be affordable for solo makers and small teams. Pricing is not set yet." },
-  { name: "Smooth", text: "Plain English, few clicks and no setup maze." },
+  { name: "The spec decides v1", text: "Anything not in the spec waits for the next round." },
+  { name: "One place for the work", text: "The idea, the spec and the tasks sit together, so nothing gets explained twice." },
+  { name: "Security before launch", text: "Basic checks (inputs, secrets, packages) happen before Ship, not after." },
 ];
 // Home mock: one illustrative project shown at each stage. Spec is selected without JS; public/mock.js makes the stages tabs.
 const stages = [
@@ -179,14 +177,14 @@ const checks = [
   <section class="sec">
     <div class="sec-inner why">
       <div class="why-head">
-        <h2>Made for people who ship</h2>
-        <p class="sec-lead">Small teams and solo makers do not need another heavy tool. They need the next step to be obvious.</p>
+        <h2>Who it's for</h2>
+        <p class="sec-lead">Solo makers and small teams who have an idea and want the next step to be obvious.</p>
       </div>
       <dl class="why-list">
         {pillars.map((p) => (
           <div class="why-item reveal">
             <dt>{p.name}</dt>
-            <dd>{p.text}{p.href && <> <a href={p.href}>{p.link}</a>.</>}</dd>
+            <dd>{p.text}</dd>
           </div>
         ))}
       </dl>

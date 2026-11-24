@@ -3,14 +3,14 @@ export const site = {
   name: "Cam Toan Do",
   role: "Microsoft 365 Security & Governance Specialist",
   headline: "Idea to MVP.\nEven better.",
-  tagline: "A SaaS for product management: turn an idea into a working MVP, fast, cheap, secure and smooth. At the idea stage, with early access by email.",
+  tagline: "A planned product-management tool that turns an idea into a small working MVP, then improves it round by round. Idea stage; early access by email.",
   email: "official@camtoan.me",
 
   // The SaaS brand (idea stage, not built or launched). The site stays on kamllistos.com for now.
   brand: {
     name: "Kaiyori",
     pronounce: "kai-YO-ri",
-    description: "Kaiyori is a planned product-management tool that takes an idea to a working MVP: fast, cheap, secure and smooth. It is at the idea stage, with early access by email.",
+    description: "Kaiyori is a planned product-management tool that takes an idea to a working MVP and then improves it one version at a time. It is at the idea stage, with early access by email.",
     meaning: "Kai comes from kaizen (改善), the Japanese idea of continuous improvement. Yori (より) means “more than”. Together: keep making the product better, one step at a time.",
   },
 

@@ -818,16 +818,13 @@ footer .f-cols h2 { margin: 0 0 10px; font: 400 11px/1 var(--mono); letter-spaci
 .path-loop { margin: 0 0 0 calc(4 * clamp(0px, 7vw, 96px)); padding: 18px 0 0; max-width: 46ch; border-top: 1.5px dashed var(--accent); font-size: clamp(15px, 1.2vw, 17px); color: var(--ink); }
 .path-step p { margin: 0; max-width: 46ch; font-size: clamp(15px, 1.2vw, 17px); color: var(--muted); }
 
-/* Why: heading pinned left, five qualities as plain type on the right. */
+/* Why: heading pinned left, three commitments as short headed lines on the right. */
 .why { display: grid; grid-template-columns: minmax(0, .8fr) minmax(0, 1.2fr); gap: clamp(28px, 6vw, 96px); align-items: start; }
 .why-head { position: sticky; top: 96px; }
 .why-list { margin: 0; display: grid; gap: clamp(22px, 3vw, 34px); }
 .why-item { margin: 0; }
-.why-item dt { font: 800 clamp(1.8rem, 3.6vw, 3rem)/1 var(--sans); letter-spacing: -.04em; }
-.why-item:nth-child(3) dt { color: var(--accent); }
+.why-item dt { font: 750 clamp(1.2rem, 2vw, 1.6rem)/1.15 var(--sans); letter-spacing: -.025em; }
 .why-item dd { margin: 8px 0 0; max-width: 46ch; font-size: clamp(15px, 1.2vw, 17px); color: var(--muted); }
-.why-item dd a { color: var(--ink); text-underline-offset: 4px; }
-.why-item dd a:hover { color: var(--accent-text); }
 
 /* Closing line: one message and the same call to action. */
 .closing { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 28px 40px; padding-bottom: 0; }
