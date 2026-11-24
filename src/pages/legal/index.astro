@@ -14,15 +14,15 @@ const label = { "in-effect": "In effect", standby: "Standby" };
     <p class="lead">This site collects almost nothing: no accounts, no forms, no tracking. Each page says what's true today and what would have to happen before that changes. <b>In effect</b> applies now. <b>Standby</b> is a plan that's ready for when it's needed.</p>
   </section>
   <section class="band band-gray">
-    <div class="tiles">
+    <ul class="rows">
       {pages.map((p) => (
-        <a class="tile tile-link reveal" href={`/legal/${p.id}/`}>
-          <span class={`status status-${p.data.status}`}>{label[p.data.status]}</span>
-          <h3>{p.data.title}</h3>
+        <li class="row reveal">
+          <h3><a class="row-link" href={`/legal/${p.id}/`}>{p.data.title}</a></h3>
           <p>{p.data.description}</p>
-        </a>
+          <span class={`status status-${p.data.status}`}>{label[p.data.status]}</span>
+        </li>
       ))}
-    </div>
+    </ul>
     <p class="center">Questions? <a href={`mailto:${site.email}`}>{site.email}</a></p>
   </section>
 </Base>

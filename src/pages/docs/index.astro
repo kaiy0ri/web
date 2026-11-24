@@ -13,14 +13,14 @@ const docs = (await getCollection("docs")).sort((a, b) => a.data.order - b.data.
     <p class="lead">Plain-English documentation for the tools behind this site. It explains how each control works. It never includes keys, tokens or account details.</p>
   </section>
   <section class="band band-gray">
-    <div class="tiles">
+    <ul class="rows rows-2">
       {docs.map((d) => (
-        <a class="tile tile-link reveal" href={`/docs/${d.id}/`}>
-          <h3>{d.data.title}</h3>
+        <li class="row reveal">
+          <h3><a class="row-link" href={`/docs/${d.id}/`}>{d.data.title}</a></h3>
           <p>{d.data.description}</p>
-        </a>
+        </li>
       ))}
-    </div>
+    </ul>
     <p class="center"><a class="more" href="/stack/">See the full stack</a></p>
   </section>
 </Base>
