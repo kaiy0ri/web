@@ -3,7 +3,7 @@ title: Third-party disclosure
 description: Every outside company that could see information about you through this site.
 order: 9
 status: in-effect
-updated: 2026-11-09
+updated: 2026-11-24
 ---
 
 ## The promise
@@ -16,7 +16,6 @@ I don't sell personal information. I don't share it for advertising. It only goe
 | --- | --- | --- | --- |
 | [Cloudflare](https://www.cloudflare.com/privacypolicy/) | Hosting, DNS, security | IP address, browser type, pages requested | Worldwide network (US company) |
 | [Proton Mail](https://proton.me/legal/privacy) | Email | Emails you send me | Switzerland |
-| [Gumroad](https://gumroad.com/privacy) | Product checkout | Name, email, payment and tax details, if you buy | United States |
 
 ## Who doesn't
 

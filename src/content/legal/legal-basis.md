@@ -3,7 +3,7 @@ title: Legal basis
 description: The lawful reason behind each use of personal information.
 order: 4
 status: in-effect
-updated: 2026-11-09
+updated: 2026-11-24
 ---
 
 ## Why this page exists
@@ -15,7 +15,7 @@ Privacy laws require a valid reason for every use of personal information. Canad
 | Serve pages and keep the site secure (host request data) | The site can't work or be defended without it | Reasonable purpose, implied consent | Legitimate interests |
 | Remember your theme choice | You asked for it | Implied consent | Not personal data; strictly necessary |
 | Read and answer your email | You contacted me | Implied consent | Legitimate interests, or steps before a contract |
-| Deliver a product or service you bought | To do what you paid for | Consent as part of the agreement | Performance of a contract |
+| Deliver a service you hired me for | To do what you paid for | Consent as part of the agreement | Performance of a contract |
 | Keep invoices and tax records | The law requires it | Required by law | Legal obligation |
 | Send marketing email | Only if you opted in | Express consent (CASL) | Consent |
 

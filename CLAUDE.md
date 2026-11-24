@@ -40,5 +40,5 @@ Owner has no coding background: explain plainly, keep things simple, be honest.
 - Enable DNSSEC (Cloudflare → DS record in Namecheap).
 - Delete Netlify project after a stable week.
 - Optional: blameless postmortem of the cutover outage; Lambda "website security check" tool.
-- Legal pages: owner to confirm the commitments (12-month enquiry retention, 30-day replies, Alberta governing law, product reuse terms, liability cap of CA$100 for free content / price paid for products), confirm whether Proton offers a DPA on the current plan, and decide on a LICENSE for the repo. Not lawyer-reviewed.
+- Legal pages: owner to confirm the commitments (12-month enquiry retention, 30-day replies, Alberta governing law, reuse terms for products bought earlier on Gumroad, liability cap of CA$100 for free content), confirm whether Proton offers a DPA on the current plan, and decide on a LICENSE for the repo. Not lawyer-reviewed.
 - DMARC p=quarantine → p=reject once email is proven stable.

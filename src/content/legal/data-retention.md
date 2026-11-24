@@ -3,7 +3,7 @@ title: Data retention
 description: How long each kind of information is kept, and why.
 order: 7
 status: in-effect
-updated: 2026-11-09
+updated: 2026-11-24
 ---
 
 ## The rule
@@ -20,7 +20,6 @@ Keep information only as long as there's a reason to, then delete it.
 | Client emails, reports and working files | The length of the engagement plus the period in our written agreement | To do the work and answer later questions |
 | Access to a client's systems | Removed when the engagement ends | No reason to keep access |
 | Invoices and tax records | 6 years after the end of the tax year | Required by Canadian tax law |
-| Purchase records | Held by Gumroad under its policy | Gumroad runs the checkout |
 | Security incident records | At least 24 months | Required by Canadian privacy law |
 
 ## How deletion happens

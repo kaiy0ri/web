@@ -3,7 +3,7 @@ title: Data deletion
 description: How to ask for your information to be deleted, and what happens next.
 order: 6
 status: in-effect
-updated: 2026-11-09
+updated: 2026-11-24
 ---
 
 ## How to ask
@@ -14,7 +14,7 @@ Email [official@camtoan.me](mailto:official@camtoan.me) from the address the req
 
 1. **I confirm it's you**, usually by replying to the address in question. I won't ask for more identification than the request needs.
 2. **I delete** what I hold: your emails and any notes or files tied to you.
-3. **I ask providers to delete** where it's in their systems (for example, your customer record at Gumroad).
+3. **I ask providers to delete** where it's in their systems.
 4. **I confirm in writing** when it's done, within 30 days of your request.
 
 ## What I can't delete

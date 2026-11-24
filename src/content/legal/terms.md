@@ -1,9 +1,9 @@
 ---
 title: Terms & conditions
-description: The rules for using this site, its free database and its API.
+description: The rules for using this site and its API.
 order: 2
 status: in-effect
-updated: 2026-11-22
+updated: 2026-11-24
 ---
 
 ## Using this site
@@ -27,7 +27,6 @@ To the fullest extent the law allows:
 
 - I'm not liable for indirect or consequential loss, including lost profits, lost data, business interruption or the cost of a security incident, that comes from using or relying on the site.
 - For anything free, my total liability is limited to CA$100.
-- For a paid product, my total liability is limited to what you paid for that product.
 
 **Your legal rights are not affected.** Some consumer protection laws give you rights that can't be signed away. Nothing in these terms limits those rights, or liability that can't legally be limited.
 
@@ -41,9 +40,9 @@ If you break these terms or the law while using the site, and that leads to a cl
 - The [REST API](/docs/rest-api/) is public and read-only. Use it reasonably. I may rate-limit or block abusive traffic.
 - Content is protected by copyright. What you may and may not reuse is on the [Intellectual property](/legal/intellectual-property/) page.
 
-## Products and services
+## Services
 
-- **Products** are sold through Gumroad. Checkout, payment and receipts follow Gumroad's terms as well as the [Payments](/legal/payments-subscriptions/) page.
+- **Nothing is sold on this site.** How paying works is on the [Payments](/legal/payments-subscriptions/) page.
 - **Services** (health checks, documentation, reviews, retainers) are each agreed in writing before work starts. That written agreement sets the scope, price, timeline and liability, and it overrides this page where they differ.
 
 ## Other sites

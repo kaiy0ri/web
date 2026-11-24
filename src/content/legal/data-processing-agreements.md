@@ -3,7 +3,7 @@ title: Data processing agreements
 description: The contracts behind each provider that handles personal information for this site.
 order: 8
 status: in-effect
-updated: 2026-11-09
+updated: 2026-11-24
 ---
 
 ## What this is
@@ -16,7 +16,6 @@ When a provider handles personal information on my behalf, there should be a con
 | --- | --- | --- |
 | Cloudflare | Visitor request data, to host and protect the site | Cloudflare's standard DPA, which is part of its self-serve terms |
 | Proton Mail | Emails you send me | Proton's terms and privacy policy. A separate DPA is **not yet confirmed**. |
-| Gumroad | Buyer details and payments | Gumroad's terms. Gumroad is the seller of record for purchases, so it's responsible for payment data in its own right. |
 
 ## Providers that don't receive visitor data
 

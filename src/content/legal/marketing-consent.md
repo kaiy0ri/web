@@ -3,7 +3,7 @@ title: Marketing consent
 description: No mailing list is run from this site. The rules if one ever is.
 order: 5
 status: standby
-updated: 2026-11-09
+updated: 2026-11-24
 ---
 
 ## Today
@@ -11,8 +11,6 @@ updated: 2026-11-09
 This site has no newsletter sign-up and I don't run a marketing email list from it. If you email me, I reply to that conversation. That isn't marketing, and you won't be added to any list.
 
 My writing is published on [Substack](https://substack.com/@camtoando). If you subscribe there, Substack handles the sign-up, the sending and the unsubscribe link under its own terms.
-
-If you buy a product, Gumroad may offer you the choice to receive updates from me. That choice is yours and every such email has an unsubscribe link.
 
 ## If this changes
 
