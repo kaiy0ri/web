@@ -342,80 +342,116 @@ footer .updated { background: none; color: var(--accent-text); border: 1px solid
 /* ---- Liquid glass: the navigation layer only (the header and its menus). ----
    Following Apple's "Adopting Liquid Glass": glass is a functional layer for navigation and controls that floats
    above content, used sparingly, never stacked on itself. Content (cards, the product example, the footer) is a plain
-   surface. The glass is drawn by ::after, a layer under the content: blur, bend (--lens) and saturate the backdrop,
-   then a tint, a soft sheen from above and an inner rim. ::before is the specular ring that turns toward the pointer.
-   public/glass.js builds the bending lens for the header (Chromium); elsewhere it is frosted glass with the same rim.
-   The menus share the header's material without a lens of their own, so they read as the header opening, not as a
-   second pane. Hand-built so the strict Content-Security-Policy holds: no library. */
+   surface. The material is mostly clear: what is behind it shows through, bent at the rim, lightly blurred and toned.
+   - ::after is the material, under the content: blur, lens (--lens, Chromium), saturate and a tone curve on the
+     backdrop (--glass-tone pulls highlights down in dark mode and lifts shadows in light mode, so the label colour
+     always reads, whatever passes behind), then a thin tint, a top inner glow and a faint bottom inner shadow.
+   - ::before is the specular rim: a hairline that is brightest along the top edge, plus a glint that turns toward
+     the pointer (--glint, glass.js) and drifts as the page scrolls (--glint-turn, scroll-driven, no listener).
+   - .glass-band is the bezel for browsers without the SVG lens (Firefox, Safari): a ring of extra blur under the
+     material, so the edge reads as thicker glass and the middle stays clear. Hidden once glass.js turns the lens on.
+   public/glass.js builds one lens per glass element (header and each menu), sized to it, rebuilt only on resize. */
+@property --glint-turn { syntax: "<angle>"; inherits: true; initial-value: 0deg; }
+@property --drop { syntax: "<number>"; inherits: false; initial-value: 1; }
 :root {
-  --glass-fill: color-mix(in srgb, var(--bg) 74%, transparent); --glass-rim: rgba(255, 255, 255, 1); --glass-rim-dim: rgba(255, 255, 255, .55);
-  --glass-hi: rgba(255, 255, 255, .7); --glass-lo: rgba(29, 29, 29, .07); --glass-edge: rgba(29, 29, 29, .1);
-  --glass-glow: rgba(255, 255, 255, .4); --glass-shade: rgba(29, 29, 29, .18);
+  /* Springs: a quick settle with a ~3% overshoot, and a softer one with a little more give for shapes that grow. */
+  --spring: linear(0, 0.044, 0.149, 0.283, 0.424, 0.558, 0.677, 0.776, 0.856, 0.917, 0.961, 0.992, 1.011, 1.022, 1.027, 1.028, 1.027, 1.023, 1.019, 1.015, 1.012, 1.008, 1.006, 1.004, 1);
+  --spring-soft: linear(0, 0.053, 0.182, 0.349, 0.523, 0.684, 0.822, 0.93, 1.008, 1.058, 1.085, 1.095, 1.091, 1.08, 1.065, 1.048, 1.033, 1.019, 1.008, 1, 0.995, 0.992, 0.991, 0.991, 0.992, 0.994, 0.995, 0.997, 1);
+  --glass-tint: color-mix(in srgb, var(--bg) 14%, transparent); --glass-tone: contrast(.86) brightness(1.07);
+  --glass-halo: color-mix(in srgb, var(--bg) 75%, transparent);
+  --glass-rim: #fff; --glass-rim-dim: rgba(255, 255, 255, .45); --glass-rim-low: rgba(255, 255, 255, .6);
+  --glass-hi: rgba(255, 255, 255, .9); --glass-glow: rgba(255, 255, 255, .35); --glass-lo: rgba(29, 29, 29, .08);
+  --glass-edge: rgba(29, 29, 29, .16); --glass-shade: rgba(29, 29, 29, .2); --glass-press: rgba(255, 255, 255, .55);
+  --glass-well: rgba(29, 29, 29, .06);
 }
 @media (prefers-color-scheme: dark) {
   :root:not([data-theme="light"]) {
-    --glass-rim: rgba(255, 255, 255, .45); --glass-rim-dim: rgba(255, 255, 255, .14);
-    --glass-hi: rgba(255, 255, 255, .14); --glass-lo: rgba(0, 0, 0, .4); --glass-edge: rgba(255, 255, 255, .08);
-    --glass-glow: rgba(255, 255, 255, .04); --glass-shade: rgba(0, 0, 0, .55);
+    --glass-tint: color-mix(in srgb, var(--bg) 22%, transparent); --glass-tone: contrast(.9) brightness(.7);
+    --glass-rim: rgba(255, 255, 255, .7); --glass-rim-dim: rgba(255, 255, 255, .16); --glass-rim-low: rgba(255, 255, 255, .22);
+    --glass-hi: rgba(255, 255, 255, .2); --glass-glow: rgba(255, 255, 255, .07); --glass-lo: rgba(0, 0, 0, .45);
+    --glass-edge: rgba(255, 255, 255, .1); --glass-shade: rgba(0, 0, 0, .6); --glass-press: rgba(255, 255, 255, .14);
+    --glass-well: rgba(0, 0, 0, .28);
   }
 }
 :root[data-theme="dark"] {
-  --glass-rim: rgba(255, 255, 255, .45); --glass-rim-dim: rgba(255, 255, 255, .14);
-  --glass-hi: rgba(255, 255, 255, .14); --glass-lo: rgba(0, 0, 0, .4); --glass-edge: rgba(255, 255, 255, .08);
-  --glass-glow: rgba(255, 255, 255, .04); --glass-shade: rgba(0, 0, 0, .55);
+  --glass-tint: color-mix(in srgb, var(--bg) 22%, transparent); --glass-tone: contrast(.9) brightness(.7);
+  --glass-rim: rgba(255, 255, 255, .7); --glass-rim-dim: rgba(255, 255, 255, .16); --glass-rim-low: rgba(255, 255, 255, .22);
+  --glass-hi: rgba(255, 255, 255, .2); --glass-glow: rgba(255, 255, 255, .07); --glass-lo: rgba(0, 0, 0, .45);
+  --glass-edge: rgba(255, 255, 255, .1); --glass-shade: rgba(0, 0, 0, .6); --glass-press: rgba(255, 255, 255, .14);
+  --glass-well: rgba(0, 0, 0, .28);
 }
 .glass-defs { position: absolute; width: 0; height: 0; }
 .glass {
-  --glint: 315deg; --glass-blur: 16px; --lens: saturate(1);
+  --glint: 315deg; --glass-blur: 9px; --lens: saturate(1);
   isolation: isolate; border: 0; background: none !important;
   /* The blur lives on ::after, never on the box: a blurred box would cut its menus' blur off from the page. */
   /* The rest of the site is flat; the floating navigation layer is the one place depth is allowed. */
-  box-shadow: 0 1px 2px rgba(0, 0, 0, .08), 0 18px 40px -18px var(--glass-shade) !important;
+  box-shadow: 0 1px 1px rgba(0, 0, 0, calc(.05 * var(--drop))), 0 12px 32px -12px color-mix(in srgb, var(--glass-shade) calc(100% * var(--drop)), transparent) !important;
 }
+/* With the lens on, the bending does the work, so the blur can be very light. */
+.lens-on .glass { --glass-blur: 1px; }
 .glass::after {
   content: ""; position: absolute; inset: 0; z-index: -1; border-radius: inherit; pointer-events: none;
   /* Blur first, then bend (--lens): bending after the blur keeps the colour fringe at the rim crisp. */
-  backdrop-filter: blur(var(--glass-blur)) var(--lens) saturate(1.5);
-  background: radial-gradient(130% 70% at 30% -10%, var(--glass-glow), transparent 55%), var(--glass-fill);
+  backdrop-filter: blur(var(--glass-blur)) var(--lens) saturate(1.7) var(--glass-tone);
+  background: radial-gradient(120% 90% at 50% -30%, var(--glass-glow), transparent 60%), var(--glass-tint);
   /* !important: the flat camtoan.me layer above removes every shadow. */
   box-shadow:
-    inset 0 0 0 .5px var(--glass-edge), inset 1px 1.5px 1px -.5px var(--glass-hi), inset -1px -1.5px 1px -.5px var(--glass-lo),
-    inset 0 -10px 24px -18px var(--glass-lo) !important;
+    inset 0 0 0 .5px var(--glass-edge), inset 0 1px .5px -.25px var(--glass-hi),
+    inset 0 10px 16px -12px var(--glass-glow), inset 0 -1px .5px -.25px var(--glass-lo), inset 0 -10px 16px -12px var(--glass-lo) !important;
 }
 /* Older Safari only knows the prefixed name. Kept in its own block: the CSS minifier merges the two otherwise. */
 @supports (-webkit-backdrop-filter: none) and (not (backdrop-filter: none)) {
-  .glass::after { -webkit-backdrop-filter: blur(var(--glass-blur)) saturate(1.5); }
-  body::before { -webkit-backdrop-filter: blur(6px); }
+  .glass::after { -webkit-backdrop-filter: blur(var(--glass-blur)) saturate(1.7) var(--glass-tone); }
+  .glass-band { -webkit-backdrop-filter: blur(10px) saturate(1.2); }
+  body::before { -webkit-backdrop-filter: blur(2px); }
 }
 .glass::before {
   content: ""; position: absolute; inset: 0; border-radius: inherit; padding: 1px; pointer-events: none;
-  background: conic-gradient(from var(--glint), var(--glass-rim), transparent 70deg 110deg, var(--glass-rim-dim) 180deg, transparent 250deg 290deg, var(--glass-rim));
+  background:
+    conic-gradient(from calc(var(--glint) + var(--glint-turn)), var(--glass-rim), transparent 55deg 125deg, var(--glass-rim-dim) 180deg, transparent 235deg 305deg, var(--glass-rim)),
+    linear-gradient(var(--glass-rim), var(--glass-rim-dim) 30%, transparent 50%, var(--glass-rim-low));
   -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0); -webkit-mask-composite: xor;
   mask: linear-gradient(#000 0 0) content-box exclude, linear-gradient(#000 0 0);
 }
+.glass-band {
+  position: absolute; inset: 0; z-index: -1; border-radius: inherit; pointer-events: none;
+  backdrop-filter: blur(10px) saturate(1.2);
+  /* A soft ring: solid at the edge, gone 14px in, so blur builds toward the rim like a thick bezel. */
+  -webkit-mask: linear-gradient(#000, transparent 14px calc(100% - 14px), #000), linear-gradient(90deg, #000, transparent 18px calc(100% - 18px), #000);
+  mask: linear-gradient(#000, transparent 14px calc(100% - 14px), #000), linear-gradient(90deg, #000, transparent 18px calc(100% - 18px), #000);
+}
+.lens-on .glass-band { display: none; }
+@supports (animation-timeline: scroll()) {
+  @media (prefers-reduced-motion: no-preference) {
+    .nav.glass { animation: glint-turn linear both; animation-timeline: scroll(root); animation-range: 0 120vh; }
+    @keyframes glint-turn { to { --glint-turn: 70deg; } }
+  }
+}
 
 /* Nav: a floating capsule instead of a bar glued to the top edge. */
-.nav.glass { top: 12px; width: min(1080px, calc(100% - 24px)); margin: 12px auto 0; --glass-bezel: 20px; }
+.nav.glass { top: 12px; width: min(1080px, calc(100% - 24px)); margin: 12px auto 0; --glass-bezel: 22px; }
 .nav-brand { white-space: nowrap; }
-.nav.glass .theme { border-color: var(--line); border-radius: 999px; overflow: hidden; }
+/* Labels on clear glass get a soft halo of the page colour, like Apple's vibrant text: it keeps them readable over
+   whatever passes behind without fogging the whole pane. */
+.nav-brand span, .nav-dd summary, .nav .nav-plain, .nav .theme button { text-shadow: 0 0 2px var(--glass-halo), 0 0 10px var(--glass-halo); }
 html { scroll-padding-top: 88px; }
 
-/* Scroll edge: content fades and softens in a band under the floating header, so the header stays legible over
-   big headings. CSS only (a fixed layer with a gradient mask), no scroll listener. --edge is the header's bottom
-   plus a little room. */
+/* Scroll edge: content softens and fades a little in a band under the floating header, so the header stays legible
+   over big headings while the glass still has something to bend. CSS only (a fixed layer with a gradient mask), no
+   scroll listener. --edge is the header's bottom plus a little room. */
 :root { --edge: 92px; }
 body::before {
   content: ""; position: fixed; inset: 0 0 auto; z-index: 9; height: var(--edge); pointer-events: none;
-  background: linear-gradient(var(--bg) 60%, color-mix(in srgb, var(--bg) 80%, transparent) 75%, transparent);
-  backdrop-filter: blur(6px);
-  -webkit-mask: linear-gradient(#000 70%, transparent); mask: linear-gradient(#000 70%, transparent);
+  background: linear-gradient(color-mix(in srgb, var(--bg) 82%, transparent) 20%, color-mix(in srgb, var(--bg) 58%, transparent) 75%, transparent);
+  backdrop-filter: blur(2px);
+  -webkit-mask: linear-gradient(#000 calc(100% - 22px), transparent); mask: linear-gradient(#000 calc(100% - 22px), transparent);
 }
 /* Where the browser can tie an animation to scrolling, the band only appears once something has scrolled under it. */
 @supports (animation-timeline: scroll()) {
   body::before { animation: edge-in linear both; animation-timeline: scroll(); animation-range: 0 64px; }
   @keyframes edge-in { from { opacity: 0; } }
 }
-
 /* ---- Landing page: ASCII sky over grid paper, a glass card, and an ASCII site tree. ---- */
 .landing {
   position: relative; overflow: hidden; min-height: 100dvh; margin-top: -64px; padding-top: 64px; display: flex; align-items: center;
@@ -550,7 +586,7 @@ a.tile:hover {
 .nav-menu { display: flex; align-items: center; justify-content: center; gap: 2px; }
 .nav-dd { position: relative; }
 .nav-dd summary, .nav .nav-plain {
-  display: inline-flex; align-items: center; padding: 8px 12px; border-radius: 999px; cursor: pointer; list-style: none;
+  position: relative; display: inline-flex; align-items: center; padding: 8px 12px; border-radius: 999px; cursor: pointer; list-style: none;
   font-size: clamp(13px, .55rem + .5vw, 14px); color: var(--ink); text-decoration: none; white-space: nowrap;
 }
 .nav-dd summary::-webkit-details-marker { display: none; }
@@ -558,34 +594,96 @@ a.tile:hover {
   content: ""; width: 6px; height: 6px; margin: -3px 0 0 8px; border: solid currentColor; border-width: 0 1.5px 1.5px 0; transform: rotate(45deg); transition: transform .2s;
 }
 .nav-dd[open] summary::after { transform: rotate(225deg); margin-top: 3px; }
-.nav-dd summary:hover, .nav-dd[open] summary, .nav .nav-plain:hover { color: var(--accent-text); }
+.nav-dd[open] summary { color: var(--accent-text); }
 .nav-dd summary:focus-visible, .nav a:focus-visible, .site-footer a:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
-/* Menus are the header opening downward: the same glass material and rim, hung just below it, growing out of its
-   button. No lens of their own (glass.js skips them), so there is never a second lens stacked on the header.
-   They sit over the page headline, so the fill is denser. Corners: 22px = the 14px link radius + 8px padding. */
+/* Hover capsule: one soft highlight that slides between the menu items (placed by glass.js), instead of each item
+   lighting up on its own. It is a tint on the header's glass, not a second pane of glass. */
+.nav-hl {
+  position: absolute; left: 0; top: 0; width: var(--hl-w, 0); height: var(--hl-h, 0); translate: var(--hl-x, 0) var(--hl-y, 0);
+  border-radius: 999px; pointer-events: none; opacity: 0;
+  background: color-mix(in srgb, var(--ink) 7%, transparent);
+  box-shadow: inset 0 1px 0 var(--glass-press), inset 0 0 0 .5px var(--glass-edge) !important;
+  transition: opacity .2s, scale .2s;
+}
+.nav-menu.hl-on .nav-hl { opacity: 1; }
+/* Press: the item and its capsule give a little under the finger, and the glass brightens where it is pressed. */
+.nav-menu:has(summary:active, .nav-plain:active) .nav-hl { scale: .94; background: color-mix(in srgb, var(--ink) 11%, transparent); }
+.nav-dd summary:active, .nav .nav-plain:active { scale: .96; }
+@media (prefers-reduced-motion: no-preference) {
+  .nav-hl { transition: opacity .2s, translate .45s var(--spring), width .45s var(--spring), height .45s var(--spring), scale .35s var(--spring), background .2s; }
+  .nav-dd summary, .nav .nav-plain { transition: scale .35s var(--spring); }
+}
+/* Menus are the header opening downward: the same glass, with their own lens, hung just below the header (never on
+   top of it). They hold a list to read over the page and reach past the scroll edge, so they are more frosted than
+   the header: their 70% tint keeps the links readable even where a browser draws no backdrop blur at all.
+   Corners: 22px = the 14px link radius + 8px padding. */
 .nav-panel {
   position: absolute; z-index: 20; top: calc(100% + 14px); left: 0; min-width: 220px; padding: 8px; display: grid; gap: 2px; border-radius: 22px;
-  --glass-fill: color-mix(in srgb, var(--bg) 86%, transparent); --glass-blur: 24px; transform-origin: 24px -14px;
+  --glass-tint: color-mix(in srgb, var(--bg) 70%, transparent); --glass-blur: 14px; --glass-bezel: 18px;
 }
+.lens-on .nav-panel { --glass-blur: 8px; }
+/* Opening: the menu grows out of its button. Its glass starts as the button's capsule (clip-path on the material and
+   rim, from --tx/--ty/--tw/--th that site.js measures) and springs out to the full menu while the box slides down and
+   its shadow fades in. The box itself is never faded or clipped: that would cut its blur off from the page. */
 @media (prefers-reduced-motion: no-preference) {
-  .nav-dd[open] .nav-panel { animation: panel-open .24s cubic-bezier(.16, 1, .3, 1); }
-  /* Transform only: opacity below 1 would cut the menu's blur off from the page while it opens. */
-  @keyframes panel-open { from { transform: translateY(-8px) scale(.94); } }
+  .nav-dd[open] .nav-panel { animation: panel-drop .5s var(--spring-soft); }
+  .nav-dd[open] .nav-panel::after, .nav-dd[open] .nav-panel::before { animation: panel-morph .5s var(--spring-soft); }
+  .nav-dd[open] .nav-panel a { animation: panel-item .32s .08s cubic-bezier(.16, 1, .3, 1) backwards; }
+  @keyframes panel-drop { from { translate: 0 calc(var(--ty, -50px) * .5); --drop: 0; } }
+  @keyframes panel-morph {
+    from { clip-path: inset(0 calc(100% - var(--tx, 0px) - var(--tw, 110px)) calc(100% - var(--th, 36px)) var(--tx, 0px) round 999px); }
+    to { clip-path: inset(0 round 22px); }
+  }
+  @keyframes panel-item { from { opacity: 0; translate: 0 -6px; } }
 }
-.nav .nav-panel a { padding: 10px 14px; border-radius: 14px; font-size: 14px; }
-.nav .nav-panel a:hover { background: color-mix(in srgb, var(--accent) 14%, transparent); }
+.nav .nav-panel a { position: relative; padding: 10px 14px; border-radius: 14px; font-size: 14px; transition: scale .3s var(--spring), background .2s; }
+.nav .nav-panel a:hover { background: color-mix(in srgb, var(--ink) 7%, transparent); color: var(--ink); }
+.nav .nav-panel a:active { scale: .97; background: color-mix(in srgb, var(--ink) 11%, transparent); }
 .nav .nav-end { gap: 10px; justify-self: end; }
-.nav.glass .theme button { padding: 4px 9px; font-size: 11px; }
-/* Call to action: a solid orange capsule on the glass (not glass itself), with a light top edge. */
+/* Theme switch: a recessed track with one glass thumb that slides to the chosen option (CSS :has, no script). When
+   the choice changes the thumb lifts, swells and clears like a lens while it travels, then settles; .moved (set by
+   theme.js on the first click) keeps that from playing on page load. */
+.nav.glass .theme {
+  position: relative; display: grid; grid-template-columns: repeat(3, 1fr); gap: 0; padding: 3px; border-radius: 999px;
+  background: var(--glass-well); box-shadow: inset 0 1px 2px var(--glass-lo), inset 0 0 0 .5px var(--glass-edge), 0 1px 0 var(--glass-rim-low) !important;
+}
+.nav.glass .theme button { position: relative; padding: 4px 10px; font-size: 11px; background: none; color: var(--ink); transition: color .2s; }
+.nav.glass .theme button[aria-pressed="true"] { background: none; color: var(--ink); font-weight: 700; }
+.nav.glass .theme button:active { scale: .94; }
+.theme-thumb {
+  --i: 0; position: absolute; top: 3px; bottom: 3px; left: 3px; width: calc((100% - 6px) / 3); border-radius: 999px; pointer-events: none;
+  translate: calc(var(--i) * 100%) 0;
+  background: radial-gradient(90% 70% at 50% 0%, var(--glass-hi), transparent 70%), color-mix(in srgb, var(--bg) 70%, transparent);
+  box-shadow: inset 0 1px .5px var(--glass-hi), inset 0 0 0 .5px var(--glass-edge), inset 0 -1px 1px var(--glass-lo), 0 2px 6px -1px var(--glass-shade) !important;
+}
+.theme:has([data-theme-set="light"][aria-pressed="true"]) .theme-thumb { --i: 1; }
+.theme:has([data-theme-set="dark"][aria-pressed="true"]) .theme-thumb { --i: 2; }
+@media (prefers-reduced-motion: no-preference) {
+  .theme-thumb { transition: translate .5s var(--spring); }
+  /* A different animation name per position restarts the lift every time the choice changes. */
+  .theme.moved .theme-thumb { animation: thumb-lift-0 .5s cubic-bezier(.3, 0, .2, 1); }
+  .theme.moved:has([data-theme-set="light"][aria-pressed="true"]) .theme-thumb { animation-name: thumb-lift-1; }
+  .theme.moved:has([data-theme-set="dark"][aria-pressed="true"]) .theme-thumb { animation-name: thumb-lift-2; }
+  @keyframes thumb-lift-0 { 35% { scale: 1.18 1.3; background-color: transparent; box-shadow: inset 0 1px .5px var(--glass-rim), inset 0 0 0 1px var(--glass-rim-dim), 0 6px 14px -4px var(--glass-shade); } }
+  @keyframes thumb-lift-1 { 35% { scale: 1.18 1.3; background-color: transparent; box-shadow: inset 0 1px .5px var(--glass-rim), inset 0 0 0 1px var(--glass-rim-dim), 0 6px 14px -4px var(--glass-shade); } }
+  @keyframes thumb-lift-2 { 35% { scale: 1.18 1.3; background-color: transparent; box-shadow: inset 0 1px .5px var(--glass-rim), inset 0 0 0 1px var(--glass-rim-dim), 0 6px 14px -4px var(--glass-shade); } }
+}
+/* Call to action: a solid orange capsule on the glass (not glass itself), with a light top edge. Pressing it gives
+   a little and it brightens, like the glass controls. */
 .nav .nav-cta {
   padding: 9px 18px; border-radius: 999px; color: #140d0a; font-weight: 700; font-size: 14px;
   background: linear-gradient(180deg, color-mix(in srgb, var(--accent) 80%, white), var(--accent) 55%);
   box-shadow: inset 0 1px 0 rgba(255, 255, 255, .5), inset 0 -1px 1px rgba(0, 0, 0, .14), 0 6px 16px -8px var(--accent);
 }
 .nav .nav-cta:hover { color: #140d0a; background: linear-gradient(180deg, color-mix(in srgb, var(--accent) 65%, white), color-mix(in srgb, var(--accent) 85%, white) 55%); }
+.nav .nav-cta:active { scale: .95; filter: brightness(1.1) saturate(1.1); }
+@media (prefers-reduced-motion: no-preference) {
+  .nav .nav-cta { transition: scale .4s var(--spring), filter .2s, background .2s; }
+  .nav .nav-cta:active { transition-duration: .12s; }
+}
 @media (max-width: 860px) {
   .nav.glass .nav-inner { grid-template-columns: 1fr auto; row-gap: 4px; padding: 8px 8px 8px 14px; }
-  :root { --edge: 130px; }
+  :root { --edge: 136px; }
   .nav-end { display: contents; }
   .nav .nav-brand { grid-area: 1 / 1; }
   .nav .theme { grid-area: 1 / 2; order: 0; margin-left: 0; }
@@ -593,11 +691,11 @@ a.tile:hover {
   .nav .nav-cta { grid-area: 2 / 2; }
   .nav-dd { position: static; }
   .nav-dd summary, .nav .nav-plain { padding: 8px 8px; }
-  .nav-panel { left: 8px; right: 8px; top: calc(100% + 8px); transform-origin: 50% -8px; }
+  .nav-panel { left: 8px; right: 8px; top: calc(100% + 8px); }
 }
 @media (max-width: 480px) {
   /* Two short rows on phones: brand + CTA, then the menu. The theme follows the OS here (Auto). */
-  .nav .theme { display: none; }
+  .nav.glass .theme { display: none; }
   .nav .nav-cta { grid-area: 1 / 2; padding: 9px 14px; font-size: 13px; }
   .nav .nav-brand { font-size: 17px; gap: 8px; }
   .nav-menu { grid-area: 2 / 1 / 3 / 3; justify-content: space-between; margin-right: -8px; }
@@ -773,10 +871,12 @@ h1, h2, h3 { text-wrap: balance; }
    reset here: the minifier drops it when both names sit together, and older Safari's blur is hidden by the solid fill. */
 @media (prefers-reduced-transparency: reduce), (prefers-contrast: more) {
   .glass::after { backdrop-filter: none; background: var(--bg); box-shadow: inset 0 0 0 1px var(--line) !important; }
-  .glass::before { display: none; }
+  .glass::before, .glass-band { display: none; }
+  .nav-brand span, .nav-dd summary, .nav .nav-plain, .nav .theme button { text-shadow: none; }
   body::before { height: calc(var(--edge) - 16px); background: var(--bg); backdrop-filter: none; -webkit-mask: none; mask: none; }
 }
 @media (prefers-contrast: more) {
   .glass::after { box-shadow: inset 0 0 0 1.5px var(--ink) !important; }
-  .tile, .stack-card, .cl-day, .doc pre, .doc table, footer, .mock, .theme { box-shadow: inset 0 0 0 1px var(--ink) !important; }
+  .tile, .stack-card, .cl-day, .doc pre, .doc table, footer, .mock, .theme, .nav.glass .theme { box-shadow: inset 0 0 0 1px var(--ink) !important; }
+  .theme-thumb, .nav-hl { box-shadow: inset 0 0 0 1.5px var(--ink) !important; }
 }

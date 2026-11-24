@@ -13,6 +13,7 @@
     };
     buttons.forEach((b) => b.addEventListener("click", () => {
       const v = b.dataset.themeSet;
+      b.parentElement.classList.add("moved"); // lets the selection thumb play its slide (styles.css), never on page load
       try {
         if (v === "system") { delete root.dataset.theme; localStorage.removeItem("theme"); }
         else { root.dataset.theme = v; localStorage.setItem("theme", v); }

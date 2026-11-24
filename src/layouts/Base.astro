@@ -57,12 +57,15 @@ const graph = JSON.stringify(ld ? [org, ld] : org).replace(/</g, "\\u003c");
   </head>
   <body>
     <nav class="nav glass" aria-label="Main">
+      <span class="glass-band" aria-hidden="true"></span>
       <div class="nav-inner">
         <a class="nav-brand" href="/" aria-label={`${site.brand.name} home`}><Logo size={28} /><span>{site.brand.name}</span></a>
         <div class="nav-menu">
+          <span class="nav-hl" aria-hidden="true"></span>
           <details class="nav-dd">
             <summary>Product</summary>
             <div class="nav-panel glass">
+              <span class="glass-band" aria-hidden="true"></span>
               <a href="/#how">How it works</a>
               <a href={earlyAccess}>Early access</a>
             </div>
@@ -70,6 +73,7 @@ const graph = JSON.stringify(ld ? [org, ld] : org).replace(/</g, "\\u003c");
           <details class="nav-dd">
             <summary>Resources</summary>
             <div class="nav-panel glass">
+              <span class="glass-band" aria-hidden="true"></span>
               <a href="/docs/">Docs</a>
               <a href="/changelog/">Changelog</a>
               <a href="/stack/">Stack</a>
@@ -80,6 +84,7 @@ const graph = JSON.stringify(ld ? [org, ld] : org).replace(/</g, "\\u003c");
         </div>
         <div class="nav-end">
           <div class="theme" role="group" aria-label="Colour theme">
+            <span class="theme-thumb" aria-hidden="true"></span>
             <button type="button" data-theme-set="system" aria-pressed="true">Auto</button>
             <button type="button" data-theme-set="light" aria-pressed="false">Light</button>
             <button type="button" data-theme-set="dark" aria-pressed="false">Dark</button>
