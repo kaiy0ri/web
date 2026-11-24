@@ -15,7 +15,7 @@ const pillars = [
   { name: "Fast", text: "Less time between the idea and something people can try." },
   { name: "Efficient", text: "The idea, the spec and the work live in one place, so nothing gets explained twice." },
   { name: "Secure", text: "Security is part of the plan from day one." },
-  { name: "Cheap", text: "Built to be affordable for solo makers and small teams. Pricing is not set yet." },
+  { name: "Cheap", text: "Meant to be affordable for solo makers and small teams. Pricing is not set yet." },
   { name: "Smooth", text: "Plain English, few clicks and no setup maze." },
 ];
 // Home mock: one illustrative project shown at each stage. Spec is selected without JS; public/mock.js makes the stages tabs.
@@ -166,7 +166,7 @@ const checks = [
   <section class="sec" id="how">
     <div class="sec-inner">
       <h2>From a rough idea to something people can try</h2>
-      <p class="sec-lead">{site.brand.name} is in development. This is the loop it is being built around.</p>
+      <p class="sec-lead">{site.brand.name} is at the idea stage. This is the loop it is being designed around.</p>
       <ol class="path">
         {steps.map((st) => (
           <li class="path-step reveal"><h3>{st.name}</h3><p>{st.text}</p></li>
@@ -196,8 +196,8 @@ const checks = [
   <section class="sec">
     <div class="sec-inner closing">
       <div class="closing-copy">
-        <h2>Kaiyori is still being built</h2>
-        <p class="sec-lead">Get in touch to ask for early access.</p>
+        <h2>Kaiyori is just an idea for now</h2>
+        <p class="sec-lead">Stage: idea. Nothing can be used or bought yet. You can follow along on the <a href="/changelog/">changelog</a>, or email to get early access.</p>
         <p class="sec-note">{site.brand.name} ({site.brand.pronounce}). {site.brand.meaning}</p>
       </div>
       <a class="btn btn-primary" href={earlyAccess}>Get early access <span aria-hidden="true">→</span></a>

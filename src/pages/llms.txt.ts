@@ -9,7 +9,7 @@ export async function GET() {
     "",
     `> ${site.brand.description}`,
     "",
-    `${site.brand.name} (${site.brand.pronounce}) is a product-management SaaS in early access (not launched yet), built by ${site.name}. It turns an idea into an MVP. Owner's personal site: https://camtoan.me`,
+    `${site.brand.name} (${site.brand.pronounce}) is a product-management SaaS at the idea stage (not built or launched yet; early access by email), planned by ${site.name}. It is meant to turn an idea into an MVP. Owner's personal site: https://camtoan.me`,
     "",
     "## Main pages",
     "",

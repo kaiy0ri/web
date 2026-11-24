@@ -1,6 +1,6 @@
 # Kaiyori (kamllistos.com) — project notes
 
-Kaiyori (pronounced kai-YO-ri) = kai, from kaizen (改善, continuous improvement) + yori (より, "more than"): keep making the product better, step by step. Text in `site.brand.meaning`. It is a SaaS for product management that turns an idea into an MVP. **Not launched yet**: the site says early access / in development, with no fake customers, metrics, pricing, login or signup. Built by Cam Toan Do (Cybersecurity Coordinator, Calgary). The domain stays kamllistos.com for now; GitHub org/repo names also keep the old name.
+Kaiyori (pronounced kai-YO-ri) = kai, from kaizen (改善, continuous improvement) + yori (より, "more than"): keep making the product better, step by step. Text in `site.brand.meaning`. It is a SaaS for product management that turns an idea into an MVP. **Idea stage, not built or launched**: the site says so plainly (home `#how` lead and closing "Stage: idea" line), offers early access by email only, and has no fake customers, metrics, pricing, login or signup. Built by Cam Toan Do (Cybersecurity Coordinator, Calgary). The domain stays kamllistos.com for now; GitHub org/repo names also keep the old name.
 Owner has no coding background: explain plainly, keep things simple, be honest.
 
 ## Stack (all free except domain + Proton)
