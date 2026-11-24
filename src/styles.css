@@ -89,7 +89,6 @@ h3 { font-size: 22px; line-height: 1.2; margin-bottom: 0.5rem; }
 .pill:hover { transform: translate(-2px, -2px); box-shadow: 8px 8px 0 var(--ink); }
 .pill:active { transform: translate(6px, 6px); box-shadow: 0 0 0 var(--ink); }
 .more { font-weight: 800; }
-.more::after { content: " →"; }
 
 /* Sections */
 .hero { text-align: center; padding: 96px 1rem 88px; }
