@@ -449,8 +449,9 @@ export function startSkySea(canvas: HTMLCanvasElement) {
 
   const ro = new ResizeObserver(() => { resize(); });
   const refresh = () => { readColours(); readBoxes(); if (!running()) draw(); };
-  document.fonts.ready.then(() => {
-    mono = getComputedStyle(document.documentElement).getPropertyValue("--mono").trim() || "monospace";
+  mono = getComputedStyle(document.documentElement).getPropertyValue("--mono").trim() || "monospace";
+  // The mono is a web font: load it before measuring cells, or the grid is sized for the fallback.
+  document.fonts.load(`10px ${mono}`).catch(() => []).then(() => document.fonts.ready).then(() => {
     readColours();
     ready = true;
     ro.observe(canvas);

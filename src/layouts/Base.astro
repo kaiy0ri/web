@@ -48,6 +48,7 @@ const graph = JSON.stringify(ld ? [org, ld] : org).replace(/</g, "\\u003c");
     <meta property="og:description" content={description} />
     <meta property="og:image" content="https://kamllistos.com/og.png" />
     <meta name="twitter:card" content="summary_large_image" />
+    <link rel="preload" href="/fonts/schibsted-grotesk.woff2" as="font" type="font/woff2" crossorigin />
     <link rel="canonical" href={url} />
     <link rel="sitemap" href="/sitemap.xml" />
     <script type="application/ld+json" set:html={graph} />

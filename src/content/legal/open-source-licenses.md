@@ -3,7 +3,7 @@ title: Open-source licences
 description: The open-source software this site is built on, and the licence status of the site's own code.
 order: 13
 status: in-effect
-updated: 2026-11-09
+updated: 2026-11-24
 ---
 
 ## Built on open source
@@ -16,10 +16,12 @@ This site exists because of other people's open-source work. The main pieces:
 | [TypeScript](https://github.com/microsoft/TypeScript) | The language the site and API are written in | Apache-2.0 |
 | [Upptime](https://github.com/upptime/upptime) | The status page | MIT |
 | [Newman](https://github.com/postmanlabs/newman) | Running the hourly API tests | Apache-2.0 |
+| [Schibsted Grotesk](https://github.com/schibsted/schibsted-grotesk) | The font for headings and reading text | SIL Open Font License 1.1 |
+| [Spline Sans Mono](https://github.com/SorkinType/SplineSansMono) | The monospace font for labels and the ASCII sky | SIL Open Font License 1.1 |
 
 Astro brings in many smaller packages. The complete, exact list is in the repository's [`package-lock.json`](https://github.com/kaiy0ri/web/blob/main/package-lock.json), and each package carries its own licence file. These licences ask that their copyright notices be kept, and they are.
 
-No fonts or images are loaded from third parties. The site uses fonts already on your device.
+No fonts or images are loaded from third parties. The two fonts above are copied from the [Google Fonts repository](https://github.com/google/fonts/tree/main/ofl), cut down to Latin characters, and served from this site (`/fonts/`). The Open Font License allows that, including commercial use, as long as the fonts are not sold on their own and keep their copyright notice and licence. Both are inside each font file and next to it in `/fonts/`.
 
 ## This site's own code
 

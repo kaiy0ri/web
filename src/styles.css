@@ -1,10 +1,21 @@
 /* Same design language as camtoan.me: off-white paper, ink, one orange accent, mono body, heavy sans headings.
    Legacy colour names (--yellow, --blue...) are kept as accent tints so older components still read. */
+/* Self-hosted fonts (public/fonts, Latin subset, SIL OFL 1.1; sources in src/content/legal/open-source-licenses.md).
+   One variable sans for headings and reading text, one variable mono for labels, body and the ASCII sky. */
+@font-face {
+  font-family: "Schibsted Grotesk"; src: url("/fonts/schibsted-grotesk.woff2") format("woff2");
+  font-weight: 400 900; font-style: normal; font-display: swap;
+}
+@font-face {
+  font-family: "Spline Sans Mono"; src: url("/fonts/spline-sans-mono.woff2") format("woff2");
+  font-weight: 300 700; font-style: normal; font-display: swap;
+}
 :root {
   --bg: #f6f5f2; --ink: #1d1d1d; --muted: #6b6b68; --accent: #ff4a1c; --accent-text: #c4320c;
   --line: rgba(29, 29, 29, .22); --rule: rgba(29, 29, 29, .08);
-  --sans: ui-sans-serif, -apple-system, BlinkMacSystemFont, "Helvetica Neue", Arial, sans-serif;
-  --mono: ui-monospace, "SF Mono", SFMono-Regular, Menlo, Consolas, "Liberation Mono", monospace;
+  /* The Japanese fallbacks only draw the 改善 / より in the brand meaning line; the subset fonts have no CJK. */
+  --sans: "Schibsted Grotesk", ui-sans-serif, -apple-system, BlinkMacSystemFont, "Helvetica Neue", Arial, "Hiragino Sans", "Noto Sans JP", "Noto Sans CJK JP", "Yu Gothic", sans-serif;
+  --mono: "Spline Sans Mono", ui-monospace, "SF Mono", Menlo, Consolas, "Liberation Mono", "Hiragino Sans", "Noto Sans JP", "Noto Sans CJK JP", "Yu Gothic", monospace;
   --paper: var(--bg);
   --surface: var(--bg);
   --border: 1px solid var(--line);
@@ -42,7 +53,6 @@ body {
   margin: 0;
   background: var(--paper);
   color: var(--ink);
-  font-family: "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, system-ui, sans-serif;
   font-size: 17px;
   line-height: 1.55;
 }
@@ -232,9 +242,9 @@ a:hover { color: var(--accent-text); }
 :focus-visible { outline: 2px solid var(--accent); outline-offset: 3px; }
 
 h1, h2, h3 { font-family: var(--sans); }
-h1 { font: 800 clamp(2.6rem, 6.2vw, 6rem)/.95 var(--sans); letter-spacing: -.045em; }
-h2 { font: 750 clamp(2rem, 3.6vw, 3.4rem)/1 var(--sans); letter-spacing: -.035em; }
-h3 { font-weight: 750; letter-spacing: -.02em; }
+h1 { font: 800 clamp(2.6rem, 6.2vw, 6rem)/.95 var(--sans); letter-spacing: -.028em; }
+h2 { font: 750 clamp(2rem, 3.6vw, 3.4rem)/1 var(--sans); letter-spacing: -.022em; }
+h3 { font-weight: 750; letter-spacing: -.012em; }
 .lead, .body-lg, .prose p, .prose li, .tile p, .step p, .cert-name, .stack-card p {
   font-family: var(--sans); color: var(--muted);
 }
@@ -558,7 +568,7 @@ a.tile:hover {
 
 /* Header: brand left, menu centre, theme + call to action right. */
 .nav.glass .nav-inner { display: grid; grid-template-columns: auto 1fr auto; align-items: center; }
-.nav .nav-brand { display: inline-flex; align-items: center; gap: 10px; font: 800 19px/1 var(--sans); letter-spacing: -.045em; color: var(--ink); }
+.nav .nav-brand { display: inline-flex; align-items: center; gap: 10px; font: 800 19px/1 var(--sans); letter-spacing: -.02em; color: var(--ink); }
 .nav-brand::before { content: none; }
 .nav-menu { display: flex; align-items: center; justify-content: center; gap: 2px; }
 .nav-dd { position: relative; }
@@ -683,7 +693,7 @@ a.tile:hover {
 footer.site-footer { display: block; text-align: left; padding: clamp(24px, 4vw, 44px) var(--gutter) 20px; font-family: var(--sans); }
 .f-top, .f-bottom { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 14px 24px; }
 .f-top { padding-bottom: 22px; border-bottom: 1px solid var(--rule); }
-.f-brand { display: inline-flex; align-items: center; gap: 10px; color: var(--ink); font-weight: 800; font-size: 21px; letter-spacing: -.045em; text-decoration: none; }
+.f-brand { display: inline-flex; align-items: center; gap: 10px; color: var(--ink); font-weight: 800; font-size: 21px; letter-spacing: -.02em; text-decoration: none; }
 footer .f-brand:hover { color: var(--ink); }
 .f-social { display: flex; gap: 8px; }
 .f-social a { display: grid; place-items: center; min-width: 38px; height: 38px; padding: 0 10px; border-radius: 12px; box-shadow: inset 0 0 0 1px var(--rule); }
@@ -790,7 +800,7 @@ footer .f-cols h2 { margin: 0 0 10px; font: 400 11px/1 var(--mono); letter-spaci
 .path { list-style: none; margin: clamp(28px, 4vw, 48px) 0 0; padding: 0; counter-reset: s; }
 .path-step { display: grid; grid-template-columns: minmax(0, 15rem) minmax(0, 1fr); gap: 8px clamp(16px, 4vw, 56px); align-items: baseline; padding: 22px 0 22px 0; border-top: 1px solid var(--line); margin-left: calc(var(--i, 0) * clamp(0px, 7vw, 96px)); }
 .path-step:nth-child(2) { --i: 1; } .path-step:nth-child(3) { --i: 2; } .path-step:nth-child(4) { --i: 3; } .path-step:nth-child(5) { --i: 4; }
-.path-step h3 { margin: 0; font-size: clamp(1.4rem, 2.4vw, 2rem); letter-spacing: -.03em; }
+.path-step h3 { margin: 0; font-size: clamp(1.4rem, 2.4vw, 2rem); letter-spacing: -.018em; }
 .path-step:last-child h3 { color: var(--accent); }
 .path-loop { margin: 0 0 0 calc(4 * clamp(0px, 7vw, 96px)); padding: 18px 0 0; max-width: 46ch; border-top: 1.5px dashed var(--accent); font-size: clamp(15px, 1.2vw, 17px); color: var(--ink); }
 .path-step p { margin: 0; max-width: 46ch; font-size: clamp(15px, 1.2vw, 17px); color: var(--muted); }
@@ -800,7 +810,7 @@ footer .f-cols h2 { margin: 0 0 10px; font: 400 11px/1 var(--mono); letter-spaci
 .why-head { position: sticky; top: 96px; }
 .why-list { margin: 0; display: grid; gap: clamp(22px, 3vw, 34px); }
 .why-item { margin: 0; }
-.why-item dt { font: 750 clamp(1.2rem, 2vw, 1.6rem)/1.15 var(--sans); letter-spacing: -.025em; }
+.why-item dt { font: 750 clamp(1.2rem, 2vw, 1.6rem)/1.15 var(--sans); letter-spacing: -.015em; }
 .why-item dd { margin: 8px 0 0; max-width: 46ch; font-size: clamp(15px, 1.2vw, 17px); color: var(--muted); }
 
 /* Closing line: one message and the same call to action. */
@@ -848,7 +858,7 @@ h1, h2, h3 { text-wrap: balance; }
 .rows-2 { grid-template-columns: minmax(11rem, 17rem) minmax(0, 1fr); }
 .rows-4 { grid-template-columns: minmax(10rem, 15rem) minmax(0, 1fr) auto auto; }
 .row { position: relative; grid-column: 1 / -1; display: grid; grid-template-columns: subgrid; align-items: baseline; padding: 18px 0; border-top: 1px solid var(--line); }
-.row h3 { margin: 0; font: 750 clamp(17px, 1rem + .3vw, 20px)/1.25 var(--sans); letter-spacing: -.02em; }
+.row h3 { margin: 0; font: 750 clamp(17px, 1rem + .3vw, 20px)/1.25 var(--sans); letter-spacing: -.01em; }
 .row p { margin: 0; max-width: 62ch; font-size: clamp(15px, .9rem + .1vw, 16px); color: var(--muted); }
 .row-link { color: var(--ink); text-decoration: none; }
 .row-link::after { content: ""; position: absolute; inset: 0; }

@@ -196,7 +196,7 @@ const checks = [
       <div class="closing-copy">
         <h2>Kaiyori is just an idea for now</h2>
         <p class="sec-lead">Stage: idea. Nothing can be used or bought yet. You can follow along on the <a href="/changelog/">changelog</a>, or email to get early access.</p>
-        <p class="sec-note">{site.brand.name} ({site.brand.pronounce}). {site.brand.meaning}</p>
+        <p class="sec-note">{site.brand.name} ({site.brand.pronounce}). {site.brand.meaning.split(/([\u3040-\u30ff\u4e00-\u9fff]+)/).map((t, i) => (i % 2 ? <span lang="ja">{t}</span> : t))}</p>
       </div>
       <a class="btn btn-primary" href={earlyAccess}>Email for early access</a>
     </div>
