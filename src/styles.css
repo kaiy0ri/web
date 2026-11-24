@@ -530,9 +530,10 @@ body {
 .prose code { word-break: normal; overflow-wrap: anywhere; }
 footer { width: min(1080px, calc(100% - 24px)); margin: clamp(24px, 5vw, 64px) auto 16px; padding: 18px var(--gutter); border-radius: var(--r-lg); }
 
-/* Capsules: every control and badge. */
-.pill, .theme, .status,
-footer .updated, .updated-big .updated, .step-num { border-radius: 999px; }
+/* Capsules only where the header's concentric glass needs them; chips and status labels are small squared tags. */
+.pill, .theme, .step-num { border-radius: 999px; }
+.status, .updated-big .updated { border-radius: 3px; }
+footer .updated { padding: 0; border: 0; border-radius: 0; color: var(--muted); font-weight: 400; }
 .theme {
   background: var(--pane); border: 0; box-shadow: var(--pane-shadow) !important;
 }
@@ -734,7 +735,7 @@ footer .f-cols h2 { margin: 0 0 10px; font: 400 11px/1 var(--mono); letter-spaci
 .landing h1 { font-size: clamp(2.7rem, 5.6vw, 5.4rem); line-height: .96; text-wrap: balance; }
 .landing .lead { margin: 1.4rem 0 0; max-width: 30rem; font-size: clamp(18px, 1.5vw, 21px); color: var(--ink); opacity: .78; }
 .landing .ctas { justify-content: flex-start; margin-top: 2rem; gap: .75rem 1.25rem; }
-.btn { display: inline-flex; align-items: center; gap: .5ch; font: 700 15px/1 var(--sans); text-decoration: none; white-space: nowrap; border-radius: 999px; }
+.btn { display: inline-flex; align-items: center; gap: .5ch; font: 700 15px/1 var(--sans); text-decoration: none; white-space: nowrap; border-radius: 10px; }
 .btn-primary { padding: 15px 26px; background: var(--accent); color: #140d0a; transition: background .2s, transform .35s cubic-bezier(.16, 1, .3, 1); }
 .btn-primary:hover { color: #140d0a; background: color-mix(in srgb, var(--accent) 80%, white); transform: translateY(-2px); }
 .btn-primary:active { transform: translateY(0); }
@@ -747,19 +748,19 @@ footer .f-cols h2 { margin: 0 0 10px; font: 400 11px/1 var(--mono); letter-spaci
 .mock-ui { color: var(--ink); font-size: 14px; line-height: 1.45; }
 .mock-bar { display: flex; align-items: center; justify-content: space-between; gap: 12px; padding-bottom: 14px; border-bottom: 1px solid var(--rule); }
 .mock-name { font-weight: 750; font-size: 16px; letter-spacing: -.01em; }
-.mock-badge { flex: none; white-space: nowrap; padding: 4px 11px; border-radius: 999px; background: color-mix(in srgb, var(--accent) 20%, transparent); font-size: 12px; font-weight: 600; }
-/* Stages are tabs (public/mock.js); stages before the selected one read as done. */
+.mock-badge { flex: none; white-space: nowrap; padding: 4px 8px; border-radius: 3px; background: color-mix(in srgb, var(--accent) 20%, transparent); font: 11px/1.2 var(--mono); }
+/* Stages are tabs (public/mock.js): one connected hairline track, a segment per stage; stages before the selected
+   one read as done. A plain control inside content, not glass. */
 .mock-flow { margin-top: 14px; }
-.mock-stages { display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); gap: 4px; }
-.mock-stages [role="tab"] { min-width: 0; padding: 8px 0; border: 0; border-radius: 999px; background: none; font: 600 12.5px/1 var(--sans); color: var(--muted); outline: 1px solid var(--rule); outline-offset: -1px; transition: background .2s, color .2s, outline-color .2s; }
+.mock-stages { display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); border: 1px solid var(--line); border-radius: 4px; }
+.mock-stages [role="tab"] { min-width: 0; padding: 8px 0; border: 0; border-radius: 0; background: none; font: 600 12.5px/1 var(--sans); color: var(--muted); transition: background .2s, color .2s; }
+.mock-stages [role="tab"] + [role="tab"] { border-left: 1px solid var(--line); }
+.mock-stages [role="tab"]:first-child { border-radius: 3px 0 0 3px; }
+.mock-stages [role="tab"]:last-child { border-radius: 0 3px 3px 0; }
 .mock-stages .past { color: var(--ink); }
-/* Selected stage: a solid ink capsule with a light top edge. A plain control inside content, not glass. */
-.mock-stages [aria-selected="true"] {
-  background: linear-gradient(180deg, color-mix(in srgb, var(--ink) 82%, var(--bg)), var(--ink)); color: var(--bg); outline: 0;
-  box-shadow: inset 0 1px 0 color-mix(in srgb, var(--bg) 30%, transparent), 0 4px 12px -6px var(--glass-shade);
-}
+.mock-stages [aria-selected="true"] { background: var(--ink); color: var(--bg); }
 .tabs-on .mock-stages [role="tab"] { cursor: pointer; }
-.tabs-on .mock-stages [aria-selected="false"]:hover { color: var(--ink); outline: 1px solid var(--accent); outline-offset: -1px; }
+.tabs-on .mock-stages [aria-selected="false"]:hover { color: var(--ink); background: color-mix(in srgb, var(--ink) 7%, transparent); }
 .mock-stages [role="tab"]:focus-visible, .mock-go:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
 /* The return arc: Ship feeds back into Idea for the next version. */
 .mock-loop { position: relative; margin: 6px 10% 0; padding-top: 13px; text-align: center; font: 11px/1.2 var(--mono); color: var(--accent-text); }
@@ -780,11 +781,11 @@ footer .f-cols h2 { margin: 0 0 10px; font: 400 11px/1 var(--mono); letter-spaci
 .mock-spec .mock-h { margin-top: 12px; color: var(--ink); font-weight: 700; }
 .mock-cap { margin: 0 0 8px; font: 400 11px/1 var(--mono); letter-spacing: .1em; text-transform: uppercase; color: var(--muted); }
 .mock-tasks ul { margin: 0; padding: 0; list-style: none; display: grid; gap: 4px; }
-.mock-tasks li { display: flex; align-items: flex-start; gap: 10px; padding: 8px 10px; border-radius: 12px; color: var(--muted); }
+.mock-tasks li { display: flex; align-items: flex-start; gap: 10px; padding: 8px 10px; border-radius: 6px; color: var(--muted); }
 .mock-tasks li.now { background: color-mix(in srgb, var(--accent) 12%, transparent); color: var(--ink); font-weight: 600; }
 .mock-check { flex: none; position: relative; width: 16px; height: 16px; margin-top: 2px; border-radius: 50%; outline: 1.5px solid color-mix(in srgb, var(--muted) 70%, transparent); outline-offset: -1.5px; }
 .mock-build li { position: relative; padding: 0; }
-.mock-build label { display: flex; align-items: flex-start; gap: 10px; width: 100%; padding: 8px 10px; border-radius: 12px; cursor: pointer; }
+.mock-build label { display: flex; align-items: flex-start; gap: 10px; width: 100%; padding: 8px 10px; border-radius: 6px; cursor: pointer; }
 .mock-build li:not(.now) label:hover { background: color-mix(in srgb, var(--accent) 6%, transparent); }
 .mock-build input { position: absolute; opacity: 0; pointer-events: none; }
 .mock-build input:checked + .mock-check { background: var(--accent); outline: 0; }
@@ -793,12 +794,12 @@ footer .f-cols h2 { margin: 0 0 10px; font: 400 11px/1 var(--mono); letter-spaci
 .mock-checks li { display: flex; justify-content: space-between; align-items: baseline; gap: 12px; padding: 9px 0; border-top: 1px solid var(--rule); color: var(--muted); }
 .mock-checks li:first-child { border-top: 0; padding-top: 0; }
 .mock-checks b { color: var(--ink); font-weight: 700; }
-.mock-ok, .mock-fix { flex: none; padding: 3px 10px; border-radius: 999px; font-size: 12px; font-weight: 600; color: var(--ink); }
-.mock-ok { outline: 1px solid var(--rule); outline-offset: -1px; }
+.mock-ok, .mock-fix { flex: none; padding: 3px 7px; border-radius: 3px; font: 11px/1.2 var(--mono); color: var(--ink); }
+.mock-ok { outline: 1px solid var(--line); outline-offset: -1px; }
 .mock-fix { background: color-mix(in srgb, var(--accent) 22%, transparent); }
 .mock-next li { padding: 8px 10px; background: color-mix(in srgb, var(--accent) 8%, transparent); color: var(--ink); }
 .mock-spec .mock-note, .mock-note { margin: 10px 0 0; font-size: 12.5px; color: var(--muted); }
-.mock-go { margin-top: 16px; padding: 10px 16px; border: 0; border-radius: 999px; background: var(--accent); color: #140d0a; font: 700 13px/1 var(--sans); cursor: pointer; transition: background .2s; }
+.mock-go { margin-top: 16px; padding: 10px 16px; border: 0; border-radius: 10px; background: var(--accent); color: #140d0a; font: 700 13px/1 var(--sans); cursor: pointer; transition: background .2s; }
 .mock-go:hover { background: color-mix(in srgb, var(--accent) 80%, white); }
 .mock-build li.now input:not(:checked) + .mock-check { outline: 1.5px solid var(--accent); outline-offset: -1.5px; }
 .mock-build li.now input:not(:checked) + .mock-check::after { content: ""; position: absolute; inset: 4px; border-radius: 50%; background: var(--accent); }
