@@ -13,7 +13,7 @@ for (const c of changes) {
 ---
 
 <Base title={`Changelog — ${site.brand.name}`} description="Every change to kamllistos.com in plain English, built automatically from the site's public Git history.">
-  <section class="hero stagger">
+  <section class="hero">
     <p class="eyebrow">Changelog</p>
     <h1>Every change,<span>in order.</span></h1>
     <p class="lead">Built automatically from this site's public Git history. Newest first.</p>
@@ -22,7 +22,7 @@ for (const c of changes) {
   <section class="band band-gray">
     <div class="changelog">
       {[...groups].map(([date, list]) => (
-        <section class="cl-day reveal">
+        <section class="cl-day">
           <h2 class="cl-date">{date}</h2>
           <ul>
             {list.map((c) => (

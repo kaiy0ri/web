@@ -48,7 +48,7 @@ const checks = [
     </div>
 
     <div class="landing-inner">
-      <div class="landing-copy stagger">
+      <div class="landing-copy">
         <h1>{site.headline.split("\n").map((line) => <span>{line}</span>)}</h1>
         <p class="lead">Kaiyori takes a product idea to a working MVP. Fast, cheap, secure and smooth.</p>
         <div class="ctas">
@@ -57,7 +57,7 @@ const checks = [
         </div>
       </div>
 
-      <figure class="mock reveal">
+      <figure class="mock">
         <div class="mock-ui">
           <div class="mock-bar">
             <span class="mock-name">Late-invoice reminders</span>
@@ -167,10 +167,10 @@ const checks = [
       <p class="sec-lead">{site.brand.name} is at the idea stage. This is the loop it is being designed around.</p>
       <ol class="path">
         {steps.map((st) => (
-          <li class="path-step reveal"><h3>{st.name}</h3><p>{st.text}</p></li>
+          <li class="path-step"><h3>{st.name}</h3><p>{st.text}</p></li>
         ))}
       </ol>
-      <p class="path-loop reveal">Then round again. Feedback from Ship becomes the next idea, so each version is a step better than the last.</p>
+      <p class="path-loop">Then round again. Feedback from Ship becomes the next idea, so each version is a step better than the last.</p>
     </div>
   </section>
 
@@ -182,7 +182,7 @@ const checks = [
       </div>
       <dl class="why-list">
         {pillars.map((p) => (
-          <div class="why-item reveal">
+          <div class="why-item">
             <dt>{p.name}</dt>
             <dd>{p.text}</dd>
           </div>

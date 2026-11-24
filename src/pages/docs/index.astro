@@ -7,7 +7,7 @@ const docs = (await getCollection("docs")).sort((a, b) => a.data.order - b.data.
 ---
 
 <Base title={`Docs — ${site.brand.name}`} description="Plain-English documentation for how kamllistos.com is built and secured. No keys, tokens or account details.">
-  <section class="hero stagger">
+  <section class="hero">
     <p class="eyebrow">Docs</p>
     <h1>How it's<span>built & secured.</span></h1>
     <p class="lead">Plain-English documentation for the tools behind this site. It explains how each control works. It never includes keys, tokens or account details.</p>
@@ -15,7 +15,7 @@ const docs = (await getCollection("docs")).sort((a, b) => a.data.order - b.data.
   <section class="band band-gray">
     <ul class="rows rows-2">
       {docs.map((d) => (
-        <li class="row reveal">
+        <li class="row">
           <h3><a class="row-link" href={`/docs/${d.id}/`}>{d.data.title}</a></h3>
           <p>{d.data.description}</p>
         </li>

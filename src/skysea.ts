@@ -460,7 +460,7 @@ export function startSkySea(canvas: HTMLCanvasElement) {
   new IntersectionObserver(([e]) => { onScreen = e.isIntersecting; update(); }).observe(canvas);
   document.addEventListener("visibilitychange", update);
   window.addEventListener("scroll", readBoxes, { passive: true });
-  setInterval(readBoxes, 2000); // the card slides in when the page loads, so check again now and then
+  setInterval(readBoxes, 2000); // fonts and layout can still shift after load, so check again now and then
   new MutationObserver(refresh).observe(document.documentElement, { attributes: true, attributeFilter: ["data-theme"] });
   matchMedia("(prefers-color-scheme: dark)").addEventListener("change", refresh);
   matchMedia("(prefers-reduced-motion: reduce)").addEventListener("change", (e) => { reduced = e.matches; update(); });
