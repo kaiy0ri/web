@@ -13,7 +13,7 @@ updated: 2026-10-17
 
 - **`main` is production.** Every push to `main` is checked automatically (see [GitHub Actions](/docs/github-actions/)) and then deployed to Cloudflare.
 - **One change, one commit.** Each commit message describes a single change in plain English. That message is published on the [changelog](/changelog/), so it's written for people, not just machines.
-- **The changelog is generated, not hand-written.** At build time the site reads the commit history through GitHub's public REST API, falling back to the local Git history. The newest commit date also powers the "days since last update" badge in the footer.
+- **The changelog is generated, not hand-written.** At build time the site reads the commit history through GitHub's public REST API, falling back to the local Git history. The newest commit date is also the "Last change" date in the footer.
 
 ## How it's kept secure
 

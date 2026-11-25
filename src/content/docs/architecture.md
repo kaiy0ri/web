@@ -36,6 +36,7 @@ kamllistos.com is a **static site**. Every page is built ahead of time into plai
 | Pages | Astro turns text and data into plain HTML and CSS at build time | `src/pages/`, `src/layouts/` |
 | Header, footer and logo | One shared layout: dropdown menu (no script needed to open it), a plain footer with one row of links and a small ASCII whale, stepped-K logo mark | `src/layouts/Base.astro`, `src/components/Logo.astro` |
 | Site text | Names, headline and contact details | `src/site.ts` |
+| Fonts | Schibsted Grotesk and Spline Sans Mono, both free under the SIL Open Font License, cut down to Latin characters and served from this site. No font requests go to anyone else | `public/fonts/` |
 | Docs and legal pages | Written in Markdown | `src/content/docs/`, `src/content/legal/` |
 | Changelog | Generated from the Git history | `src/changelog.ts` |
 | REST API | Read-only JSON on `/api`, answering GET requests only | `worker/index.ts` |
