@@ -1,10 +1,10 @@
 // Checks the live site from the outside, like a visitor would.
-// Usage: node scripts/check-live.mjs [https://kamllistos.com]
+// Usage: node scripts/check-live.mjs [https://kaiyori.dev]
 import { connect } from "node:tls";
 import { resolveMx, resolveTxt, resolveCname, resolveNs, resolve4, Resolver } from "node:dns/promises";
 import { appendFileSync } from "node:fs";
 
-const BASE = process.argv[2] ?? "https://kamllistos.com";
+const BASE = process.argv[2] ?? "https://kaiyori.dev";
 const host = new URL(BASE).hostname;
 const results = [];
 
@@ -80,6 +80,18 @@ for (const [path, to] of [["/blog/", "https://camtoan.me/blog/"], ["/services/",
   });
 }
 
+// The old address must forward every link to the same page on the new one.
+if (host === "kaiyori.dev") {
+  for (const old of ["https://kamllistos.com", "https://www.kamllistos.com"]) {
+    await check(`${old} redirects to kaiyori.dev`, async () => {
+      const res = await get(`${old}/docs/rest-api/?ref=check`);
+      const loc = res.headers.get("location") ?? "";
+      if (res.status !== 301 || loc !== "https://kaiyori.dev/docs/rest-api/?ref=check") throw new Error(`HTTP ${res.status} → ${loc || "no redirect"}`);
+      return loc;
+    });
+  }
+}
+
 await check("TLS certificate valid for 14+ days", () =>
   new Promise((resolve, reject) => {
     const socket = connect({ host, port: 443, servername: host, timeout: 10_000 }, () => {
@@ -95,7 +107,7 @@ await check("TLS certificate valid for 14+ days", () =>
 
 // camtoan.me is the owner's personal site (GitHub Pages), and keeps the email + status page.
 const PERSONAL = "camtoan.me";
-if (host === "kamllistos.com") {
+if (host === "kaiyori.dev") {
   await check("camtoan.me personal site is up", async () => {
     const res = await get(`https://${PERSONAL}/`);
     if (res.status !== 200) throw new Error(`HTTP ${res.status}`);
