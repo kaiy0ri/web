@@ -902,6 +902,13 @@ h1, h2, h3 { text-wrap: balance; }
 .hero { padding-bottom: clamp(24px, 4vw, 48px); }
 .hero + .band { padding-top: clamp(8px, 2vw, 24px); }
 
+/* Docs tables: cells read in the sans at 14px; on phones the columns keep a readable width and the table scrolls
+   sideways inside its box (.doc table is display: block with overflow-x) instead of wrapping one word per line. */
+.doc td { font: 14px/1.5 var(--sans); }
+@media (max-width: 600px) {
+  .doc th, .doc td { min-width: 9.5rem; }
+}
+
 /* ---- Accessibility settings for the glass (last on purpose). ----
    Reduce transparency or more contrast: the header and its menus become solid, the scroll edge becomes a plain band
    under the header, and with more contrast every edge is drawn in full ink. Only the unprefixed backdrop-filter is
