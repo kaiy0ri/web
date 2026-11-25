@@ -1,633 +1,224 @@
-/* Same design language as camtoan.me: off-white paper, ink, one orange accent, mono body, heavy sans headings.
-   Legacy colour names (--yellow, --blue...) are kept as accent tints so older components still read. */
+/* Same design language as camtoan.me: off-white paper, ink, one orange accent, mono body, heavy sans headings. */
+/* Self-hosted fonts (public/fonts, Latin subset, SIL OFL 1.1; sources in src/content/legal/open-source-licenses.md).
+   One variable sans for headings and reading text, one variable mono for labels, body and the ASCII sky. */
+@font-face {
+  font-family: "Schibsted Grotesk"; src: url("/fonts/schibsted-grotesk.woff2") format("woff2");
+  font-weight: 400 900; font-style: normal; font-display: swap;
+}
+@font-face {
+  font-family: "Spline Sans Mono"; src: url("/fonts/spline-sans-mono.woff2") format("woff2");
+  font-weight: 300 700; font-style: normal; font-display: swap;
+}
 :root {
-  --bg: #f6f5f2; --ink: #1d1d1d; --muted: #6b6b68; --accent: #ff4a1c;
+  --bg: #f6f5f2; --ink: #1d1d1d; --muted: #6b6b68; --accent: #ff4a1c; --accent-text: #c4320c;
   --line: rgba(29, 29, 29, .22); --rule: rgba(29, 29, 29, .08);
-  --sans: ui-sans-serif, -apple-system, BlinkMacSystemFont, "Helvetica Neue", Arial, sans-serif;
-  --mono: ui-monospace, "SF Mono", SFMono-Regular, Menlo, Consolas, "Liberation Mono", monospace;
-  --paper: var(--bg);
-  --surface: var(--bg);
-  --border: 1px solid var(--line);
-  --shadow: none;
-  --shadow-sm: none;
-  --yellow: color-mix(in srgb, var(--accent) 16%, var(--bg));
-  --coral: color-mix(in srgb, var(--accent) 30%, var(--bg));
-  --pink: color-mix(in srgb, var(--accent) 10%, var(--bg));
-  --blue: color-mix(in srgb, var(--ink) 6%, var(--bg));
-  --purple: color-mix(in srgb, var(--ink) 10%, var(--bg));
-  --green: color-mix(in srgb, #2f9e44 22%, var(--bg));
-  --on-color: var(--ink);
-  --link: inherit;
+  /* The Japanese fallbacks only draw the 改善 / より in the brand meaning line; the subset fonts have no CJK. */
+  --sans: "Schibsted Grotesk", ui-sans-serif, -apple-system, BlinkMacSystemFont, "Helvetica Neue", Arial, "Hiragino Sans", "Noto Sans JP", "Noto Sans CJK JP", "Yu Gothic", sans-serif;
+  --mono: "Spline Sans Mono", ui-monospace, "SF Mono", Menlo, Consolas, "Liberation Mono", "Hiragino Sans", "Noto Sans JP", "Noto Sans CJK JP", "Yu Gothic", monospace;
   --sky-ink: var(--accent); --sky-ink-hot: color-mix(in srgb, var(--accent) 70%, black);
   color-scheme: light dark;
 }
 @media (prefers-color-scheme: dark) {
   :root:not([data-theme="light"]) {
     --sky-ink: color-mix(in srgb, var(--accent) 85%, var(--bg)); --sky-ink-hot: color-mix(in srgb, var(--accent) 60%, white);
-    --bg: #121211; --ink: #ecebe7; --muted: #9a9995; --accent: #ff5a2e;
+    --bg: #121211; --ink: #ecebe7; --muted: #9a9995; --accent: #ff5a2e; --accent-text: #ff7a52;
     --line: rgba(236, 235, 231, .22); --rule: rgba(236, 235, 231, .07);
   }
 }
 :root[data-theme="dark"] {
   --sky-ink: color-mix(in srgb, var(--accent) 85%, var(--bg)); --sky-ink-hot: color-mix(in srgb, var(--accent) 60%, white);
-  --bg: #121211; --ink: #ecebe7; --muted: #9a9995; --accent: #ff5a2e;
+  --bg: #121211; --ink: #ecebe7; --muted: #9a9995; --accent: #ff5a2e; --accent-text: #ff7a52;
   --line: rgba(236, 235, 231, .22); --rule: rgba(236, 235, 231, .07);
 }
 :root[data-theme="light"] { color-scheme: light; }
 :root[data-theme="dark"] { color-scheme: dark; }
 
+/* ---- Base: page, type, sections, articles, changelog, docs. Flat, hairline borders, grid paper, one accent. ---- */
+/* Flat by default: every shadow is off, so the glass and surface edges below that do want one carry !important. */
 * { box-sizing: border-box; }
-html { scroll-behavior: smooth; scroll-padding-top: 72px; }
-body {
-  margin: 0;
-  background: var(--paper);
-  color: var(--ink);
-  font-family: "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, system-ui, sans-serif;
-  font-size: 17px;
-  line-height: 1.55;
-}
-a { color: var(--link); text-decoration-thickness: 2px; text-underline-offset: 3px; }
-
-/* Nav */
-.nav { position: sticky; top: 0; z-index: 10; background: var(--yellow); border-bottom: var(--border); }
-.nav-inner {
-  max-width: 1080px; height: 60px; margin: 0 auto; padding: 0 1rem;
-  display: flex; align-items: center; justify-content: space-between;
-}
-.nav a { color: var(--on-color); text-decoration: none; font-weight: 700; }
-.nav-brand {
-  font-weight: 900; font-size: 16px; padding: 4px 10px; background: var(--surface); color: var(--ink) !important;
-  border: var(--border); box-shadow: var(--shadow-sm);
-}
-.nav-links { display: flex; gap: 1.25rem; font-size: 15px; }
-.nav-links a:hover { text-decoration: underline; text-decoration-thickness: 3px; }
-
-/* Type */
-h1, h2, h3 { margin: 0; font-weight: 900; letter-spacing: -0.02em; }
-h1 { font-size: clamp(44px, 9vw, 96px); line-height: 1; }
-h1 span { display: block; }
-h2 { font-size: clamp(32px, 5.5vw, 56px); line-height: 1.05; margin-bottom: 1.25rem; }
-h3 { font-size: 22px; line-height: 1.2; margin-bottom: 0.5rem; }
-.eyebrow {
-  display: inline-block; margin: 0 0 1rem; padding: 4px 12px;
-  background: var(--pink); color: var(--on-color); border: var(--border); box-shadow: var(--shadow-sm);
-  font-weight: 800; font-size: 14px; text-transform: uppercase; letter-spacing: 0.05em;
-}
-.lead { font-size: clamp(19px, 2.4vw, 24px); line-height: 1.4; color: var(--muted); max-width: 40rem; margin: 1.25rem auto 0; font-weight: 500; }
-.body-lg { font-size: 19px; line-height: 1.55; color: var(--muted); }
-.center { text-align: center; }
-.small { font-size: 14px; color: var(--muted); margin-top: 1.5rem; }
-
-/* Buttons & links */
-.ctas { display: flex; flex-wrap: wrap; align-items: center; justify-content: center; gap: 1rem 1.5rem; margin-top: 2rem; }
-.pill {
-  display: inline-block; padding: 12px 22px; cursor: pointer;
-  background: var(--yellow); color: var(--on-color); font-weight: 800; text-decoration: none;
-  border: var(--border); box-shadow: var(--shadow);
-  transition: transform 0.12s ease, box-shadow 0.12s ease;
-}
-.pill:hover { transform: translate(-2px, -2px); box-shadow: 8px 8px 0 var(--ink); }
-.pill:active { transform: translate(6px, 6px); box-shadow: 0 0 0 var(--ink); }
-.more { font-weight: 800; }
-.more::after { content: " →"; }
-
-/* Sections */
-.hero { text-align: center; padding: 96px 1rem 88px; }
-.band { padding: 88px 1rem; border-top: var(--border); }
-.band-gray { background: var(--blue); }
-.band-gray, .band-gray .body-lg, .band-gray h2 { color: var(--on-color); }
-.band-dark { background: var(--purple); color: var(--on-color); }
-.band-dark .body-lg, .band-dark .eyebrow { color: var(--on-color); }
-.band-dark a { color: var(--on-color); }
-.narrow { max-width: 720px; margin: 0 auto; }
-.checks { display: flex; flex-wrap: wrap; justify-content: center; gap: 0.75rem 1.5rem; margin-top: 2rem; }
-
-/* Cards */
-.tiles, .certs, .steps {
-  max-width: 1080px; margin: 3rem auto 0; padding: 0; list-style: none;
-  display: grid; gap: 24px; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
-}
-.tile, .cert, .step, .stat {
-  background: var(--surface); color: var(--ink); border: var(--border); box-shadow: var(--shadow);
-}
-.tile { padding: 28px 24px; transition: transform 0.15s ease, box-shadow 0.15s ease; }
-.tile:hover, a.cert:hover { transform: translate(-3px, -3px); box-shadow: 9px 9px 0 var(--ink); }
-.tile p { margin: 0; color: var(--muted); }
-.tile-link { display: block; text-decoration: none; }
-.tile .eyebrow { font-size: 12px; box-shadow: none; margin-bottom: 0.75rem; }
-
-/* Home: stats */
-.stats-band { padding: 48px 1rem; background: var(--green); }
-.stats { max-width: 1080px; margin: 0 auto; display: grid; gap: 24px; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); text-align: center; }
-.stat { display: flex; flex-direction: column; gap: 4px; padding: 20px; text-decoration: none; }
-a.stat:hover { transform: translate(-3px, -3px); box-shadow: 9px 9px 0 var(--ink); }
-.stat-value { font-size: 40px; font-weight: 900; }
-.stat-label { font-size: 15px; color: var(--muted); font-weight: 600; }
-
-/* Home: how it works */
-.step { padding: 24px; }
-.step-num {
-  display: inline-grid; place-items: center; width: 44px; height: 44px; margin-bottom: 14px;
-  background: var(--coral); color: var(--on-color); border: var(--border); font-weight: 900; font-size: 20px;
-}
-.step p { margin: 0; color: var(--muted); }
-
-/* Certifications */
-.cert { display: flex; flex-direction: column; gap: 6px; padding: 22px; text-decoration: none; transition: transform 0.15s ease, box-shadow 0.15s ease; }
-.cert-issuer { font-size: 12px; font-weight: 800; text-transform: uppercase; letter-spacing: 0.05em; color: var(--muted); }
-.cert-name { font-size: 19px; font-weight: 800; line-height: 1.25; }
-.cert-verify { font-size: 14px; font-weight: 800; text-decoration: underline; }
-.cert-drawer { max-width: 1080px; margin: 2rem auto 0; text-align: center; }
-.cert-drawer > summary { list-style: none; }
-.cert-drawer > summary::-webkit-details-marker { display: none; }
-.cert-drawer > summary::after { content: " ↓"; }
-.cert-drawer[open] > summary::after { content: " ↑"; }
-.cert-drawer .certs { text-align: left; }
-
-/* Articles */
-.prose { max-width: 720px; margin: 0 auto; padding: 72px 1rem 96px; }
-.prose h1 { font-size: clamp(36px, 6vw, 60px); margin: 0.5rem 0; }
-.prose .lead { margin: 0 0 2.5rem; }
-.prose h2 { font-size: 28px; margin: 2.5rem 0 0.75rem; }
-.prose p, .prose li { font-size: 18px; line-height: 1.65; }
-.prose ul { padding-left: 1.25rem; }
-.prose hr { border: 0; border-top: var(--border); margin: 3rem 0; }
-.prose code { font-size: 0.85em; word-break: break-all; background: var(--yellow); color: var(--on-color); padding: 1px 4px; }
-.back { display: inline-block; margin-bottom: 1.5rem; font-weight: 800; }
-
-/* Footer */
-footer { background: var(--ink); color: var(--paper); font-size: 14px; font-weight: 600; text-align: center; padding: 1.5rem 1rem; }
-footer a { color: var(--paper); }
-.sep { margin: 0 0.5rem; opacity: 0.6; }
-
-kbd { border: 2px solid var(--ink); padding: 0 6px; font-size: 13px; background: var(--surface); }
-.chips { display: flex; flex-wrap: wrap; justify-content: center; gap: 10px; max-width: 1080px; margin: 1.5rem auto 0; }
-.chip {
-  font: inherit; font-size: 14px; font-weight: 800; cursor: pointer; padding: 6px 12px;
-  background: var(--surface); color: var(--ink); border: var(--border); box-shadow: 3px 3px 0 var(--ink);
-  transition: transform 0.1s ease, box-shadow 0.1s ease;
-}
-.chip:hover { transform: translate(-1px, -1px); }
-.chip[aria-pressed="true"] { background: var(--yellow); color: var(--on-color); transform: translate(3px, 3px); box-shadow: 0 0 0 var(--ink); }
-
-/* Motion: things pop in one by one, and on scroll (CSS only, respects reduced motion). */
-@media (prefers-reduced-motion: no-preference) {
-  .stagger > * { animation: pop 0.55s cubic-bezier(0.2, 1.4, 0.4, 1) backwards; }
-  .stagger > :nth-child(1) { animation-delay: 0.05s; }
-  .stagger > :nth-child(2) { animation-delay: 0.2s; }
-  .stagger > :nth-child(3) { animation-delay: 0.35s; }
-  .stagger > :nth-child(4) { animation-delay: 0.5s; }
-  .stagger > :nth-child(5) { animation-delay: 0.65s; }
-  .stagger > :nth-child(6) { animation-delay: 0.8s; }
-  .stagger > :nth-child(n + 7) { animation-delay: 0.95s; }
-  @keyframes pop {
-    from { opacity: 0; transform: translate(8px, 16px) rotate(-1deg); }
-    to { opacity: 1; transform: none; }
-  }
-}
-
-/* Scroll-reveal: elements spawn in the first time they enter view (site.js adds .in).
-   Only hidden when JS is present and motion is allowed, so no-JS users see everything. */
-@media (prefers-reduced-motion: no-preference) {
-  .js .reveal { opacity: 0; transform: translateY(28px); transition: opacity 0.6s ease, transform 0.6s cubic-bezier(0.2, 1.1, 0.3, 1); }
-  .js .reveal.in { opacity: 1; transform: none; }
-}
-
-@media (max-width: 600px) {
-  .nav-links { gap: 0.8rem; font-size: 13px; }
-  .nav-brand { font-size: 13px; padding: 3px 7px; }
-  .hero { padding: 64px 1rem 64px; }
-  .band { padding: 64px 1rem; }
-}
-.sr-only { position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; border: 0; }
-/* Text sitting directly on a bright band is always black, in light and dark mode. */
-.band-gray > .center { color: var(--on-color); }
-
-/* Marquee */
-.marquee { overflow: hidden; border-bottom: var(--border); background: var(--yellow); }
-.marquee-track { display: flex; width: max-content; gap: 10px; padding: 10px; }
-.marquee-item {
-  flex: none; white-space: nowrap; font-weight: 800; font-size: 14px; padding: 6px 12px;
-  background: var(--surface); color: var(--ink); border: 2px solid var(--ink); box-shadow: 3px 3px 0 var(--ink);
-  text-decoration: none;
-}
-.marquee-item:hover { background: var(--pink); color: var(--on-color); }
-
-@media (prefers-reduced-motion: no-preference) {
-  .marquee-track { animation: marquee 150s linear infinite; }
-  .marquee:hover .marquee-track,
-  .marquee:focus-within .marquee-track { animation-play-state: paused; }
-  @keyframes marquee {
-    from { transform: translateX(0); }
-    to { transform: translateX(-50%); }
-  }
-}
-
-/* Per-concept pages (/glossary/<slug>/). */
-.crumbs { max-width: 720px; margin: 0 auto; padding: 24px 1rem 0; font-weight: 800; font-size: 14px; }
-.crumbs a { text-decoration: none; }
-.crumbs a:hover { text-decoration: underline; }
-.crumbs span { margin: 0 6px; opacity: 0.5; }
-.cp-nav { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 16px; max-width: 1080px; margin: 0 auto; }
-.cp-prev, .cp-next { display: flex; flex-direction: column; gap: 2px; text-decoration: none; font-weight: 800; max-width: 42%; }
-.cp-next { text-align: right; margin-left: auto; }
-.cp-dir { font-size: 13px; color: var(--muted); }
-.cp-nav-name { font-size: 15px; }
-
-.footer-sep { opacity: 0.5; margin: 0 4px; }
-
-
-/* Products page: product cards. */
-.products { max-width: 1080px; margin: 0 auto; display: grid; gap: 22px; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); }
-.product-card { position: relative; display: flex; flex-direction: column; gap: 10px; padding: 24px; background: var(--surface); color: var(--ink); border: var(--border); box-shadow: var(--shadow); }
-.product-card p { margin: 0; color: var(--muted); font-size: 15px; line-height: 1.5; }
-a.product-card { text-decoration: none; transition: transform 0.14s ease, box-shadow 0.14s ease; }
-a.product-card:hover { transform: translate(-3px, -3px); box-shadow: 9px 9px 0 var(--ink); }
-.product-badge { align-self: flex-start; font-size: 12px; font-weight: 800; text-transform: uppercase; letter-spacing: 0.04em; padding: 3px 10px; border: 2px solid var(--ink); }
-.product-badge.live { background: var(--green); color: var(--on-color); }
-
-/* Footer links + "days since last update" badge */
-.footer-links { display: inline-flex; flex-wrap: wrap; justify-content: center; gap: 0.4rem 1.1rem; margin-top: 0.6rem; }
-footer .updated { background: var(--green); color: #000; padding: 1px 8px; border: 2px solid var(--paper); text-decoration: none; }
-.updated-big .updated { display: inline-block; margin-top: 1rem; padding: 4px 12px; background: var(--green); color: #000; border: var(--border); box-shadow: var(--shadow-sm); font-weight: 800; }
-
-/* Changelog */
-.changelog { max-width: 820px; margin: 0 auto; display: grid; gap: 22px; }
-.cl-day { background: var(--surface); color: var(--ink); border: var(--border); box-shadow: var(--shadow); padding: 18px 22px; }
-.cl-date { font-size: 18px; margin: 0 0 10px; }
-.cl-day ul { margin: 0; padding-left: 0; list-style: none; display: grid; gap: 8px; }
-.cl-day li { line-height: 1.45; }
-.cl-day code { background: var(--yellow); color: #000; border: 2px solid var(--ink); padding: 0 5px; font-size: 13px; margin-right: 6px; }
-
-/* Stack */
-.stack-grid { max-width: 1080px; margin: 2rem auto 0; display: grid; gap: 24px; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); }
-.stack-card { background: var(--surface); color: var(--ink); border: var(--border); box-shadow: var(--shadow); padding: 20px; display: flex; flex-direction: column; gap: 6px; }
-.stack-card h3 { margin: 6px 0 0; font-size: 20px; }
-.stack-card p { margin: 0; color: var(--muted); }
-.stack-links { display: flex; gap: 14px; margin-top: auto !important; padding-top: 8px; font-weight: 800; }
-.status { align-self: flex-start; font-size: 12px; font-weight: 800; text-transform: uppercase; letter-spacing: 0.05em; padding: 2px 8px; border: 2px solid var(--ink); color: #000; }
-.status-in-use { background: var(--green); }
-.status-planned, .status-standby { background: var(--yellow); }
-.status-in-effect { background: var(--green); }
-.tile .status { display: inline-block; margin-bottom: 0.75rem; }
-.status-lab { background: var(--pink); }
-
-/* Docs */
-.doc table { width: 100%; border-collapse: collapse; margin: 1.5rem 0; font-size: 16px; border: var(--border); box-shadow: var(--shadow-sm); display: block; overflow-x: auto; }
-.doc th, .doc td { border: 2px solid var(--ink); padding: 10px 12px; text-align: left; vertical-align: top; }
-.doc th { background: var(--yellow); color: #000; }
-.doc pre { background: var(--ink); color: var(--paper); padding: 14px 16px; overflow-x: auto; border: var(--border); }
-.doc pre code { background: none; color: inherit; padding: 0; word-break: normal; }
-
-/* Phones: let the nav wrap onto two rows instead of pushing the page sideways. */
-@media (max-width: 600px) {
-  .nav-inner { height: auto; min-height: 60px; flex-wrap: wrap; row-gap: 6px; padding-top: 8px; padding-bottom: 8px; }
-  .nav-links { flex-wrap: wrap; row-gap: 4px; }
-}
-.doc .back { display: block; width: fit-content; margin-bottom: 1rem; }
-.doc td code, .doc th code { word-break: normal; white-space: nowrap; }
-
-/* Footer: one centered row that wraps neatly; everything vertically aligned. */
-footer { display: flex; flex-wrap: wrap; align-items: center; justify-content: center; gap: 10px 22px; }
-footer .sep { display: none; }
-.footer-links { display: inline-flex; flex-wrap: wrap; align-items: center; justify-content: center; gap: 8px 16px; margin-top: 0; }
-footer .updated { display: inline-block; line-height: 1.4; padding: 2px 10px; font-weight: 800; }
-
-/* Readability: small print and links must stay high-contrast. */
-.small { color: var(--ink); font-weight: 600; font-size: 15px; }
-.band-gray .small, .band-dark .small, .band-gray .small a, .band-dark .small a { color: var(--on-color); }
-.band-gray :is(.ctas, .center, .lead, .body-lg) > a:not(.pill), .band-dark :is(.ctas, .center, .lead, .body-lg) > a:not(.pill) { color: var(--on-color); }
-
-/* ---- camtoan.me layer: flat, sharp, hairline borders, grid paper, one accent. ---- */
 *, *::before, *::after { box-shadow: none !important; }
-body { font: 15px/1.6 var(--mono); background: var(--bg); color: var(--ink); -webkit-font-smoothing: antialiased; }
-::selection { background: var(--accent); color: #fff; }
-a { text-decoration-thickness: 1px; }
-a:hover { color: var(--accent); }
+html { scroll-behavior: smooth; scroll-padding-top: 72px; }
+body { margin: 0; font: 15px/1.6 var(--mono); background: var(--bg); color: var(--ink); -webkit-font-smoothing: antialiased; }
+::selection { background: var(--accent); color: #140d0a; }
+a { color: inherit; text-decoration-thickness: 1px; text-underline-offset: 3px; }
+a:hover { color: var(--accent-text); }
 :focus-visible { outline: 2px solid var(--accent); outline-offset: 3px; }
 
-h1, h2, h3 { font-family: var(--sans); }
-h1 { font: 800 clamp(2.6rem, 6.2vw, 6rem)/.95 var(--sans); letter-spacing: -.045em; }
-h2 { font: 750 clamp(2rem, 3.6vw, 3.4rem)/1 var(--sans); letter-spacing: -.035em; }
-h3 { font-weight: 750; letter-spacing: -.02em; }
-.lead, .body-lg, .prose p, .prose li, .tile p, .step p, .cert-name, .product-card p, .stack-card p {
-  font-family: var(--sans); color: var(--muted);
-}
-.lead { font-weight: 400; }
-.eyebrow, .tile .eyebrow {
-  display: block; padding: 0; background: none; border: 0; color: var(--accent);
-  font: 400 12px/1 var(--mono); letter-spacing: .1em; text-transform: uppercase;
-}
-.small { color: var(--muted); font-weight: 400; font-size: 13px; }
+/* Header basics; the glass, layout and sizes are in the liquid glass and brand layers below. */
+.nav { position: sticky; top: 0; z-index: 10; }
+.nav-inner { margin: 0 auto; display: flex; align-items: center; justify-content: space-between; }
+.nav a { color: var(--ink); text-decoration: none; font-weight: 400; }
+.nav a:hover { color: var(--accent-text); }
+.nav-brand { padding: 0; background: none; border: 0; color: var(--ink) !important; white-space: nowrap; }
+.theme button { font: 12px var(--mono); background: none; color: var(--ink); border: 0; border-radius: 999px; cursor: pointer; }
+.nav-end { display: flex; align-items: center; }
 
-/* Buttons: ink outline, filled on primary, accent on hover. */
-.pill {
-  padding: 10px 16px; font: 13px var(--mono); font-weight: 400;
-  background: var(--ink); color: var(--bg); border: 1px solid var(--ink);
-  transition: background .15s, border-color .15s, color .15s;
-}
-.pill:hover { transform: none; background: var(--accent); border-color: var(--accent); color: #fff; }
-.pill:active { transform: none; }
-.more { font-weight: 400; color: var(--ink); }
-.chip { font: 13px var(--mono); border: 1px solid var(--line); transition: border-color .15s; }
-.chip:hover { transform: none; border-color: var(--ink); }
-.chip[aria-pressed="true"] { transform: none; background: var(--ink); color: var(--bg); border-color: var(--ink); }
+/* Type */
+h1, h2, h3 { margin: 0; font-family: var(--sans); text-wrap: balance; }
+h1 { font: 800 clamp(2.6rem, 6.2vw, 6rem)/.95 var(--sans); letter-spacing: -.028em; }
+h1 span { display: block; }
+h2 { font: 750 clamp(2rem, 3.6vw, 3.4rem)/1 var(--sans); letter-spacing: -.022em; margin-bottom: 1.25rem; }
+h3 { font-size: 22px; font-weight: 750; line-height: 1.2; letter-spacing: -.012em; margin-bottom: .5rem; }
+.lead { max-width: 40rem; margin: 1.25rem auto 0; font: 400 clamp(19px, 2.4vw, 24px)/1.4 var(--sans); color: var(--muted); }
+.center { text-align: center; }
+.small { margin-top: 1.5rem; font-size: 13px; color: var(--muted); }
+.ctas { display: flex; flex-wrap: wrap; align-items: center; justify-content: center; gap: 1rem 1.5rem; margin-top: 2rem; }
+.more { color: var(--ink); }
 
-/* Nav: translucent bar with a hairline, like camtoan.me's header. */
-.nav { background: color-mix(in srgb, var(--bg) 88%, transparent); border-bottom: 1px solid var(--rule); backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px); }
-.nav a { color: var(--ink); font-weight: 400; font-size: 13px; }
-.nav a:hover { color: var(--accent); text-decoration: none; }
-.nav-brand { padding: 0; background: none; border: 0; font: 700 14px var(--mono); letter-spacing: -.01em; }
-.nav-brand::before { content: ""; display: inline-block; width: 9px; height: 9px; margin-right: 8px; background: var(--accent); }
-.nav-links { align-items: center; gap: 1.4rem; }
-.theme { display: flex; border: 1px solid var(--ink); }
-.theme button { font: 12px var(--mono); padding: 4px 8px; background: none; color: var(--ink); border: 0; cursor: pointer; }
-.theme button + button { border-left: 1px solid var(--ink); }
-.theme button[aria-pressed="true"] { background: var(--ink); color: var(--bg); }
-.nav-end { display: flex; align-items: center; gap: 1.4rem; }
-
-/* Sections: left-aligned on grid paper; bands are separated by hairlines, not colour. */
-.hero {
-  text-align: left; max-width: 1080px; margin: 0 auto; padding: 120px 1rem 96px;
-  background-image: linear-gradient(var(--rule) 1px, transparent 1px), linear-gradient(90deg, var(--rule) 1px, transparent 1px);
-  background-size: 40px 40px;
-}
+/* Sections: left-aligned; bands are separated by space, not colour. */
+.hero { text-align: left; margin: 0 auto; }
 .hero .lead { margin-left: 0; }
 .hero .ctas { justify-content: flex-start; }
-.band, .band-gray, .band-dark, .stats-band { background: transparent; color: var(--ink); border-top: 1px solid var(--rule); }
-.band-dark .eyebrow { color: var(--accent); }
-.marquee { background: transparent; border-bottom: 1px solid var(--rule); }
-.marquee-item { font: 12px var(--mono); border: 1px solid var(--line); }
-.marquee-item:hover { background: none; color: var(--accent); border-color: var(--accent); }
+.band { color: var(--ink); }
 
-/* Cards: hairline boxes; hover turns the border accent. No lift, no float. */
-.tile, .cert, .step, .stat, .product-card, .stack-card, .cl-day {
-  background: var(--bg); border: 1px solid var(--line);
-}
-.tile:hover, a.cert:hover, a.stat:hover, a.product-card:hover {
-  transform: none; border-color: var(--accent);
-}
-.stat-value { font-family: var(--sans); font-weight: 800; letter-spacing: -.03em; }
-.stat-label, .cert-issuer { font-family: var(--mono); font-weight: 400; }
-.step-num { background: none; color: var(--accent); border: 1px solid var(--accent); font: 16px var(--mono); }
-.product-badge, .status { font: 11px var(--mono); border: 1px solid currentColor; }
-.status { color: var(--ink); }
+/* Articles (security, docs and legal pages) */
+.prose { max-width: 720px; margin: 0 auto; }
+.prose h1 { margin: .5rem 0; }
+.prose .lead { margin: 0 0 2.5rem; }
+.prose h2 { font-size: 28px; margin: 2.5rem 0 .75rem; }
+.prose p, .prose li { font: 18px/1.65 var(--sans); color: var(--muted); }
+.prose ul { padding-left: 1.25rem; }
+.prose hr { border: 0; border-top: 1px solid var(--rule); margin: 3rem 0; }
+.prose code { font-size: .85em; color: var(--accent-text); word-break: normal; overflow-wrap: anywhere; }
+.back { display: inline-block; margin-bottom: 1.5rem; font-weight: 800; }
+.doc .back { display: block; width: fit-content; margin-bottom: 1rem; }
 
-/* Code and tables */
-.prose code, .cl-day code { background: transparent; color: var(--accent); border: 0; padding: 0; }
-.doc table { border: 1px solid var(--line); }
-.doc th, .doc td { border: 1px solid var(--rule); }
-.doc th { background: transparent; color: var(--ink); font-family: var(--mono); font-weight: 400; text-transform: uppercase; font-size: 12px; letter-spacing: .08em; }
-.doc pre { background: transparent; color: var(--ink); border: 1px solid var(--line); }
-.prose hr { border-top: 1px solid var(--rule); }
-kbd { border: 1px solid var(--line); font-family: var(--mono); }
-
-/* Footer: quiet, small, separated by a hairline. */
-footer { background: transparent; color: var(--muted); border-top: 1px solid var(--rule); font: 12px var(--mono); padding: 2rem 1rem; }
+/* Footer text defaults; the layout is in the brand layer. */
+footer { color: var(--muted); font: 12px var(--mono); }
 footer a { color: var(--muted); }
-footer a:hover { color: var(--accent); }
-footer .updated { background: none; color: var(--accent); border: 1px solid var(--accent); font-weight: 400; }
-.updated-big .updated { background: none; color: var(--accent); border: 1px solid var(--accent); font-weight: 400; }
+footer a:hover { color: var(--accent-text); }
 
-@media (max-width: 600px) {
-  .hero { padding: 72px 1rem 64px; }
-  .nav-end { flex-wrap: wrap; gap: 6px; width: 100%; }
-  .nav-links { width: 100%; gap: .4rem .9rem; font-size: 13px; }
-}
+/* Changelog */
+.changelog { margin: 0 auto; display: grid; gap: 22px; }
+.cl-day { color: var(--ink); }
+.cl-date { font-size: 18px; margin: 0 0 10px; }
+.cl-day ul { margin: 0; padding-left: 0; list-style: none; display: grid; gap: 8px; }
+.cl-day code { font-size: 13px; margin-right: 6px; color: var(--accent-text); }
 
-/* ---- Security feature database (home page) ---- */
-.db-hero { padding: 96px 1rem 72px; }
-.db-hero h1 { max-width: 15ch; margin: 18px 0 20px; }
-.db-hero .lead { max-width: 58ch; margin-bottom: 32px; }
-.db-search-wrap { position: relative; max-width: 760px; }
-.db-search {
-  width: 100%; padding: 22px 64px 22px 58px; font: 400 clamp(16px, 2.2vw, 21px) var(--mono);
-  background: var(--bg); color: var(--ink); border: 1px solid var(--ink); border-radius: 0; outline: none;
-  -webkit-appearance: none; appearance: none;
-}
-.db-search::placeholder { color: var(--muted); opacity: 1; }
-.db-search::-webkit-search-cancel-button { display: none; }
-.db-search:focus { border-color: var(--accent); }
-.db-search-ico { position: absolute; left: 22px; top: 50%; transform: translateY(-50%); color: var(--muted); pointer-events: none; transition: color .2s; }
-.db-search-wrap:focus-within .db-search-ico { color: var(--accent); }
-.db-keys { position: absolute; right: 18px; top: 50%; transform: translateY(-50%); }
-/* Accent bar that sweeps under the box while it has focus. */
-.db-search-wrap::after { content: ""; position: absolute; left: 0; right: 0; bottom: -1px; height: 3px; background: var(--accent); transform: scaleX(0); transform-origin: left; transition: transform .45s cubic-bezier(.2, .9, .2, 1); }
-.db-search-wrap:focus-within::after { transform: scaleX(1); }
-.db-tip { margin: 16px 0 0; font-size: 13px; color: var(--muted); }
-.db-tip a { color: var(--ink); }
+/* Docs: tables and code */
+.doc table { width: 100%; margin: 1.5rem 0; font-size: 16px; display: block; overflow-x: auto; border-collapse: separate; border-spacing: 0; }
+.doc th, .doc td { padding: 10px 12px; text-align: left; vertical-align: top; border: 0 solid var(--rule); border-bottom-width: 1px; }
+.doc th { color: var(--muted); font: 400 12px/1.4 var(--mono); }
+.doc pre { color: var(--ink); padding: 14px 16px; overflow-x: auto; }
+.doc pre code { color: inherit; padding: 0; word-break: normal; }
+.doc td code, .doc th code { word-break: normal; overflow-wrap: anywhere; }
 
-.db-marquee .marquee-item { font-style: italic; }
-.db-band { max-width: 1240px; margin: 0 auto; padding: 40px 1rem 96px; border-top: 0; }
-.db-bar { position: sticky; top: 60px; z-index: 5; padding: 14px 0; margin-bottom: 26px; background: color-mix(in srgb, var(--bg) 92%, transparent); backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px); border-bottom: 1px solid var(--rule); }
-.db-chips { justify-content: flex-start; margin: 0; gap: 8px; max-width: none; }
-.chip { padding: 6px 11px; background: var(--bg); color: var(--ink); }
-.chip-n { color: var(--muted); margin-left: 4px; font-size: 11px; }
-.chip[aria-pressed="true"] .chip-n { color: inherit; opacity: .6; }
-.chip-must { border-color: var(--accent); }
-.db-tools { display: flex; flex-wrap: wrap; align-items: center; gap: 10px 18px; margin-top: 12px; font-size: 13px; }
-.db-count { margin: 0 auto 0 0; color: var(--muted); }
-.db-sort { display: flex; border: 1px solid var(--line); }
-.db-sort button, .db-surprise, .linkish { font: 12px var(--mono); padding: 5px 10px; background: none; color: var(--ink); border: 0; cursor: pointer; }
-.db-sort button + button { border-left: 1px solid var(--line); }
-.db-sort button[aria-pressed="true"] { background: var(--ink); color: var(--bg); }
-.db-surprise { border: 1px solid var(--line); transition: border-color .15s, color .15s; }
-.db-surprise:hover { border-color: var(--accent); color: var(--accent); }
-.linkish { padding: 0; font: inherit; text-decoration: underline; text-underline-offset: 3px; }
-
-.db-grid { display: grid; gap: 0; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); border-top: 1px solid var(--line); border-left: 1px solid var(--line); }
-.db-card {
-  position: relative; display: flex; flex-direction: column; gap: 8px; min-height: 236px; padding: 20px 20px 18px;
-  color: var(--ink); text-decoration: none; background: var(--bg);
-  border-right: 1px solid var(--line); border-bottom: 1px solid var(--line); overflow: hidden;
-  transition: background .2s;
-}
-.db-card[hidden] { display: none; }
-.db-card::before { content: ""; position: absolute; left: 0; top: 0; bottom: 0; width: 3px; background: var(--accent); transform: scaleY(0); transform-origin: top; transition: transform .3s cubic-bezier(.2, .9, .2, 1); }
-.db-card:hover, .db-card:focus-visible { color: var(--ink); background: color-mix(in srgb, var(--accent) 5%, var(--bg)); }
-.db-card:hover::before, .db-card:focus-visible::before { transform: scaleY(1); }
-.db-card:focus-visible { outline-offset: -3px; }
-/* Specimen: the unsafe thing, struck out; flips to the fix on hover. */
-.db-spec { position: relative; display: block; height: 22px; overflow: hidden; font: 12px/22px var(--mono); }
-.db-spec s, .db-spec b { position: absolute; inset: 0; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; font-weight: 400; transition: transform .35s cubic-bezier(.2, .9, .2, 1), opacity .35s; }
-.db-spec s { color: var(--muted); text-decoration-color: var(--accent); }
-.db-spec b { color: var(--accent); transform: translateY(100%); opacity: 0; }
-.db-card:hover .db-spec s, .db-card:focus-visible .db-spec s { transform: translateY(-100%); opacity: 0; }
-.db-card:hover .db-spec b, .db-card:focus-visible .db-spec b { transform: none; opacity: 1; }
-.db-meta { display: flex; justify-content: space-between; gap: 8px; font: 11px var(--mono); text-transform: uppercase; letter-spacing: .08em; color: var(--muted); }
-.db-pri { padding: 1px 6px; border: 1px solid var(--line); }
-.pri-must { color: var(--accent); border-color: var(--accent); }
-.db-name { margin-top: 6px; font: 750 22px/1.1 var(--sans); letter-spacing: -.025em; }
-.db-one { font: 14px/1.5 var(--sans); color: var(--muted); }
-.db-stops { margin-top: auto; padding-top: 8px; font-size: 12px; color: var(--muted); border-top: 1px dashed var(--rule); }
-
-.db-empty { padding: 48px 0; max-width: 60ch; }
-.db-empty-big { font: 800 clamp(2rem, 4vw, 3rem)/1 var(--sans); letter-spacing: -.035em; margin: 0 0 12px; }
-
-.db-areas { max-width: 1240px; margin: 0 auto; padding: 72px 1rem 96px; }
-.db-area-grid { margin-top: 24px; display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: 0; border-top: 1px solid var(--line); }
-.db-area { display: grid; gap: 6px; padding: 22px 18px 22px 0; border-bottom: 1px solid var(--line); text-decoration: none; color: var(--ink); transition: padding .25s cubic-bezier(.2, .9, .2, 1); }
-.db-area:hover { padding-left: 12px; }
-.db-area-n { font-size: 12px; color: var(--accent); }
-.db-area-name { font: 750 20px/1.15 var(--sans); letter-spacing: -.02em; }
-.db-area-tag { font: 14px/1.45 var(--sans); color: var(--muted); }
-.db-area-count { font-size: 12px; color: var(--muted); }
-.db-area:hover .db-area-count { color: var(--accent); }
-
-@media (prefers-reduced-motion: no-preference) {
-  .db-card.enter { animation: db-in .5s cubic-bezier(.2, .9, .2, 1) backwards; animation-delay: calc(var(--i, 0) * 28ms); }
-  @keyframes db-in { from { opacity: 0; transform: translateY(14px); } }
-  .db-search-ico { animation: db-blink 2.4s ease-in-out 1.2s 2; }
-  @keyframes db-blink { 50% { color: var(--accent); } }
-}
-@media (max-width: 600px) {
-  .db-hero { padding: 56px 1rem 48px; }
-  .db-search { padding: 18px 16px 18px 50px; }
-  .db-search-ico { left: 16px; }
-  .db-keys { display: none; }
-  .db-bar { position: static; }
-  .db-chips { flex-wrap: nowrap; overflow-x: auto; padding-bottom: 4px; scrollbar-width: none; }
-  .chip { flex: none; }
-  .db-grid { grid-template-columns: 1fr; }
-  .db-card { min-height: 0; }
-}
-
-/* ---- Security feature database (entry page) ---- */
-.entry-head { padding: 88px 1rem 64px; }
-.entry-inner { max-width: 980px; margin: 0 auto; }
-.entry-inner .crumbs { max-width: none; margin: 0; padding: 0; font-weight: 400; font-size: 12px; color: var(--muted); }
-.entry-inner .crumbs a { color: var(--ink); }
-.entry-badges { display: flex; flex-wrap: wrap; gap: 8px; margin: 18px 0 0; font: 11px var(--mono); text-transform: uppercase; letter-spacing: .08em; }
-.entry-cwe { padding: 1px 6px; border: 1px solid var(--line); color: var(--ink); text-decoration: none; }
-.entry-cwe:hover { border-color: var(--accent); color: var(--accent); }
-.entry-head h1 { margin: 16px 0 12px; max-width: 18ch; }
-.entry-aka { margin: 0 0 22px; font-size: 13px; color: var(--muted); }
-.entry-head .lead { max-width: 60ch; }
-.entry-stops { margin: 22px 0 0; max-width: 70ch; font: 15px/1.55 var(--sans); }
-.entry-stops span { margin-right: 8px; font: 11px var(--mono); text-transform: uppercase; letter-spacing: .1em; color: var(--accent); }
-
-.entry-body { max-width: 980px; margin: 0 auto; padding: 0 1rem 72px; }
-.entry-sec { padding: 40px 0; border-top: 1px solid var(--rule); }
-.entry-sec h2 { font-size: clamp(1.5rem, 2.6vw, 2.1rem); margin: 0 0 20px; }
-.entry-n { margin-right: 10px; font: 13px var(--mono); color: var(--accent); vertical-align: middle; letter-spacing: 0; }
-.entry-explain { max-width: 68ch; font: 17px/1.65 var(--sans); }
-.entry-said-label { margin: 26px 0 10px; font-size: 12px; color: var(--muted); text-transform: uppercase; letter-spacing: .08em; }
-.entry-said { display: flex; flex-wrap: wrap; gap: 8px; margin: 0; }
-.entry-said a { padding: 5px 10px; font-size: 13px; color: var(--ink); text-decoration: none; border: 1px solid var(--line); transition: border-color .15s, color .15s; }
-.entry-said a:hover { border-color: var(--accent); color: var(--accent); }
-
-.entry-parts { counter-reset: part; list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); border-top: 1px solid var(--line); border-left: 1px solid var(--line); }
-.entry-parts li { counter-increment: part; display: grid; gap: 6px; padding: 18px; border-right: 1px solid var(--line); border-bottom: 1px solid var(--line); }
-.entry-parts li::before { content: counter(part, decimal-leading-zero); font-size: 11px; color: var(--accent); }
-.entry-parts b { font: 700 17px/1.2 var(--sans); }
-.entry-parts span { font: 14px/1.5 var(--sans); color: var(--muted); }
-
-.entry-sec-top { display: flex; flex-wrap: wrap; align-items: baseline; justify-content: space-between; gap: 12px; }
-.copy-btn { font: 12px var(--mono); padding: 5px 10px; background: none; color: var(--ink); border: 1px solid var(--line); cursor: pointer; transition: border-color .15s, color .15s; }
-.copy-btn:hover, .copy-btn.copied { border-color: var(--accent); color: var(--accent); }
-.entry-prompt, .entry-code pre { margin: 0; padding: 18px 20px; font: 13px/1.6 var(--mono); border: 1px solid var(--line); background: color-mix(in srgb, var(--ink) 3%, var(--bg)); }
-.entry-prompt { white-space: pre-wrap; }
-.entry-code pre { overflow-x: auto; }
-.entry-code + .entry-code { margin-top: 24px; }
-.entry-code-top { display: flex; justify-content: space-between; align-items: center; margin-bottom: -1px; padding: 6px 6px 6px 12px; border: 1px solid var(--line); }
-.entry-stack { font-size: 12px; text-transform: uppercase; letter-spacing: .08em; color: var(--muted); }
-.entry-note { margin: 10px 0 0; max-width: 70ch; font: 14px/1.5 var(--sans); color: var(--muted); }
-
-.entry-verify, .entry-refs { list-style: none; margin: 0; padding: 0; }
-.entry-verify li { position: relative; padding: 10px 0 10px 26px; border-bottom: 1px dashed var(--rule); font: 15px/1.55 var(--sans); }
-.entry-verify li::before { content: ""; position: absolute; left: 0; top: 17px; width: 10px; height: 10px; border: 1px solid var(--accent); }
-.entry-refs li { padding: 6px 0; }
-.entry-refs a { color: var(--ink); }
-.entry-refs a:hover { color: var(--accent); }
-
-.entry-related { max-width: 1240px; margin: 0 auto; }
-.entry-related .db-grid { margin-top: 20px; }
-
-@media (max-width: 600px) {
-  .entry-head { padding: 48px 1rem 40px; }
-  .entry-sec { padding: 28px 0; }
-  .entry-prompt, .entry-code pre { padding: 14px; font-size: 12px; }
-}
-
-/* ---- Liquid glass (nav capsule, landing card, buttons, search filter bar). ----
-   A clear, thick-looking lens: light fill, bright rim that turns toward the pointer, inner glow, soft depth
-   shadow, springy hover. public/glass.js adds the real bending of the backdrop at the rim (Chromium);
-   without it this is frosted glass. Hand-built so the strict Content-Security-Policy holds — no library. */
+/* ---- Liquid glass: the navigation layer only (the header and its menus). ----
+   Following Apple's "Adopting Liquid Glass": glass is a functional layer for navigation and controls that floats
+   above content, used sparingly, never stacked on itself. Content (cards, the product example, the footer) is a plain
+   surface. The material is mostly clear: what is behind it shows through, bent at the rim, lightly blurred and toned.
+   - ::after is the material, under the content: blur, lens (--lens, Chromium), saturate and a tone curve on the
+     backdrop (--glass-tone pulls highlights down in dark mode and lifts shadows in light mode, so the label colour
+     always reads, whatever passes behind), then a thin tint, a top inner glow and a faint bottom inner shadow.
+   - ::before is the specular rim: a hairline that is brightest along the top edge, plus a glint that turns toward
+     the pointer (--glint, glass.js) and drifts as the page scrolls (--glint-turn, scroll-driven, no listener).
+   - .glass-band is the bezel for browsers without the SVG lens (Firefox, Safari): a ring of extra blur under the
+     material, so the edge reads as thicker glass and the middle stays clear. Hidden once glass.js turns the lens on.
+   public/glass.js builds one lens per glass element (header and each menu), sized to it, rebuilt only on resize. */
+@property --glint-turn { syntax: "<angle>"; inherits: true; initial-value: 0deg; }
+@property --drop { syntax: "<number>"; inherits: false; initial-value: 1; }
 :root {
-  --glass-fill: rgba(255, 255, 255, .04); --glass-rim: rgba(255, 255, 255, .95); --glass-rim-dim: rgba(255, 255, 255, .28);
-  --glass-glow: rgba(255, 255, 255, .14); --glass-shade: rgba(29, 29, 29, .22);
+  /* Springs: a quick settle with a ~3% overshoot, and a softer one with a little more give for shapes that grow. */
+  --spring: linear(0, 0.044, 0.149, 0.283, 0.424, 0.558, 0.677, 0.776, 0.856, 0.917, 0.961, 0.992, 1.011, 1.022, 1.027, 1.028, 1.027, 1.023, 1.019, 1.015, 1.012, 1.008, 1.006, 1.004, 1);
+  --spring-soft: linear(0, 0.053, 0.182, 0.349, 0.523, 0.684, 0.822, 0.93, 1.008, 1.058, 1.085, 1.095, 1.091, 1.08, 1.065, 1.048, 1.033, 1.019, 1.008, 1, 0.995, 0.992, 0.991, 0.991, 0.992, 0.994, 0.995, 0.997, 1);
+  --glass-tint: color-mix(in srgb, var(--bg) 14%, transparent); --glass-tone: contrast(.86) brightness(1.07);
+  --glass-halo: color-mix(in srgb, var(--bg) 75%, transparent);
+  --glass-rim: #fff; --glass-rim-dim: rgba(255, 255, 255, .45); --glass-rim-low: rgba(255, 255, 255, .6);
+  --glass-hi: rgba(255, 255, 255, .9); --glass-glow: rgba(255, 255, 255, .35); --glass-lo: rgba(29, 29, 29, .08);
+  --glass-edge: rgba(29, 29, 29, .16); --glass-shade: rgba(29, 29, 29, .2); --glass-press: rgba(255, 255, 255, .55);
+  --glass-well: rgba(29, 29, 29, .06);
 }
 @media (prefers-color-scheme: dark) {
   :root:not([data-theme="light"]) {
-    --glass-fill: rgba(255, 255, 255, .012); --glass-rim: rgba(255, 255, 255, .55); --glass-rim-dim: rgba(255, 255, 255, .1);
-    --glass-glow: rgba(255, 255, 255, .06); --glass-shade: rgba(0, 0, 0, .65);
+    --glass-tint: color-mix(in srgb, var(--bg) 22%, transparent); --glass-tone: contrast(.9) brightness(.7);
+    --glass-rim: rgba(255, 255, 255, .7); --glass-rim-dim: rgba(255, 255, 255, .16); --glass-rim-low: rgba(255, 255, 255, .22);
+    --glass-hi: rgba(255, 255, 255, .2); --glass-glow: rgba(255, 255, 255, .07); --glass-lo: rgba(0, 0, 0, .45);
+    --glass-edge: rgba(255, 255, 255, .1); --glass-shade: rgba(0, 0, 0, .6); --glass-press: rgba(255, 255, 255, .14);
+    --glass-well: rgba(0, 0, 0, .28);
   }
 }
 :root[data-theme="dark"] {
-  --glass-fill: rgba(255, 255, 255, .012); --glass-rim: rgba(255, 255, 255, .55); --glass-rim-dim: rgba(255, 255, 255, .1);
-  --glass-glow: rgba(255, 255, 255, .06); --glass-shade: rgba(0, 0, 0, .65);
+  --glass-tint: color-mix(in srgb, var(--bg) 22%, transparent); --glass-tone: contrast(.9) brightness(.7);
+  --glass-rim: rgba(255, 255, 255, .7); --glass-rim-dim: rgba(255, 255, 255, .16); --glass-rim-low: rgba(255, 255, 255, .22);
+  --glass-hi: rgba(255, 255, 255, .2); --glass-glow: rgba(255, 255, 255, .07); --glass-lo: rgba(0, 0, 0, .45);
+  --glass-edge: rgba(255, 255, 255, .1); --glass-shade: rgba(0, 0, 0, .6); --glass-press: rgba(255, 255, 255, .14);
+  --glass-well: rgba(0, 0, 0, .28);
 }
 .glass-defs { position: absolute; width: 0; height: 0; }
 .glass {
-  --glint: 135deg; --glass-blur: 0px;
-  isolation: isolate; border: 0; border-radius: 40px; background: var(--glass-fill);
-  backdrop-filter: blur(2px) saturate(1.6); -webkit-backdrop-filter: blur(2px) saturate(1.6);
-  /* The rest of the site is flat (no shadows); glass is the one place depth is allowed. */
-  box-shadow:
-    inset 0 1px 1px var(--glass-rim), inset 0 -1px 1px var(--glass-rim-dim), inset 0 0 26px var(--glass-glow),
-    0 1px 2px rgba(0, 0, 0, .1), 0 22px 50px -14px var(--glass-shade) !important;
+  --glint: 315deg; --glass-blur: 9px; --lens: saturate(1);
+  isolation: isolate; border: 0; background: none !important;
+  /* The blur lives on ::after, never on the box: a blurred box would cut its menus' blur off from the page. */
+  /* The rest of the site is flat; the floating navigation layer is the one place depth is allowed. */
+  box-shadow: 0 1px 1px rgba(0, 0, 0, calc(.05 * var(--drop))), 0 12px 32px -12px color-mix(in srgb, var(--glass-shade) calc(100% * var(--drop)), transparent) !important;
 }
-/* Rim: a hairline ring, bright where the light hits and again faintly on the far side. */
+/* With the lens on, the bending does the work, so the blur can be very light. */
+.lens-on .glass { --glass-blur: 1px; }
+.glass::after {
+  content: ""; position: absolute; inset: 0; z-index: -1; border-radius: inherit; pointer-events: none;
+  /* Blur first, then bend (--lens): bending after the blur keeps the colour fringe at the rim crisp. */
+  backdrop-filter: blur(var(--glass-blur)) var(--lens) saturate(1.7) var(--glass-tone);
+  background: radial-gradient(120% 90% at 50% -30%, var(--glass-glow), transparent 60%), var(--glass-tint);
+  /* !important: the flat base layer at the top removes every shadow. */
+  box-shadow:
+    inset 0 0 0 .5px var(--glass-edge), inset 0 1px .5px -.25px var(--glass-hi),
+    inset 0 10px 16px -12px var(--glass-glow), inset 0 -1px .5px -.25px var(--glass-lo), inset 0 -10px 16px -12px var(--glass-lo) !important;
+}
+/* Older Safari only knows the prefixed name. Kept in its own block: the CSS minifier merges the two otherwise. */
+@supports (-webkit-backdrop-filter: none) and (not (backdrop-filter: none)) {
+  .glass::after { -webkit-backdrop-filter: blur(var(--glass-blur)) saturate(1.7) var(--glass-tone); }
+  .glass-band { -webkit-backdrop-filter: blur(10px) saturate(1.2); }
+  body::before { -webkit-backdrop-filter: blur(2px); }
+}
 .glass::before {
-  content: ""; position: absolute; inset: 0; border-radius: inherit; padding: 1.2px; pointer-events: none;
-  background: linear-gradient(var(--glint), var(--glass-rim), transparent 32%, transparent 68%, var(--glass-rim-dim));
+  content: ""; position: absolute; inset: 0; border-radius: inherit; padding: 1px; pointer-events: none;
+  background:
+    conic-gradient(from calc(var(--glint) + var(--glint-turn)), var(--glass-rim), transparent 55deg 125deg, var(--glass-rim-dim) 180deg, transparent 235deg 305deg, var(--glass-rim)),
+    linear-gradient(var(--glass-rim), var(--glass-rim-dim) 30%, transparent 50%, var(--glass-rim-low));
   -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0); -webkit-mask-composite: xor;
   mask: linear-gradient(#000 0 0) content-box exclude, linear-gradient(#000 0 0);
 }
-/* Sheen: a soft highlight pooled near the top-left, under the content. */
-.glass::after {
-  content: ""; position: absolute; inset: 0; z-index: -1; border-radius: inherit; pointer-events: none;
-  background: radial-gradient(120% 90% at 18% -20%, var(--glass-glow), transparent 60%);
+.glass-band {
+  position: absolute; inset: 0; z-index: -1; border-radius: inherit; pointer-events: none;
+  backdrop-filter: blur(10px) saturate(1.2);
+  /* A soft ring: solid at the edge, gone 14px in, so blur builds toward the rim like a thick bezel. */
+  -webkit-mask: linear-gradient(#000, transparent 14px calc(100% - 14px), #000), linear-gradient(90deg, #000, transparent 18px calc(100% - 18px), #000);
+  mask: linear-gradient(#000, transparent 14px calc(100% - 14px), #000), linear-gradient(90deg, #000, transparent 18px calc(100% - 18px), #000);
+}
+.lens-on .glass-band { display: none; }
+@supports (animation-timeline: scroll()) {
+  @media (prefers-reduced-motion: no-preference) {
+    .nav.glass { animation: glint-turn linear both; animation-timeline: scroll(root); animation-range: 0 120vh; }
+    @keyframes glint-turn { to { --glint-turn: 70deg; } }
+  }
 }
 
 /* Nav: a floating capsule instead of a bar glued to the top edge. */
-.nav.glass {
-  top: 12px; width: min(1080px, calc(100% - 24px)); margin: 12px auto 0; border-radius: 999px;
-  /* page text scrolls under the menu, so it is kept slightly frosted so links stay readable, but clear */
-  background: color-mix(in srgb, var(--bg) 32%, transparent); border: 0; --glass-bezel: 20px; --glass-blur: 2.5px;
-}
-.nav.glass .nav-inner { max-width: none; height: 52px; padding: 0 12px 0 22px; }
+.nav.glass { top: 12px; width: min(1080px, calc(100% - 24px)); margin: 12px auto 0; --glass-bezel: 22px; }
 .nav-brand { white-space: nowrap; }
-.nav.glass .theme { border-color: var(--line); border-radius: 999px; overflow: hidden; }
-.nav.glass .theme button + button { border-left-color: var(--line); }
+/* Labels on clear glass get a soft halo of the page colour, like Apple's vibrant text: it keeps them readable over
+   whatever passes behind without fogging the whole pane. */
+.nav-brand span, .nav-dd summary, .nav .nav-plain, .nav .theme button { text-shadow: 0 0 2px var(--glass-halo), 0 0 10px var(--glass-halo); }
 html { scroll-padding-top: 88px; }
 
-/* Glass buttons: clear capsule, or tinted with the accent for the main action. */
-.pill.glass { position: relative; border-radius: 999px; padding: 12px 22px; color: var(--ink); background: var(--glass-fill); }
-.pill.glass:hover { background: var(--glass-fill); color: var(--accent); }
-/* Primary button: same clear glass as the others, with an orange tint so it still reads as the main action. */
-.pill.glass-tint { background: color-mix(in srgb, var(--accent) 22%, transparent); color: var(--ink); }
-.pill.glass-tint:hover { background: color-mix(in srgb, var(--accent) 34%, transparent); color: var(--ink); }
-.db-bar.glass { top: 76px; border-radius: 30px; padding: 14px 16px; border: 0; background: color-mix(in srgb, var(--bg) 60%, transparent); --glass-bezel: 16px; --glass-blur: 7px; }
-
-@media (prefers-reduced-motion: no-preference) {
-  /* Springy, slightly overshooting — the "liquid" part. */
-  .glass { transition: transform .45s cubic-bezier(.34, 1.56, .64, 1), box-shadow .3s; }
-  /* No grow-on-hover for the landing card: scaling a lensed element shows the backdrop edge as a green line at the rim. */
-  .pill.glass:hover { transform: scale(1.06); }
-  .pill.glass:active { transform: scale(.96); }
+/* Scroll edge: content softens and fades a little in a band under the floating header, so the header stays legible
+   over big headings while the glass still has something to bend. CSS only (a fixed layer with a gradient mask), no
+   scroll listener. --edge is the header's bottom plus a little room. */
+:root { --edge: 92px; }
+body::before {
+  content: ""; position: fixed; inset: 0 0 auto; z-index: 9; height: var(--edge); pointer-events: none;
+  background: linear-gradient(color-mix(in srgb, var(--bg) 82%, transparent) 20%, color-mix(in srgb, var(--bg) 58%, transparent) 75%, transparent);
+  backdrop-filter: blur(2px);
+  -webkit-mask: linear-gradient(#000 calc(100% - 22px), transparent); mask: linear-gradient(#000 calc(100% - 22px), transparent);
 }
-@media (max-width: 600px) {
-  .nav.glass { border-radius: 30px; }
-  .nav.glass .nav-inner { height: auto; padding: 10px 16px; }
-  .db-bar.glass { top: auto; }
+/* Where the browser can tie an animation to scrolling, the band only appears once something has scrolled under it. */
+@supports (animation-timeline: scroll()) {
+  body::before { animation: edge-in linear both; animation-timeline: scroll(); animation-range: 0 64px; }
+  @keyframes edge-in { from { opacity: 0; } }
 }
-
 /* ---- Landing page: ASCII sky over grid paper, a glass card, and an ASCII site tree. ---- */
 .landing {
   position: relative; overflow: hidden; min-height: 100dvh; margin-top: -64px; padding-top: 64px; display: flex; align-items: center;
-  background-image: linear-gradient(var(--rule) 1px, transparent 1px), linear-gradient(90deg, var(--rule) 1px, transparent 1px);
-  background-size: 40px 40px;
 }
 .landing-inner { position: relative; width: 100%; max-width: 1080px; margin: 0 auto; padding: 72px 1rem 88px; }
 
@@ -662,144 +253,66 @@ html { scroll-padding-top: 88px; }
   @keyframes birds-pass { 0% { translate: -130% 0; } 55%, 100% { translate: 100vw -70px; } }
 }
 
-/* ==== Glass everywhere, fluid sizing. ====
-   Last on purpose: it restyles the older flat components (cards, chips, inputs, badges, footer) as glass panes and
-   capsules without touching their markup, and swaps fixed pixel sizes for ones that flow with the window width.
-   Panes are real glass too: public/glass.js adds .glass.pane to them and builds each lens only once it nears the
-   screen. They keep a denser fill and a lighter shadow than the big glass surfaces so text stays easy to read. */
+/* ==== Surfaces and fluid sizing. ====
+   Content boxes are not glass: a solid surface a step off the page with a hairline edge, so text reads cleanly.
+   Sizes flow with the window width. */
 :root {
-  --r-lg: clamp(24px, 3.2vw, 40px); --r-md: clamp(16px, 2vw, 24px);
-  --gutter: clamp(14px, 3.5vw, 40px); --gap: clamp(10px, 1.4vw, 16px);
-  --pane: rgba(255, 255, 255, .3); --pane-edge: rgba(29, 29, 29, .08); --pane-rim: rgba(255, 255, 255, .95);
-  --pane-shadow: inset 0 1px 0 var(--pane-rim), inset 0 0 0 1px var(--pane-edge), 0 1px 2px rgba(0, 0, 0, .05), 0 16px 34px -20px var(--glass-shade);
+  --r-md: clamp(16px, 2vw, 24px); --gutter: clamp(14px, 3.5vw, 40px);
+  --pane: color-mix(in srgb, var(--bg), white 55%); --pane-edge: rgba(29, 29, 29, .12);
+  --pane-shadow: inset 0 0 0 1px var(--pane-edge);
 }
 @media (prefers-color-scheme: dark) {
-  :root:not([data-theme="light"]) { --pane: rgba(255, 255, 255, .045); --pane-edge: rgba(255, 255, 255, .09); --pane-rim: rgba(255, 255, 255, .16); }
+  :root:not([data-theme="light"]) { --pane: color-mix(in srgb, var(--bg), white 4%); --pane-edge: rgba(255, 255, 255, .1); }
 }
-:root[data-theme="dark"] { --pane: rgba(255, 255, 255, .045); --pane-edge: rgba(255, 255, 255, .09); --pane-rim: rgba(255, 255, 255, .16); }
+:root[data-theme="dark"] { --pane: color-mix(in srgb, var(--bg), white 4%); --pane-edge: rgba(255, 255, 255, .1); }
 
-/* Grid paper runs behind every page, so glass always has something to show through. */
+/* Grid paper runs behind every page. */
 body {
   font-size: clamp(14px, .82rem + .22vw, 16px);
   background-image: linear-gradient(var(--rule) 1px, transparent 1px), linear-gradient(90deg, var(--rule) 1px, transparent 1px);
   background-size: 40px 40px; background-attachment: fixed;
 }
-.hero, .landing { background-image: none; }
 .hero { padding: clamp(56px, 9vw, 120px) var(--gutter) clamp(40px, 7vw, 96px); }
-.band, .band-gray { padding: clamp(40px, 7vw, 88px) var(--gutter); border-top: 0; }
-.db-hero { padding: clamp(48px, 8vw, 96px) var(--gutter) clamp(36px, 6vw, 72px); }
-.db-band { padding: clamp(24px, 4vw, 40px) var(--gutter) clamp(48px, 8vw, 96px); }
-.db-areas { padding: clamp(40px, 6vw, 72px) var(--gutter) clamp(48px, 8vw, 96px); border-top: 0; }
-.entry-head { padding: clamp(40px, 7vw, 88px) var(--gutter) clamp(32px, 5vw, 64px); }
-.entry-body { padding: 0 var(--gutter) clamp(40px, 6vw, 72px); }
+.band { padding: clamp(40px, 7vw, 88px) var(--gutter); }
 .prose { padding: clamp(48px, 7vw, 72px) var(--gutter) clamp(56px, 8vw, 96px); }
 .landing-inner { padding: clamp(32px, 6vw, 72px) var(--gutter) clamp(48px, 7vw, 88px); }
-.marquee { border-bottom: 0; }
 
-/* Panes: every box. */
-.db-card, .tile, .product-card, .stack-card, .cl-day, .entry-parts li, .entry-prompt, .entry-code, .doc pre, .doc table,
-.db-area, .cp-prev, .cp-next, footer, footer.glass {
-  background: var(--pane); border: 0; border-radius: var(--r-md); box-shadow: var(--pane-shadow) !important;
-}
-.pane.glass { position: relative; --glass-bezel: 14px; }
-.pane.glass::after { display: none; }
-/* Search cards already use ::before for the orange hover bar; keep that bar instead of the rim line. */
-.db-card.glass::before { inset: 0 auto 0 0; width: 3px; padding: 0; border-radius: 0; background: var(--accent); -webkit-mask: none; mask: none; }
-.db-grid, .entry-parts { gap: var(--gap); border: 0; grid-template-columns: repeat(auto-fill, minmax(min(100%, 260px), 1fr)); }
-.db-area-grid { gap: var(--gap); border: 0; grid-template-columns: repeat(auto-fill, minmax(min(100%, 220px), 1fr)); }
-.products, .stack-grid, .tiles { gap: var(--gap); grid-template-columns: repeat(auto-fit, minmax(min(100%, 250px), 1fr)); }
-.db-card { min-height: 0; padding: clamp(16px, 2vw, 22px); }
-.db-card:hover, .db-card:focus-visible { background: var(--pane); }
-.db-area, .db-area:hover { padding: 18px 20px; }
-.tile, .product-card, .stack-card, .cl-day { padding: clamp(18px, 2.4vw, 26px); }
-.entry-code { overflow: hidden; }
-.entry-code-top { margin: 0; border: 0; border-bottom: 1px solid var(--pane-edge); padding: 8px 8px 8px 18px; }
-.entry-code pre { border: 0; background: none; }
-.doc table { border-collapse: separate; border-spacing: 0; }
-.doc th, .doc td { border-width: 0 0 1px; }
-.doc td code, .doc th code { white-space: normal; overflow-wrap: anywhere; }
-.prose code { word-break: normal; overflow-wrap: anywhere; }
-.cp-prev, .cp-next { padding: 12px 18px; }
-footer, footer.glass { width: min(1080px, calc(100% - 24px)); margin: clamp(24px, 5vw, 64px) auto 16px; padding: 18px var(--gutter); border-radius: var(--r-lg); }
-
-/* Capsules: every control and badge. */
-.pill, .chip, .marquee-item, .copy-btn, .db-surprise, .db-sort, .theme, .entry-said a, .entry-cwe, .db-pri, .status,
-.product-badge, footer .updated, .updated-big .updated, .step-num { border-radius: 999px; }
-.chip, .marquee-item, .copy-btn, .db-surprise, .db-sort, .theme, .entry-said a, .entry-cwe {
-  background: var(--pane); border: 0; box-shadow: var(--pane-shadow) !important;
-}
-.chip { padding: 7px 14px; }
-.chip[aria-pressed="true"] { background: var(--ink); color: var(--bg); }
-.chip-must { box-shadow: var(--pane-shadow), inset 0 0 0 1.5px var(--accent) !important; }
-.marquee-item, .entry-said a { padding: 7px 14px; }
-.copy-btn, .db-surprise { padding: 7px 14px; }
-.db-sort, .theme { padding: 3px; gap: 2px; }
-.db-sort button, .theme button { border-radius: 999px; padding: 5px 11px; font-size: clamp(11px, .6rem + .25vw, 12px); }
-.db-sort button + button, .theme button + button, .nav.glass .theme button + button { border-left: 0; }
-.pill { border: 0; padding: 12px 22px; box-shadow: inset 0 1px 0 rgba(255, 255, 255, .28), 0 12px 26px -14px var(--glass-shade) !important; }
-.db-pri, .status, .product-badge, .entry-cwe { padding: 2px 10px; }
-kbd { border: 0; border-radius: 8px; padding: 2px 8px; background: var(--pane); box-shadow: var(--pane-shadow) !important; }
-
-/* Search box: a glass capsule with the real lens (it carries the .glass class). */
-.db-search-wrap.glass { border-radius: 999px; --glass-bezel: 22px; --glass-blur: 3px; }
-.db-search-wrap.glass::after { inset: 0; height: auto; transform: none; transition: none; background: radial-gradient(120% 90% at 18% -20%, var(--glass-glow), transparent 60%); }
-.db-search-wrap.glass:focus-within { outline: 2px solid var(--accent); outline-offset: 2px; }
-.db-search { background: transparent; border: 0; border-radius: 999px; font-size: clamp(16px, .8rem + .6vw, 21px); padding: clamp(15px, 2vw, 22px) 64px clamp(15px, 2vw, 22px) 60px; }
-.db-search:focus-visible { outline: 0; }
-.db-bar.glass { border-radius: var(--r-md); }
-
-/* Link cards rise a little on hover and get an accent ring. */
-a.db-card:hover, a.tile:hover, a.product-card:hover, a.db-area:hover, .cp-prev:hover, .cp-next:hover {
-  box-shadow: var(--pane-shadow), 0 0 0 1.5px var(--accent) !important;
-}
-@media (prefers-reduced-motion: no-preference) {
-  a.db-card, a.tile, a.product-card, a.db-area, .cp-prev, .cp-next, .chip, .pill, .marquee-item { transition: transform .4s cubic-bezier(.34, 1.56, .64, 1), box-shadow .25s, background .2s, color .2s; }
-  a.db-card:hover, a.tile:hover, a.product-card:hover, a.db-area:hover, .cp-prev:hover, .cp-next:hover { transform: translateY(-3px); }
-  .chip:hover, .pill:hover, .marquee-item:hover { transform: scale(1.04); }
-  .pill:active, .chip:active { transform: scale(.96); }
-}
+/* Surfaces: every content box. */
+.cl-day, .doc pre, .doc table { background: var(--pane); border-radius: var(--r-md); box-shadow: var(--pane-shadow) !important; }
+.cl-day { padding: clamp(18px, 2.4vw, 26px); }
+.status { border-radius: 3px; }
 
 /* Menu: text and gaps shrink smoothly with the window; when it still cannot fit on one row, the brand and theme
    switch share the first row and the links get a full row of their own. Nothing is ever squeezed or cut off. */
+/* Concentric corners: controls sit 8px in from the header's edge, so its radius is theirs (20px) plus 8. */
 .nav.glass { border-radius: 28px; }
-.nav.glass .nav-inner { height: auto; min-height: 52px; padding: 6px 10px 6px clamp(14px, 2vw, 22px); gap: clamp(.6rem, 1.6vw, 1.4rem); }
+.nav.glass .nav-inner { max-width: none; height: auto; min-height: 52px; padding: 8px 8px 8px clamp(14px, 2vw, 22px); gap: clamp(.6rem, 1.6vw, 1.4rem); }
 .nav a { font-size: clamp(12px, .55rem + .55vw, 14px); white-space: nowrap; }
 .nav-brand { font-size: clamp(13px, .6rem + .6vw, 15px); }
-.nav-links { gap: clamp(.7rem, 1.9vw, 1.5rem); }
 .nav-end { gap: clamp(.6rem, 1.6vw, 1.4rem); }
 @media (max-width: 720px) {
-  .nav.glass .nav-inner { flex-wrap: wrap; row-gap: 4px; padding: 8px 10px 8px 16px; }
+  .nav.glass .nav-inner { flex-wrap: wrap; row-gap: 4px; padding: 8px 8px 8px 16px; }
   .nav-end { display: contents; }
   .nav .theme { order: 2; margin-left: auto; }
-  .nav-links { order: 3; flex: 1 0 100%; width: auto; flex-wrap: nowrap; justify-content: space-between; gap: 0; padding: 2px 8px 4px 0; }
   .nav a { font-size: clamp(12px, 3.4vw, 14px); }
   html { scroll-padding-top: 116px; }
   .landing { margin-top: 0; padding-top: 0; }
-  .db-bar.glass { position: static; }
-  .db-chips { flex-wrap: nowrap; overflow-x: auto; padding: 4px 2px 8px; scrollbar-width: none; }
-  .chip { flex: none; }
-  .cp-nav { flex-direction: column; align-items: stretch; }
-  .cp-prev, .cp-next { max-width: none; }
-  .cp-next { text-align: left; margin-left: 0; }
-  footer { border-radius: var(--r-md); }
 }
-.entry-note { margin: 0; padding: 10px 18px 14px; max-width: none; border-top: 1px solid var(--pane-edge); }
 
 /* ---- Kaiyori brand layer: logo mark, header with dropdowns, big footer, landing sections. Last on purpose. ---- */
 .logo { display: block; flex: none; border-radius: 8px; }
 .logo-bg { fill: var(--accent); }
-.logo-whale { fill: var(--bg); }
-.logo-spout { stroke: var(--bg); stroke-width: 1.4; stroke-linecap: round; fill: none; }
-.logo-eye { fill: var(--accent); }
+/* The K stays dark on orange in both themes, like the text on orange buttons. */
+.logo-k { fill: #140d0a; }
 
 /* Header: brand left, menu centre, theme + call to action right. */
 .nav.glass .nav-inner { display: grid; grid-template-columns: auto 1fr auto; align-items: center; }
-.nav .nav-brand { display: inline-flex; align-items: center; gap: 9px; font: 800 16px var(--sans); letter-spacing: -.02em; color: var(--ink); }
+.nav .nav-brand { display: inline-flex; align-items: center; gap: 10px; font: 800 19px/1 var(--sans); letter-spacing: -.02em; color: var(--ink); }
 .nav-brand::before { content: none; }
 .nav-menu { display: flex; align-items: center; justify-content: center; gap: 2px; }
 .nav-dd { position: relative; }
 .nav-dd summary, .nav .nav-plain {
-  display: inline-flex; align-items: center; padding: 8px 12px; border-radius: 999px; cursor: pointer; list-style: none;
+  position: relative; display: inline-flex; align-items: center; padding: 8px 12px; border-radius: 999px; cursor: pointer; list-style: none;
   font-size: clamp(13px, .55rem + .5vw, 14px); color: var(--ink); text-decoration: none; white-space: nowrap;
 }
 .nav-dd summary::-webkit-details-marker { display: none; }
@@ -807,20 +320,96 @@ a.db-card:hover, a.tile:hover, a.product-card:hover, a.db-area:hover, .cp-prev:h
   content: ""; width: 6px; height: 6px; margin: -3px 0 0 8px; border: solid currentColor; border-width: 0 1.5px 1.5px 0; transform: rotate(45deg); transition: transform .2s;
 }
 .nav-dd[open] summary::after { transform: rotate(225deg); margin-top: 3px; }
-.nav-dd summary:hover, .nav-dd[open] summary, .nav .nav-plain:hover { color: var(--accent); }
+.nav-dd[open] summary { color: var(--accent-text); }
 .nav-dd summary:focus-visible, .nav a:focus-visible, .site-footer a:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
-.nav-panel {
-  position: absolute; z-index: 20; top: calc(100% + 12px); left: 0; min-width: 220px; padding: 8px; display: grid; gap: 2px; border-radius: 22px;
-  background: color-mix(in srgb, var(--bg) 96%, transparent); box-shadow: 0 0 0 1px var(--line), 0 22px 44px -18px var(--glass-shade);
+/* Hover capsule: one soft highlight that slides between the menu items (placed by glass.js), instead of each item
+   lighting up on its own. It is a tint on the header's glass, not a second pane of glass. */
+.nav-hl {
+  position: absolute; left: 0; top: 0; width: var(--hl-w, 0); height: var(--hl-h, 0); translate: var(--hl-x, 0) var(--hl-y, 0);
+  border-radius: 999px; pointer-events: none; opacity: 0;
+  background: color-mix(in srgb, var(--ink) 7%, transparent);
+  box-shadow: inset 0 1px 0 var(--glass-press), inset 0 0 0 .5px var(--glass-edge) !important;
+  transition: opacity .2s, scale .2s;
 }
-.nav .nav-panel a { padding: 10px 14px; border-radius: 14px; font-size: 14px; }
-.nav .nav-panel a:hover { background: color-mix(in srgb, var(--accent) 14%, transparent); }
+.nav-menu.hl-on .nav-hl { opacity: 1; }
+/* Press: the item and its capsule give a little under the finger, and the glass brightens where it is pressed. */
+.nav-menu:has(summary:active, .nav-plain:active) .nav-hl { scale: .94; background: color-mix(in srgb, var(--ink) 11%, transparent); }
+.nav-dd summary:active, .nav .nav-plain:active { scale: .96; }
+@media (prefers-reduced-motion: no-preference) {
+  .nav-hl { transition: opacity .2s, translate .45s var(--spring), width .45s var(--spring), height .45s var(--spring), scale .35s var(--spring), background .2s; }
+  .nav-dd summary, .nav .nav-plain { transition: scale .35s var(--spring); }
+}
+/* Menus are the header opening downward: the same glass, with their own lens, hung just below the header (never on
+   top of it). They hold a list to read over the page and reach past the scroll edge, so they are more frosted than
+   the header: their 70% tint keeps the links readable even where a browser draws no backdrop blur at all.
+   Corners: 22px = the 14px link radius + 8px padding. */
+.nav-panel {
+  position: absolute; z-index: 20; top: calc(100% + 14px); left: 0; min-width: 220px; padding: 8px; display: grid; gap: 2px; border-radius: 22px;
+  --glass-tint: color-mix(in srgb, var(--bg) 70%, transparent); --glass-blur: 14px; --glass-bezel: 18px;
+}
+.lens-on .nav-panel { --glass-blur: 8px; }
+/* Opening: the menu grows out of its button. Its glass starts as the button's capsule (clip-path on the material and
+   rim, from --tx/--ty/--tw/--th that site.js measures) and springs out to the full menu while the box slides down and
+   its shadow fades in. The box itself is never faded or clipped: that would cut its blur off from the page. */
+@media (prefers-reduced-motion: no-preference) {
+  .nav-dd[open] .nav-panel { animation: panel-drop .5s var(--spring-soft); }
+  .nav-dd[open] .nav-panel::after, .nav-dd[open] .nav-panel::before { animation: panel-morph .5s var(--spring-soft); }
+  .nav-dd[open] .nav-panel a { animation: panel-item .32s .08s cubic-bezier(.16, 1, .3, 1) backwards; }
+  @keyframes panel-drop { from { translate: 0 calc(var(--ty, -50px) * .5); --drop: 0; } }
+  @keyframes panel-morph {
+    from { clip-path: inset(0 calc(100% - var(--tx, 0px) - var(--tw, 110px)) calc(100% - var(--th, 36px)) var(--tx, 0px) round 999px); }
+    to { clip-path: inset(0 round 22px); }
+  }
+  @keyframes panel-item { from { opacity: 0; translate: 0 -6px; } }
+}
+.nav .nav-panel a { position: relative; padding: 10px 14px; border-radius: 14px; font-size: 14px; transition: scale .3s var(--spring), background .2s; }
+.nav .nav-panel a:hover { background: color-mix(in srgb, var(--ink) 7%, transparent); color: var(--ink); }
+.nav .nav-panel a:active { scale: .97; background: color-mix(in srgb, var(--ink) 11%, transparent); }
 .nav .nav-end { gap: 10px; justify-self: end; }
-.nav.glass .theme button { padding: 4px 9px; font-size: 11px; }
-.nav .nav-cta { padding: 9px 18px; border-radius: 999px; background: var(--accent); color: #140d0a; font-weight: 700; font-size: 14px; }
-.nav .nav-cta:hover { color: #140d0a; background: color-mix(in srgb, var(--accent) 82%, white); }
+/* Theme switch: a recessed track with one glass thumb that slides to the chosen option (CSS :has, no script). When
+   the choice changes the thumb lifts, swells and clears like a lens while it travels, then settles; .moved (set by
+   theme.js on the first click) keeps that from playing on page load. */
+.nav.glass .theme {
+  position: relative; display: grid; grid-template-columns: repeat(3, 1fr); gap: 0; padding: 3px; border-radius: 999px;
+  background: var(--glass-well); box-shadow: inset 0 1px 2px var(--glass-lo), inset 0 0 0 .5px var(--glass-edge), 0 1px 0 var(--glass-rim-low) !important;
+}
+.nav.glass .theme button { position: relative; padding: 4px 10px; font-size: 11px; background: none; color: var(--ink); transition: color .2s; }
+.nav.glass .theme button[aria-pressed="true"] { background: none; color: var(--ink); font-weight: 700; }
+.nav.glass .theme button:active { scale: .94; }
+.theme-thumb {
+  --i: 0; position: absolute; top: 3px; bottom: 3px; left: 3px; width: calc((100% - 6px) / 3); border-radius: 999px; pointer-events: none;
+  translate: calc(var(--i) * 100%) 0;
+  background: radial-gradient(90% 70% at 50% 0%, var(--glass-hi), transparent 70%), color-mix(in srgb, var(--bg) 70%, transparent);
+  box-shadow: inset 0 1px .5px var(--glass-hi), inset 0 0 0 .5px var(--glass-edge), inset 0 -1px 1px var(--glass-lo), 0 2px 6px -1px var(--glass-shade) !important;
+}
+.theme:has([data-theme-set="light"][aria-pressed="true"]) .theme-thumb { --i: 1; }
+.theme:has([data-theme-set="dark"][aria-pressed="true"]) .theme-thumb { --i: 2; }
+@media (prefers-reduced-motion: no-preference) {
+  .theme-thumb { transition: translate .5s var(--spring); }
+  /* A different animation name per position restarts the lift every time the choice changes. */
+  .theme.moved .theme-thumb { animation: thumb-lift-0 .5s cubic-bezier(.3, 0, .2, 1); }
+  .theme.moved:has([data-theme-set="light"][aria-pressed="true"]) .theme-thumb { animation-name: thumb-lift-1; }
+  .theme.moved:has([data-theme-set="dark"][aria-pressed="true"]) .theme-thumb { animation-name: thumb-lift-2; }
+  @keyframes thumb-lift-0 { 35% { scale: 1.18 1.3; background-color: transparent; box-shadow: inset 0 1px .5px var(--glass-rim), inset 0 0 0 1px var(--glass-rim-dim), 0 6px 14px -4px var(--glass-shade); } }
+  @keyframes thumb-lift-1 { 35% { scale: 1.18 1.3; background-color: transparent; box-shadow: inset 0 1px .5px var(--glass-rim), inset 0 0 0 1px var(--glass-rim-dim), 0 6px 14px -4px var(--glass-shade); } }
+  @keyframes thumb-lift-2 { 35% { scale: 1.18 1.3; background-color: transparent; box-shadow: inset 0 1px .5px var(--glass-rim), inset 0 0 0 1px var(--glass-rim-dim), 0 6px 14px -4px var(--glass-shade); } }
+}
+/* Call to action: a solid orange capsule on the glass (not glass itself), with a light top edge. Pressing it gives
+   a little and it brightens, like the glass controls. */
+.nav .nav-cta {
+  padding: 9px 18px; border-radius: 999px; color: #140d0a; font-weight: 700; font-size: 14px;
+  background: linear-gradient(180deg, color-mix(in srgb, var(--accent) 80%, white), var(--accent) 55%);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, .5), inset 0 -1px 1px rgba(0, 0, 0, .14), 0 6px 16px -8px var(--accent);
+}
+.nav .nav-cta:hover { color: #140d0a; background: linear-gradient(180deg, color-mix(in srgb, var(--accent) 65%, white), color-mix(in srgb, var(--accent) 85%, white) 55%); }
+.nav .nav-cta:active { scale: .95; filter: brightness(1.1) saturate(1.1); }
+@media (prefers-reduced-motion: no-preference) {
+  .nav .nav-cta { transition: scale .4s var(--spring), filter .2s, background .2s; }
+  .nav .nav-cta:active { transition-duration: .12s; }
+}
 @media (max-width: 860px) {
-  .nav.glass .nav-inner { grid-template-columns: 1fr auto; row-gap: 4px; padding: 8px 10px 8px 14px; }
+  .nav.glass .nav-inner { grid-template-columns: 1fr auto; row-gap: 4px; padding: 8px 8px 8px 14px; }
+  :root { --edge: 136px; }
   .nav-end { display: contents; }
   .nav .nav-brand { grid-area: 1 / 1; }
   .nav .theme { grid-area: 1 / 2; order: 0; margin-left: 0; }
@@ -832,28 +421,45 @@ a.db-card:hover, a.tile:hover, a.product-card:hover, a.db-area:hover, .cp-prev:h
 }
 @media (max-width: 480px) {
   /* Two short rows on phones: brand + CTA, then the menu. The theme follows the OS here (Auto). */
-  .nav .theme { display: none; }
-  .nav .nav-cta { grid-area: 1 / 2; padding: 7px 14px; font-size: 13px; }
+  .nav.glass .theme { display: none; }
+  .nav .nav-cta { grid-area: 1 / 2; padding: 9px 14px; font-size: 13px; }
+  .nav .nav-brand { font-size: 17px; gap: 8px; }
   .nav-menu { grid-area: 2 / 1 / 3 / 3; justify-content: space-between; margin-right: -8px; }
   html { scroll-padding-top: 110px; }
 }
 
-/* Footer: logo and socials, four link columns, then the small print. */
-footer.site-footer { display: block; text-align: left; padding: clamp(24px, 4vw, 44px) var(--gutter) 20px; font-family: var(--sans); }
+/* Footer: no card, a full-width hairline on top. Logo and socials, one row of links in hairline-divided groups (no
+   headings), the sky whale in miniature, then the small print with the date of the last change. */
+footer.site-footer {
+  display: block; width: auto; margin: clamp(56px, 9vw, 120px) 0 0; border-radius: 0; background: none; box-shadow: none !important;
+  border-top: 1px solid var(--line); text-align: left; font-family: var(--sans);
+  padding: clamp(24px, 4vw, 40px) max(var(--gutter), calc((100% - 1080px) / 2)) 20px;
+}
 .f-top, .f-bottom { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 14px 24px; }
-.f-top { padding-bottom: 22px; border-bottom: 1px solid var(--rule); }
-.f-brand { display: inline-flex; align-items: center; gap: 10px; color: var(--ink); font-weight: 800; font-size: 19px; letter-spacing: -.02em; text-decoration: none; }
+.f-brand { display: inline-flex; align-items: center; gap: 10px; color: var(--ink); font-weight: 800; font-size: 21px; letter-spacing: -.02em; text-decoration: none; }
 footer .f-brand:hover { color: var(--ink); }
 .f-social { display: flex; gap: 8px; }
-.f-social a { display: grid; place-items: center; min-width: 38px; height: 38px; padding: 0 10px; border-radius: 12px; box-shadow: inset 0 0 0 1px var(--rule); }
-.f-social a:hover { box-shadow: inset 0 0 0 1px var(--accent); }
-.f-cols { display: grid; grid-template-columns: repeat(4, 1fr); gap: 28px 24px; padding: clamp(24px, 3.5vw, 36px) 0; }
-.f-cols a { display: block; padding: 5px 0; font-size: 14px; text-decoration: none; }
-footer .f-cols h2 { margin: 0 0 10px; font: 400 11px/1 var(--mono); letter-spacing: .12em; text-transform: uppercase; color: var(--accent); }
-.f-bottom { padding-top: 18px; border-top: 1px solid var(--rule); font: 12px var(--mono); }
-.f-whale { margin: 0; font: 10px/1.15 var(--mono); color: var(--accent); }
-@media (max-width: 860px) { .f-cols { grid-template-columns: repeat(2, 1fr); } }
-@media (max-width: 480px) { .f-cols { grid-template-columns: 1fr; } }
+.f-social a { display: grid; place-items: center; min-width: 38px; height: 38px; padding: 0 10px; border-radius: 10px; box-shadow: inset 0 0 0 1px var(--rule) !important; }
+.f-social a:hover { box-shadow: inset 0 0 0 1px var(--accent) !important; }
+.f-links { display: flex; flex-wrap: wrap; margin: clamp(20px, 3vw, 32px) 0 0; padding: 0; list-style: none; row-gap: 10px; }
+.f-links li { display: flex; flex-wrap: wrap; gap: 6px 18px; padding: 0 18px; border-left: 1px solid var(--line); }
+.f-links li:first-child { padding-left: 0; border-left: 0; }
+.f-links a { font-size: 14px; color: var(--ink); text-decoration: none; }
+.f-links a:hover { color: var(--accent-text); text-decoration: underline; text-underline-offset: 4px; }
+/* The sky whale in miniature (whaleArt(64) in src/skysea.ts, 78 columns, 46.8em): dim and mid characters keep the body's
+   shading. Cells match the hero sky (9px, line-height 1.15, the ratio whaleArt draws for) and shrink only to fit. */
+.site-footer { container-type: inline-size; }
+.f-whale { margin: clamp(28px, 4vw, 44px) 0 10px; font: min(9px, 100cqi / 47)/1.15 var(--mono); color: var(--accent); }
+.f-whale i { font-style: normal; }
+.f-whale .w1 { opacity: .55; } /* the hero's floor on paper, so the belly still shows in the light theme */
+.f-whale .w2 { opacity: .78; }
+.f-bottom { padding-top: 16px; border-top: 1px solid var(--rule); font: 12px var(--mono); color: var(--muted); }
+footer .updated { display: inline-block; line-height: 1.4; color: var(--muted); text-decoration: none; }
+footer .updated:hover { color: var(--accent-text); text-decoration: underline; }
+@media (max-width: 560px) {
+  .f-links { flex-direction: column; row-gap: 12px; }
+  .f-links li, .f-links li:first-child { padding: 0; border-left: 0; }
+}
 
 /* Home: sky hero with a product mock, a stepped path, a split "why" list, a closing line. Sans for reading, mono for tiny labels. */
 .landing, .sec { font-family: var(--sans); }
@@ -861,39 +467,82 @@ footer .f-cols h2 { margin: 0 0 10px; font: 400 11px/1 var(--mono); letter-spaci
 .landing-inner { padding-bottom: clamp(200px, 25vw, 360px); display: grid; grid-template-columns: minmax(0, 1.05fr) minmax(0, 1fr); gap: clamp(28px, 5vw, 72px); align-items: center; max-width: 1180px; }
 .landing-copy { position: relative; padding: clamp(8px, 1.5vw, 20px) 0; }
 .landing h1 { font-size: clamp(2.7rem, 5.6vw, 5.4rem); line-height: .96; text-wrap: balance; }
-.landing h1 span:last-child { color: var(--accent); }
 .landing .lead { margin: 1.4rem 0 0; max-width: 30rem; font-size: clamp(18px, 1.5vw, 21px); color: var(--ink); opacity: .78; }
 .landing .ctas { justify-content: flex-start; margin-top: 2rem; gap: .75rem 1.25rem; }
-.btn { display: inline-flex; align-items: center; gap: .5ch; font: 700 15px/1 var(--sans); text-decoration: none; white-space: nowrap; border-radius: 999px; }
+.btn { display: inline-flex; align-items: center; gap: .5ch; font: 700 15px/1 var(--sans); text-decoration: none; white-space: nowrap; border-radius: 10px; }
 .btn-primary { padding: 15px 26px; background: var(--accent); color: #140d0a; transition: background .2s, transform .35s cubic-bezier(.16, 1, .3, 1); }
 .btn-primary:hover { color: #140d0a; background: color-mix(in srgb, var(--accent) 80%, white); transform: translateY(-2px); }
 .btn-primary:active { transform: translateY(0); }
 .btn-quiet { padding: 15px 8px; color: var(--ink); text-decoration: underline; text-underline-offset: 5px; text-decoration-thickness: 1px; }
-.btn-quiet:hover { color: var(--accent); }
+.btn-quiet:hover { color: var(--accent-text); }
 
 /* Product mock: an illustrative idea-to-ship project, built from plain HTML. */
-.mock { margin: 0; padding: clamp(14px, 1.8vw, 22px); border-radius: var(--r-md); background: var(--pane); font-family: var(--sans); --glass-bezel: 18px; }
+/* A content card, so a solid surface: the sky stops at its edge and its text reads cleanly. */
+.mock { margin: 0; padding: clamp(14px, 1.8vw, 22px); border-radius: var(--r-md); background: var(--pane); box-shadow: var(--pane-shadow) !important; font-family: var(--sans); }
 .mock-ui { color: var(--ink); font-size: 14px; line-height: 1.45; }
 .mock-bar { display: flex; align-items: center; justify-content: space-between; gap: 12px; padding-bottom: 14px; border-bottom: 1px solid var(--rule); }
 .mock-name { font-weight: 750; font-size: 16px; letter-spacing: -.01em; }
-.mock-badge { padding: 4px 11px; border-radius: 999px; background: color-mix(in srgb, var(--accent) 20%, transparent); font-size: 12px; font-weight: 600; }
-.mock-stages { display: flex; flex-wrap: wrap; gap: 6px; margin: 14px 0 0; padding: 0; list-style: none; }
-.mock-stages li { padding: 5px 12px; border-radius: 999px; font-size: 12.5px; color: var(--muted); box-shadow: inset 0 0 0 1px var(--rule); }
-.mock-stages li.done { color: var(--ink); }
-.mock-stages li.now { background: var(--ink); color: var(--bg); box-shadow: none; font-weight: 600; }
-.mock-body { display: grid; grid-template-columns: 1.1fr 1fr; gap: clamp(14px, 2vw, 24px); margin-top: 18px; }
+.mock-badge { flex: none; white-space: nowrap; padding: 4px 8px; border-radius: 3px; background: color-mix(in srgb, var(--accent) 20%, transparent); font: 11px/1.2 var(--mono); }
+/* Stages are tabs (public/mock.js): one connected hairline track, a segment per stage; stages before the selected
+   one read as done. A plain control inside content, not glass. */
+.mock-flow { margin-top: 14px; }
+.mock-stages { display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); border: 1px solid var(--line); border-radius: 4px; }
+.mock-stages [role="tab"] { min-width: 0; padding: 8px 0; border: 0; border-radius: 0; background: none; font: 600 12.5px/1 var(--sans); color: var(--muted); transition: background .2s, color .2s; }
+.mock-stages [role="tab"] + [role="tab"] { border-left: 1px solid var(--line); }
+.mock-stages [role="tab"]:first-child { border-radius: 3px 0 0 3px; }
+.mock-stages [role="tab"]:last-child { border-radius: 0 3px 3px 0; }
+/* Stages before the selected one read as done: a 2px accent rule along their bottom edge. */
+.mock-stages .past { color: var(--ink); background: linear-gradient(var(--accent), var(--accent)) bottom / 100% 2px no-repeat; }
+.mock-stages [aria-selected="true"] { background: var(--ink); color: var(--bg); }
+.tabs-on .mock-stages [role="tab"] { cursor: pointer; }
+.tabs-on .mock-stages [aria-selected="false"]:hover { color: var(--ink); background: color-mix(in srgb, var(--ink) 7%, transparent); }
+.mock-stages [role="tab"]:focus-visible, .mock-go:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+/* The return arc: Ship feeds back into Idea for the next version. */
+.mock-loop { position: relative; margin: 6px 10% 0; padding-top: 13px; text-align: center; font: 11px/1.2 var(--mono); color: var(--accent-text); }
+.mock-loop::before { content: ""; position: absolute; inset: 0 0 auto; height: 8px; border: 1.5px dashed var(--accent); border-top: 0; border-radius: 0 0 10px 10px; }
+.mock-loop::after { content: ""; position: absolute; left: -4.5px; top: -3px; border: 4.5px solid transparent; border-top: 0; border-bottom: 6px solid var(--accent); }
+.mock-panels { margin-top: 16px; }
+.mock-body { display: grid; grid-template-columns: 1.1fr 1fr; gap: clamp(14px, 2vw, 24px); }
+.mock-one { grid-template-columns: 1fr; }
+.mock-spec .mock-checks, .mock-spec .mock-cap + p:not(.mock-h) { margin-top: 12px; }
+.mock-body[hidden] { display: none; }
+.mock-body:focus-visible { outline: 2px solid var(--accent); outline-offset: 6px; border-radius: 8px; }
+/* With tabs on, every view sits in one cell so switching never changes the height. */
+.tabs-on .mock-panels { display: grid; }
+.tabs-on .mock-body { grid-area: 1 / 1; }
+.tabs-on .mock-body[hidden] { display: grid; visibility: hidden; }
 .mock-spec, .mock-tasks { min-width: 0; }
+/* Every view shares the tallest one's height; on Secure the summary line sits at the bottom, not mid-air. */
+.mock-spec { display: flex; flex-direction: column; align-items: flex-start; }
+.mock-spec > .mock-checks { align-self: stretch; }
+.mock-end { margin-top: auto !important; padding-top: 16px; }
 .mock-spec p { margin: 0; color: var(--muted); }
 .mock-spec .mock-h { margin-top: 12px; color: var(--ink); font-weight: 700; }
-.mock-cap { margin: 0 0 8px; font: 400 11px/1 var(--mono); letter-spacing: .1em; text-transform: uppercase; color: var(--muted); }
+.mock-cap { margin: 0 0 8px; font: 400 12px/1.2 var(--mono); color: var(--muted); }
 .mock-tasks ul { margin: 0; padding: 0; list-style: none; display: grid; gap: 4px; }
-.mock-tasks li { display: flex; align-items: flex-start; gap: 10px; padding: 8px 10px; border-radius: 12px; color: var(--muted); }
+.mock-tasks li { display: flex; align-items: flex-start; gap: 10px; padding: 8px 10px; border-radius: 6px; color: var(--muted); }
 .mock-tasks li.now { background: color-mix(in srgb, var(--accent) 12%, transparent); color: var(--ink); font-weight: 600; }
-.mock-check { flex: none; position: relative; width: 16px; height: 16px; margin-top: 1px; border-radius: 50%; box-shadow: inset 0 0 0 1.5px var(--line); }
-.mock-tasks li.done .mock-check { background: var(--accent); box-shadow: none; }
-.mock-tasks li.done .mock-check::after { content: ""; position: absolute; left: 5px; top: 2.5px; width: 4px; height: 8px; border: solid #140d0a; border-width: 0 2px 2px 0; transform: rotate(45deg); }
-.mock-tasks li.now .mock-check { box-shadow: inset 0 0 0 1.5px var(--accent); }
-.mock-tasks li.now .mock-check::after { content: ""; position: absolute; inset: 4px; border-radius: 50%; background: var(--accent); }
+.mock-check { flex: none; position: relative; width: 16px; height: 16px; margin-top: 2px; border-radius: 50%; outline: 1.5px solid color-mix(in srgb, var(--muted) 70%, transparent); outline-offset: -1.5px; }
+.mock-build li { position: relative; padding: 0; }
+.mock-build label { display: flex; align-items: flex-start; gap: 10px; width: 100%; padding: 8px 10px; border-radius: 6px; cursor: pointer; }
+.mock-build li:not(.now) label:hover { background: color-mix(in srgb, var(--accent) 6%, transparent); }
+.mock-build input { position: absolute; opacity: 0; pointer-events: none; }
+.mock-build input:checked + .mock-check { background: var(--accent); outline: 0; }
+.mock-build input:checked + .mock-check::after { content: ""; position: absolute; left: 5px; top: 2.5px; width: 4px; height: 8px; border: solid #140d0a; border-width: 0 2px 2px 0; transform: rotate(45deg); }
+.mock-checks { margin: 0; padding: 0; list-style: none; }
+.mock-checks li { display: flex; justify-content: space-between; align-items: baseline; gap: 12px; padding: 9px 0; border-top: 1px solid var(--rule); color: var(--muted); }
+.mock-checks li:first-child { border-top: 0; padding-top: 0; }
+.mock-checks b { color: var(--ink); font-weight: 700; }
+.mock-ok, .mock-fix { flex: none; padding: 3px 7px; border-radius: 3px; font: 11px/1.2 var(--mono); color: var(--ink); }
+.mock-ok { outline: 1px solid var(--line); outline-offset: -1px; }
+.mock-fix { background: color-mix(in srgb, var(--accent) 22%, transparent); }
+.mock-next li { padding: 8px 10px; background: color-mix(in srgb, var(--accent) 8%, transparent); color: var(--ink); }
+.mock-spec .mock-note, .mock-note { margin: 10px 0 0; font-size: 12.5px; color: var(--muted); }
+.mock-go { margin-top: 16px; padding: 10px 16px; border: 0; border-radius: 10px; background: var(--accent); color: #140d0a; font: 700 13px/1 var(--sans); cursor: pointer; transition: background .2s; }
+.mock-go:hover { background: color-mix(in srgb, var(--accent) 80%, white); }
+.mock-build li.now input:not(:checked) + .mock-check { outline: 1.5px solid var(--accent); outline-offset: -1.5px; }
+.mock-build li.now input:not(:checked) + .mock-check::after { content: ""; position: absolute; inset: 4px; border-radius: 50%; background: var(--accent); }
+.mock-build input:focus-visible + .mock-check { outline: 2px solid var(--accent); outline-offset: 2px; }
 .mock figcaption { margin-top: 14px; font-size: 12px; color: var(--muted); }
 
 /* Path: five moves as a descending staircase, each row starting further right than the last. */
@@ -904,20 +553,18 @@ footer .f-cols h2 { margin: 0 0 10px; font: 400 11px/1 var(--mono); letter-spaci
 .path { list-style: none; margin: clamp(28px, 4vw, 48px) 0 0; padding: 0; counter-reset: s; }
 .path-step { display: grid; grid-template-columns: minmax(0, 15rem) minmax(0, 1fr); gap: 8px clamp(16px, 4vw, 56px); align-items: baseline; padding: 22px 0 22px 0; border-top: 1px solid var(--line); margin-left: calc(var(--i, 0) * clamp(0px, 7vw, 96px)); }
 .path-step:nth-child(2) { --i: 1; } .path-step:nth-child(3) { --i: 2; } .path-step:nth-child(4) { --i: 3; } .path-step:nth-child(5) { --i: 4; }
-.path-step h3 { margin: 0; font-size: clamp(1.4rem, 2.4vw, 2rem); letter-spacing: -.03em; }
+.path-step h3 { margin: 0; font-size: clamp(1.4rem, 2.4vw, 2rem); letter-spacing: -.018em; }
 .path-step:last-child h3 { color: var(--accent); }
+.path-loop { margin: 0 0 0 calc(4 * clamp(0px, 7vw, 96px)); padding: 18px 0 0; max-width: 46ch; border-top: 1.5px dashed var(--accent); font-size: clamp(15px, 1.2vw, 17px); color: var(--ink); }
 .path-step p { margin: 0; max-width: 46ch; font-size: clamp(15px, 1.2vw, 17px); color: var(--muted); }
 
-/* Why: heading pinned left, five qualities as plain type on the right. */
+/* Why: heading pinned left, three commitments as short headed lines on the right. */
 .why { display: grid; grid-template-columns: minmax(0, .8fr) minmax(0, 1.2fr); gap: clamp(28px, 6vw, 96px); align-items: start; }
 .why-head { position: sticky; top: 96px; }
 .why-list { margin: 0; display: grid; gap: clamp(22px, 3vw, 34px); }
 .why-item { margin: 0; }
-.why-item dt { font: 800 clamp(1.8rem, 3.6vw, 3rem)/1 var(--sans); letter-spacing: -.04em; }
-.why-item:nth-child(3) dt { color: var(--accent); }
+.why-item dt { font: 750 clamp(1.2rem, 2vw, 1.6rem)/1.15 var(--sans); letter-spacing: -.015em; }
 .why-item dd { margin: 8px 0 0; max-width: 46ch; font-size: clamp(15px, 1.2vw, 17px); color: var(--muted); }
-.why-item dd a { color: var(--ink); text-underline-offset: 4px; }
-.why-item dd a:hover { color: var(--accent); }
 
 /* Closing line: one message and the same call to action. */
 .closing { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 28px 40px; padding-bottom: 0; }
@@ -932,12 +579,87 @@ footer .f-cols h2 { margin: 0 0 10px; font: 400 11px/1 var(--mono); letter-spaci
 @media (max-width: 600px) {
   .mock-body { grid-template-columns: 1fr; gap: 22px; }
   .path-step { grid-template-columns: 1fr; margin-left: 0; padding: 18px 0; }
+  .path-loop { margin-left: 0; }
   .landing { min-height: 0; }
 }
 @media (prefers-reduced-motion: no-preference) {
-  .mock-tasks li.now .mock-check::after { animation: now-pulse 2.4s ease-in-out infinite; }
+  .mock-build li.now input:not(:checked) + .mock-check::after { animation: now-pulse 2.4s ease-in-out infinite; }
+  .tabs-on .mock-body:not([hidden]) { animation: mock-in .3s cubic-bezier(.16, 1, .3, 1); }
+  @keyframes mock-in { from { opacity: 0; transform: translateY(4px); } }
   @keyframes now-pulse { 50% { transform: scale(.55); opacity: .6; } }
 }
 .nav { font-family: var(--sans); }
 .nav .theme { width: max-content; flex: none; }
 .nav .theme button { white-space: nowrap; flex: none; }
+
+/* ---- Inner pages: line them up with the home page. ---- */
+h1, h2, h3 { text-wrap: balance; }
+/* Hero padding sits inside its max-width, so widen it by the gutter to share a left edge with the cards below. */
+.hero { max-width: calc(1080px + 2 * var(--gutter)); }
+.band > h2.center, .band > p.center { max-width: 1080px; margin-inline: auto; text-align: left; }
+.band > p.center { margin-top: 2rem; }
+.changelog { max-width: 1080px; grid-template-columns: minmax(0, 820px); }
+.cl-day li { font: 15px/1.55 var(--sans); }
+
+/* Index pages (stack, docs, legal): ruled lists, not cards. One hairline per row, columns shared across rows
+   (subgrid): title, what it is, then links and status on the right. On docs and legal the title link covers the row. */
+.rows {
+  max-width: 1080px; margin: clamp(20px, 3vw, 32px) auto 0; padding: 0; list-style: none; font-family: var(--sans);
+  display: grid; grid-template-columns: minmax(11rem, 17rem) minmax(0, 1fr) auto; column-gap: clamp(16px, 3vw, 40px);
+  border-bottom: 1px solid var(--line);
+}
+.rows-2 { grid-template-columns: minmax(11rem, 17rem) minmax(0, 1fr); }
+.rows-4 { grid-template-columns: minmax(10rem, 15rem) minmax(0, 1fr) auto auto; }
+.row { position: relative; grid-column: 1 / -1; display: grid; grid-template-columns: subgrid; align-items: baseline; padding: 18px 0; border-top: 1px solid var(--line); }
+.row :is(h2, h3) { margin: 0; font: 750 clamp(17px, 1rem + .3vw, 20px)/1.25 var(--sans); letter-spacing: -.01em; }
+.row p { margin: 0; max-width: 62ch; font-size: clamp(15px, .9rem + .1vw, 16px); color: var(--muted); }
+.row-link { color: var(--ink); text-decoration: none; }
+.row-link::after { content: ""; position: absolute; inset: 0; }
+.row:hover .row-link { text-decoration: underline; text-underline-offset: 4px; text-decoration-thickness: 1px; }
+.row-links { display: flex; gap: 14px; white-space: nowrap; }
+.row .row-links a { color: var(--ink); font-size: 14px; text-underline-offset: 3px; }
+/* Status: a small squared mono tag. Solid edge = running or in effect; dashed = not yet or not here. */
+.row .status, .lead .status {
+  justify-self: end; align-self: baseline; padding: 2px 7px; border: 1px solid var(--line); border-radius: 3px; background: none;
+  font: 12px/1.4 var(--mono); letter-spacing: 0; text-transform: lowercase; color: var(--ink); white-space: nowrap;
+}
+.row .status-planned, .row .status-lab, .row .status-standby, .lead .status-standby { border-style: dashed; color: var(--muted); }
+.lead .status { display: inline-block; font-size: .78em; line-height: 1.3; vertical-align: .08em; }
+@media (max-width: 640px) {
+  .rows, .rows-2, .rows-4 { display: block; }
+  .row { grid-template-columns: minmax(0, 1fr) auto; gap: 6px 12px; padding: 16px 0; }
+  .row > :is(h2, h3) { grid-area: 1 / 1; }
+  .row > .status { grid-area: 1 / 2; }
+  .row > p { grid-column: 1 / -1; }
+}
+
+/* Inner page headings: a step down from the home page's 6rem, on one line where they fit; leads are capped and read in
+   ink, not grey; the index pages keep their list close to the heading. */
+.hero h1, .prose h1 { font-size: clamp(2.2rem, 4.5vw, 4rem); line-height: 1; }
+.hero .lead, .prose .lead { max-width: 60ch; font-size: clamp(16px, 1rem + .3vw, 19px); line-height: 1.5; color: color-mix(in srgb, var(--ink) 80%, var(--bg)); }
+.hero h1 + .lead, .prose h1 + .lead { margin-top: .6em; }
+.hero { padding-bottom: clamp(24px, 4vw, 48px); }
+.hero + .band { padding-top: clamp(8px, 2vw, 24px); }
+
+/* Docs tables: cells read in the sans at 14px; on phones the columns keep a readable width and the table scrolls
+   sideways inside its box (.doc table is display: block with overflow-x) instead of wrapping one word per line. */
+.doc td { font: 14px/1.5 var(--sans); }
+@media (max-width: 600px) {
+  .doc th, .doc td { min-width: 9.5rem; }
+}
+
+/* ---- Accessibility settings for the glass (last on purpose). ----
+   Reduce transparency or more contrast: the header and its menus become solid, the scroll edge becomes a plain band
+   under the header, and with more contrast every edge is drawn in full ink. Only the unprefixed backdrop-filter is
+   reset here: the minifier drops it when both names sit together, and older Safari's blur is hidden by the solid fill. */
+@media (prefers-reduced-transparency: reduce), (prefers-contrast: more) {
+  .glass::after { backdrop-filter: none; background: var(--bg); box-shadow: inset 0 0 0 1px var(--line) !important; }
+  .glass::before, .glass-band { display: none; }
+  .nav-brand span, .nav-dd summary, .nav .nav-plain, .nav .theme button { text-shadow: none; }
+  body::before { height: calc(var(--edge) - 16px); background: var(--bg); backdrop-filter: none; -webkit-mask: none; mask: none; }
+}
+@media (prefers-contrast: more) {
+  .glass::after { box-shadow: inset 0 0 0 1.5px var(--ink) !important; }
+  .cl-day, .doc pre, .doc table, .mock, .nav.glass .theme { box-shadow: inset 0 0 0 1px var(--ink) !important; }
+  .theme-thumb, .nav-hl { box-shadow: inset 0 0 0 1.5px var(--ink) !important; }
+}

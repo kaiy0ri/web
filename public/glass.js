@@ -1,23 +1,24 @@
-// Liquid glass. Every .glass element becomes a thick lens: whatever sits behind it bends at the rim,
-// colours split slightly at the edge, and the rim light turns toward the pointer.
+// Liquid glass for the navigation layer (the header and its menus; see styles.css).
+// 1) Rim light: the specular edge turns toward the pointer (one rAF per pointer move, nothing else per frame).
+// 2) Refraction (Chromium): each glass element gets its own SVG lens, sized to it and rebuilt only on resize.
+// 3) The hover capsule that slides between the header's menu items.
 // External file because the strict Content-Security-Policy allows no inline code. No library.
 (() => {
-  // Panes (cards, tiles, code boxes, the footer) are glass too; the class is added here so the markup stays plain.
-  const PANES = ".db-card, .tile, .product-card, .stack-card, .cl-day, .entry-parts li, .entry-prompt, .entry-code, .doc pre, .doc table, .db-area, .cp-prev, .cp-next, .mock, footer";
-  document.querySelectorAll(PANES).forEach((el) => el.classList.add("glass", "pane"));
   const els = [...document.querySelectorAll(".glass")];
   if (!els.length) return;
   const reduce = matchMedia("(prefers-reduced-motion: reduce)").matches;
+  const plain = matchMedia("(prefers-reduced-transparency: reduce), (prefers-contrast: more)").matches;
 
-  // --- Rim light: the bright edge faces the pointer, like light catching real glass. ---
-  if (!reduce) {
+  // --- Rim light ---
+  if (!reduce && !plain) {
     let ev = null;
     addEventListener("pointermove", (e) => {
       if (!ev) requestAnimationFrame(() => {
         for (const el of els) {
           const r = el.getBoundingClientRect();
+          if (!r.width) continue;
           const a = Math.atan2(ev.clientY - (r.top + r.height / 2), ev.clientX - (r.left + r.width / 2));
-          el.style.setProperty("--glint", `${Math.round((a * 180) / Math.PI + 270)}deg`);
+          el.style.setProperty("--glint", `${Math.round((a * 180) / Math.PI + 90)}deg`); // CSS angles start at the top
         }
         ev = null;
       });
@@ -25,10 +26,38 @@
     }, { passive: true });
   }
 
+  // --- Hover capsule: one highlight that slides to whichever menu item is under the pointer or focused. ---
+  const menu = document.querySelector(".nav-menu");
+  if (menu) {
+    const items = [...menu.querySelectorAll("summary, .nav-plain")];
+    const nav = menu.closest(".nav");
+    const place = (item) => {
+      const m = nav.getBoundingClientRect(), r = item.getBoundingClientRect();
+      menu.style.setProperty("--hl-x", `${r.left - m.left}px`);
+      menu.style.setProperty("--hl-y", `${r.top - m.top}px`);
+      menu.style.setProperty("--hl-w", `${r.width}px`);
+      menu.style.setProperty("--hl-h", `${r.height}px`);
+      menu.classList.add("hl-on");
+    };
+    // At rest the capsule sits on the open menu's button, or hides.
+    const rest = () => {
+      const open = menu.querySelector(".nav-dd[open] summary");
+      if (open) place(open); else menu.classList.remove("hl-on");
+    };
+    items.forEach((it) => {
+      it.addEventListener("pointerenter", () => place(it));
+      it.addEventListener("focus", () => place(it));
+      it.addEventListener("blur", rest);
+    });
+    menu.addEventListener("pointerleave", rest);
+    menu.querySelectorAll(".nav-dd").forEach((d) => d.addEventListener("toggle", rest));
+  }
+
   // --- Refraction ---
   // shortcut: only Chromium can run an SVG filter on the backdrop, and navigator.userAgentData exists only there.
-  // Other browsers keep the frosted fallback from styles.css. Swap for a real feature test if one appears.
-  if (!navigator.userAgentData) return;
+  // Other browsers keep the CSS-only glass from styles.css. Swap for a real feature test if one appears.
+  if (plain || !navigator.userAgentData) return;
+  document.documentElement.classList.add("lens-on");
 
   const NS = "http://www.w3.org/2000/svg";
   const make = (name, attrs) => {
@@ -39,8 +68,25 @@
   const defs = make("svg", { class: "glass-defs", "aria-hidden": "true", focusable: "false" });
   document.body.append(defs);
 
-  // Displacement map for a rounded rectangle: neutral grey in the middle (no bending); inside the bezel the
-  // red/green channels push each pixel to sample from further inside, more steeply the closer it is to the rim.
+  // How far light bends across the bezel, from the rim (x = 0) to where the glass goes flat (x = 1).
+  // The surface is a convex squircle, h = (1 - (1 - x)^4)^(1/4): flat in the middle, rolling off steeply at the rim.
+  // A ray through a surface tilted by θ leaves at asin(sin θ / n); the sideways shift grows with tan of the
+  // difference. Sampled once into a table, normalised so the rim bends the most.
+  const N = 128, IOR = 1.5, bend = new Float32Array(N + 1);
+  {
+    const h = (x) => Math.pow(1 - Math.pow(1 - Math.min(1, Math.max(0, x)), 4), 0.25);
+    let max = 0;
+    for (let i = 0; i <= N; i++) {
+      const x = Math.max(i / N, 1e-4), slope = (h(x + 1e-3) - h(x - 1e-3)) / 2e-3;
+      const t = Math.atan(slope);
+      bend[i] = Math.tan(t - Math.asin(Math.sin(t) / IOR));
+      max = Math.max(max, bend[i]);
+    }
+    for (let i = 0; i <= N; i++) bend[i] /= max;
+  }
+
+  // Displacement map for a rounded rectangle: neutral grey where the glass is flat; inside the bezel the red and
+  // green channels point each pixel further in, so content is pulled in and magnified toward the rim.
   function lensMap(w, h, radius, bezel) {
     const s = 0.5; // half resolution is plenty for a smooth map
     const cw = Math.max(1, Math.round(w * s)), ch = Math.max(1, Math.round(h * s));
@@ -59,8 +105,8 @@
           dist = r - l; nx = (qx / l) * Math.sign(px); ny = (qy / l) * Math.sign(py);
         } else if (qx > qy) { dist = r - qx; nx = Math.sign(px); }
         else { dist = r - qy; ny = Math.sign(py); }
-        const t = dist < 0 ? 0 : Math.max(0, 1 - dist / bezel);
-        const mag = 1 - Math.sqrt(1 - t * t); // circular lens profile: flat inside, steep at the rim
+        const u = dist / bezel;
+        const mag = dist < 0 || u >= 1 ? 0 : bend[Math.round(u * N)];
         img.data[i] = 128 - nx * mag * 127;
         img.data[i + 1] = 128 - ny * mag * 127;
         img.data[i + 2] = 128;
@@ -68,7 +114,7 @@
       }
     }
     ctx.putImageData(img, 0, 0);
-    return canvas.toDataURL();
+    return canvas.toDataURL(); // a data: image, which the CSP's img-src allows
   }
 
   let count = 0;
@@ -77,16 +123,16 @@
     if (!w || !h) return;
     const cs = getComputedStyle(el);
     const radius = parseFloat(cs.borderTopLeftRadius) || 0;
-    const bezel = Math.min(parseFloat(cs.getPropertyValue("--glass-bezel")) || 26, w / 2, h / 2);
-    const scale = bezel * 2.6;
+    const bezel = Math.min(parseFloat(cs.getPropertyValue("--glass-bezel")) || 20, w / 2, h / 2);
+    const scale = bezel * 2.4; // the rim pulls content in by up to 1.2 bezel widths
     const id = (el.dataset.glassId ||= `glass-${++count}`);
     document.getElementById(id)?.remove();
 
     const f = make("filter", { id, x: 0, y: 0, width: w, height: h, filterUnits: "userSpaceOnUse", "color-interpolation-filters": "sRGB" });
     f.append(make("feImage", { href: lensMap(w, h, radius, bezel), x: 0, y: 0, width: w, height: h, preserveAspectRatio: "none", result: "map" }));
-    // Three passes, one per colour, each bent less: the rim splits into a visible rainbow fringe.
+    // One pass per colour, each bent a little less, so the rim splits into a faint fringe like real glass.
     const keep = { r: "1 0 0 0 0  0 0 0 0 0  0 0 0 0 0  0 0 0 1 0", g: "0 0 0 0 0  0 1 0 0 0  0 0 0 0 0  0 0 0 1 0", b: "0 0 0 0 0  0 0 0 0 0  0 0 1 0 0  0 0 0 1 0" };
-    [["r", 1], ["g", 0.93], ["b", 0.86]].forEach(([c, k]) => {
+    [["r", 1], ["g", 0.96], ["b", 0.92]].forEach(([c, k]) => {
       f.append(make("feDisplacementMap", { in: "SourceGraphic", in2: "map", scale: scale * k, xChannelSelector: "R", yChannelSelector: "G", result: `d${c}` }));
       f.append(make("feColorMatrix", { in: `d${c}`, type: "matrix", values: keep[c], result: c }));
     });
@@ -94,21 +140,11 @@
     f.append(make("feBlend", { in: "rg", in2: "b", mode: "screen" }));
     defs.append(f);
 
-    // Blur first, then bend: blurring after the lens would smear the colour fringe away.
-    const css = `blur(${cs.getPropertyValue("--glass-blur").trim() || "2px"}) url(#${id}) saturate(1.8)`;
-    el.style.backdropFilter = css;
+    // styles.css puts this between the blur and the tone on the glass layer (::after).
+    el.style.setProperty("--lens", `url(#${id})`);
   }
 
-  // Glass inside glass only sees its parent's fill, so bending it would be wasted work.
-  const lenses = els.filter((el) => !el.parentElement.closest(".glass"));
-  const pending = new Set();
-  const ro = new ResizeObserver((entries) => {
-    for (const e of entries) pending.add(e.target);
-    requestAnimationFrame(() => { pending.forEach(apply); pending.clear(); });
-  });
-  // Only build a lens once its element scrolls near the screen: the search page has 70 cards.
-  const io = new IntersectionObserver((entries) => {
-    for (const e of entries) if (e.isIntersecting) { io.unobserve(e.target); ro.observe(e.target); }
-  }, { rootMargin: "300px" });
-  lenses.forEach((el) => io.observe(el));
+  // One lens per glass element. The menus are hidden until opened, so theirs is built the first time they show.
+  const ro = new ResizeObserver((entries) => requestAnimationFrame(() => entries.forEach((e) => apply(e.target))));
+  els.forEach((el) => ro.observe(el));
 })();

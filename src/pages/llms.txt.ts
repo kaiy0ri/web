@@ -1,7 +1,6 @@
 // llms.txt: a plain-text map of the site for AI assistants and answer engines (llmstxt.org).
 import { getCollection } from "astro:content";
 import { site } from "../site";
-import { entries, catById } from "../db";
 
 export async function GET() {
   const docs = (await getCollection("docs")).sort((a, b) => a.data.order - b.data.order);
@@ -10,18 +9,12 @@ export async function GET() {
     "",
     `> ${site.brand.description}`,
     "",
-    `${site.brand.name} (${site.brand.pronounce}) is a product-management SaaS in early access (not launched yet), built by ${site.name}. It turns an idea into an MVP. This site also hosts a free security feature database, written in plain English. Owner's personal site: https://camtoan.me`,
+    `${site.brand.name} (${site.brand.pronounce}) is a product-management SaaS at the idea stage (not built or launched yet; early access by email), planned by ${site.name}. It is meant to turn an idea into an MVP. Owner's personal site: https://camtoan.me`,
     "",
     "## Main pages",
     "",
-    "- [Security feature database](https://kamllistos.com/search/): describe a security problem in your own words and get the proper name, what it stops, a prompt for your AI agent and code you can copy",
-    "- [Products](https://kamllistos.com/products/): checklist, rules pack and launch review",
-    "- [Public API](https://kamllistos.com/openapi.json): read-only JSON API for the database (GET /api/glossary)",
+    "- [Public API](https://kamllistos.com/openapi.json): read-only JSON API for site status and the changelog (GET /api/health, /api/changelog)",
     "- [Changelog](https://kamllistos.com/changelog/): every change in plain English",
-    "",
-    "## Security feature database",
-    "",
-    ...entries.map((e) => `- [${e.name}](https://kamllistos.com/glossary/${e.slug}/): ${e.oneLiner} (${catById.get(e.category)!.name})`),
     "",
     "## Docs",
     "",

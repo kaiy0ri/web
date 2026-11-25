@@ -4,28 +4,27 @@ import { site } from "../site";
 import { stack, statusLabel } from "../stack";
 ---
 
-<Base title={`Stack — ${site.brand.name}`} description="Every tool behind kamllistos.com, labelled honestly: in use, planned, or a separate lab project.">
-  <section class="hero stagger">
-    <p class="eyebrow">Stack</p>
-    <h1>What runs<span>this site.</span></h1>
+<Base title={`Stack | ${site.brand.name}`} description="Every tool behind kamllistos.com, labelled honestly: in use, planned, or a separate lab project.">
+  <section class="hero">
+    <h1>What runs this site</h1>
     <p class="lead">Every tool here is labelled honestly: in use, planned, or a separate lab project. Click through for the docs.</p>
   </section>
   {stack.map((g, i) => (
-    <section class={`band ${i % 2 === 0 ? "band-gray" : ""}`}>
+    <section class="band">
       <h2 class="center">{g.group}</h2>
-      <div class="stack-grid">
+      <ul class="rows rows-4">
         {g.items.map((t) => (
-          <article class="stack-card reveal">
-            <span class={`status status-${t.status}`}>{statusLabel[t.status]}</span>
+          <li class="row">
             <h3>{t.name}</h3>
             <p>{t.what}</p>
-            <p class="stack-links">
+            <p class="row-links">
               {t.doc && <a href={`/docs/${t.doc}/`}>Docs</a>}
               {t.link && <a href={t.link.url} rel={t.link.url.startsWith("http") ? "noopener noreferrer" : undefined}>{t.link.label}</a>}
             </p>
-          </article>
+            <span class={`status status-${t.status}`}>{statusLabel[t.status]}</span>
+          </li>
         ))}
-      </div>
+      </ul>
     </section>
   ))}
 </Base>

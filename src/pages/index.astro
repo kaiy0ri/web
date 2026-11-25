@@ -5,32 +5,37 @@ import { birds, stars } from "../sky";
 
 const earlyAccess = `mailto:${site.email}?subject=Kaiyori%20early%20access`;
 const steps = [
-  { name: "Shape the idea", text: "Turn a rough idea into a clear problem, a user and a goal." },
-  { name: "Spec the MVP", text: "Cut it down to the smallest version worth building, written in plain English." },
-  { name: "Build", text: "Break the spec into tasks and follow them from first commit to a working product." },
-  { name: "Secure", text: "Check the basics before launch, with the free security database on this site." },
-  { name: "Ship", text: "Release it, learn from real use and decide what comes next." },
+  { name: "Idea", text: "Capture the rough idea, then turn it into a clear problem, a user and a goal." },
+  { name: "Spec", text: "Cut it down to the smallest version worth building, written in plain English." },
+  { name: "Build", text: "Break the spec into tasks and tick them off, from first commit to a working product." },
+  { name: "Secure", text: "Check the basics before launch: what forms accept, where secrets live, which packages need updates." },
+  { name: "Ship", text: "Release it, collect the first feedback and decide what comes next." },
 ];
 const pillars = [
-  { name: "Fast", text: "Less time between the idea and something people can try." },
-  { name: "Efficient", text: "The idea, the spec and the work live in one place, so nothing gets explained twice." },
-  { name: "Secure", text: "Security is part of the plan from day one.", href: "/search/", link: "Browse the free security database" },
-  { name: "Cheap", text: "Built to be affordable for solo makers and small teams. Pricing is not set yet." },
-  { name: "Smooth", text: "Plain English, few clicks and no setup maze." },
+  { name: "The spec decides v1", text: "Anything not in the spec waits for the next round." },
+  { name: "One place for the work", text: "The idea, the spec and the tasks sit together, so nothing gets explained twice." },
+  { name: "Security before launch", text: "Basic checks (inputs, secrets, packages) happen before Ship, not after." },
 ];
+// Home mock: one illustrative project shown at each stage. Spec is selected without JS; public/mock.js makes the stages tabs.
 const stages = [
-  { name: "Idea", state: "done" },
-  { name: "Spec", state: "done" },
-  { name: "Build", state: "now" },
-  { name: "Secure", state: "" },
-  { name: "Ship", state: "" },
+  { id: "idea", name: "Idea", badge: "Idea captured" },
+  { id: "spec", name: "Spec", badge: "Spec ready" },
+  { id: "build", name: "Build", badge: "Building" },
+  { id: "secure", name: "Secure", badge: "Checking" },
+  { id: "ship", name: "Ship", badge: "Live, v1" },
 ];
 const tasks = [
-  { name: "Draft the reminder email", state: "done" },
-  { name: "List unpaid invoices each morning", state: "done" },
-  { name: "Send one reminder after day 3", state: "now" },
-  { name: "Check what the form accepts", state: "" },
-  { name: "Write the launch note", state: "" },
+  { name: "Draft the reminder email", done: true },
+  { name: "List unpaid invoices each morning", done: true },
+  { name: "Send one reminder after day 3", done: false },
+  { name: "Check what the form accepts", done: false },
+  { name: "Write the launch note", done: false },
+];
+const checks = [
+  { name: "What the form accepts", text: "Amounts must be numbers and emails must be real addresses.", ok: true },
+  { name: "Secrets", text: "The email service key lives in settings, not in the code.", ok: true },
+  { name: "Dependencies", text: "One package has a known issue. Update it before launch.", ok: false },
+  { name: "Who sees what", text: "Each freelancer sees only their own invoices.", ok: true },
 ];
 ---
 
@@ -43,39 +48,112 @@ const tasks = [
     </div>
 
     <div class="landing-inner">
-      <div class="landing-copy stagger">
+      <div class="landing-copy">
         <h1>{site.headline.split("\n").map((line) => <span>{line}</span>)}</h1>
         <p class="lead">Kaiyori takes a product idea to a working MVP. Fast, cheap, secure and smooth.</p>
         <div class="ctas">
-          <a class="btn btn-primary" href={earlyAccess}>Get early access <span aria-hidden="true">→</span></a>
+          <a class="btn btn-primary" href={earlyAccess}>Get early access</a>
           <a class="btn btn-quiet" href="#how">How it works</a>
         </div>
       </div>
 
-      <figure class="mock reveal">
-        <div class="mock-ui" aria-hidden="true">
+      <figure class="mock">
+        <div class="mock-ui">
           <div class="mock-bar">
             <span class="mock-name">Late-invoice reminders</span>
-            <span class="mock-badge">Building</span>
+            <span class="mock-badge">Spec ready</span>
           </div>
-          <ol class="mock-stages">
-            {stages.map((st) => <li class={st.state}>{st.name}</li>)}
-          </ol>
-          <div class="mock-body">
-            <div class="mock-spec">
-              <p class="mock-cap">Spec</p>
-              <p class="mock-h">Problem</p>
-              <p>Freelancers forget to chase unpaid invoices.</p>
-              <p class="mock-h">MVP</p>
-              <p>A daily check, and one friendly reminder email per late invoice.</p>
-              <p class="mock-h">Not in v1</p>
-              <p>Payments and multiple currencies.</p>
+          <div class="mock-flow">
+            <div class="mock-stages" role="tablist" aria-label="Stages of the example project">
+              {stages.map((st, i) => (
+                <button type="button" role="tab" id={`tab-${st.id}`} aria-controls={`panel-${st.id}`} aria-selected={st.id === "spec" ? "true" : "false"} tabindex={st.id === "spec" ? 0 : -1} class={i < 1 ? "past" : undefined} data-badge={st.badge}>{st.name}</button>
+              ))}
             </div>
-            <div class="mock-tasks">
-              <p class="mock-cap">Tasks</p>
-              <ul>
-                {tasks.map((t) => <li class={t.state}><span class="mock-check"></span>{t.name}</li>)}
-              </ul>
+            <p class="mock-loop">Feedback starts v2</p>
+          </div>
+
+          <div class="mock-panels">
+            <div class="mock-body" role="tabpanel" tabindex="0" id="panel-idea" aria-labelledby="tab-idea" hidden>
+              <div class="mock-spec">
+                <p class="mock-cap">Idea</p>
+                <p class="mock-h">Rough note</p>
+                <p>“I keep forgetting to chase clients who haven't paid.”</p>
+                <p class="mock-h">Who it's for</p>
+                <p>Freelancers who send their own invoices.</p>
+                <p class="mock-h">What good looks like</p>
+                <p>Paid on time, without awkward follow-ups.</p>
+              </div>
+              <div class="mock-tasks">
+                <p class="mock-cap">Next version</p>
+                <ul class="mock-next">
+                  <li>Let people edit the reminder wording</li>
+                  <li>A second reminder after day 10</li>
+                </ul>
+                <p class="mock-note">Ideas from launch feedback wait here for v2.</p>
+              </div>
+            </div>
+
+            <div class="mock-body" role="tabpanel" tabindex="0" id="panel-spec" aria-labelledby="tab-spec">
+              <div class="mock-spec">
+                <p class="mock-cap">Spec</p>
+                <p class="mock-h">Problem</p>
+                <p>Freelancers forget to chase unpaid invoices.</p>
+                <p class="mock-h">MVP</p>
+                <p>A daily check, and one friendly reminder email per late invoice.</p>
+                <p class="mock-h">Not in v1</p>
+                <p>Payments and multiple currencies.</p>
+              </div>
+              <div class="mock-tasks">
+                <p class="mock-cap">Tasks</p>
+                <ul>
+                  {tasks.map((t) => <li><span class="mock-check"></span>{t.name}</li>)}
+                </ul>
+              </div>
+            </div>
+
+            <div class="mock-body" role="tabpanel" tabindex="0" id="panel-build" aria-labelledby="tab-build" hidden>
+              <div class="mock-spec">
+                <p class="mock-cap">Build</p>
+                <p class="mock-h mock-count" aria-live="polite">2 of 5 tasks done</p>
+                <p>Every task comes from the spec, so nothing outside v1 sneaks in.</p>
+                <p class="mock-h">Try it</p>
+                <p>Tick a task to mark it done.</p>
+              </div>
+              <div class="mock-tasks mock-build">
+                <p class="mock-cap">Tasks</p>
+                <ul>
+                  {tasks.map((t, i) => (
+                    <li class={i === 2 ? "now" : undefined}><label><input type="checkbox" checked={t.done} /><span class="mock-check"></span>{t.name}</label></li>
+                  ))}
+                </ul>
+              </div>
+            </div>
+
+            <div class="mock-body mock-one" role="tabpanel" tabindex="0" id="panel-secure" aria-labelledby="tab-secure" hidden>
+              <div class="mock-spec">
+                <p class="mock-cap">Checks before launch</p>
+                <ul class="mock-checks">
+                  {checks.map((c) => (
+                    <li><span><b>{c.name}</b> {c.text}</span><span class={c.ok ? "mock-ok" : "mock-fix"}>{c.ok ? "Passed" : "Fix first"}</span></li>
+                  ))}
+                </ul>
+                <p class="mock-note mock-end">{checks.filter((c) => c.ok).length} passed, {checks.filter((c) => !c.ok).length} to fix before launch.</p>
+              </div>
+            </div>
+
+            <div class="mock-body" role="tabpanel" tabindex="0" id="panel-ship" aria-labelledby="tab-ship" hidden>
+              <div class="mock-spec">
+                <p class="mock-cap">Launch note</p>
+                <p>Late-invoice reminders is live. Each morning it checks for unpaid invoices and sends one friendly reminder after day 3.</p>
+                <button type="button" class="mock-go" data-goto="tab-idea">Plan v2 from feedback</button>
+              </div>
+              <div class="mock-tasks">
+                <p class="mock-cap">First feedback</p>
+                <ul class="mock-next">
+                  <li>“Can I change the wording?”</li>
+                  <li>“Some clients need a second nudge.”</li>
+                </ul>
+              </div>
             </div>
           </div>
         </div>
@@ -87,26 +165,27 @@ const tasks = [
   <section class="sec" id="how">
     <div class="sec-inner">
       <h2>From a rough idea to something people can try</h2>
-      <p class="sec-lead">{site.brand.name} is in development. This is the path it is being built around.</p>
+      <p class="sec-lead">{site.brand.name} is at the idea stage. This is the loop it is being designed around.</p>
       <ol class="path">
         {steps.map((st) => (
-          <li class="path-step reveal"><h3>{st.name}</h3><p>{st.text}</p></li>
+          <li class="path-step"><h3>{st.name}</h3><p>{st.text}</p></li>
         ))}
       </ol>
+      <p class="path-loop">Then round again. Feedback from Ship becomes the next idea, so each version is a step better than the last.</p>
     </div>
   </section>
 
   <section class="sec">
     <div class="sec-inner why">
       <div class="why-head">
-        <h2>Made for people who ship</h2>
-        <p class="sec-lead">Small teams and solo makers do not need another heavy tool. They need the next step to be obvious.</p>
+        <h2>Who it's for</h2>
+        <p class="sec-lead">Solo makers and small teams who have an idea and want the next step to be obvious.</p>
       </div>
       <dl class="why-list">
         {pillars.map((p) => (
-          <div class="why-item reveal">
+          <div class="why-item">
             <dt>{p.name}</dt>
-            <dd>{p.text}{p.href && <> <a href={p.href}>{p.link}</a>.</>}</dd>
+            <dd>{p.text}</dd>
           </div>
         ))}
       </dl>
@@ -116,15 +195,16 @@ const tasks = [
   <section class="sec">
     <div class="sec-inner closing">
       <div class="closing-copy">
-        <h2>Kaiyori is still being built</h2>
-        <p class="sec-lead">Get in touch to ask for early access.</p>
-        <p class="sec-note">{site.brand.name} ({site.brand.pronounce}). {site.brand.meaning}</p>
+        <h2>Kaiyori is just an idea for now</h2>
+        <p class="sec-lead">Stage: idea. Nothing can be used or bought yet. You can follow along on the <a href="/changelog/">changelog</a>, or email to get early access.</p>
+        <p class="sec-note">{site.brand.name} ({site.brand.pronounce}). {site.brand.meaning.split(/([\u3040-\u30ff\u4e00-\u9fff]+)/).map((t, i) => (i % 2 ? <span lang="ja">{t}</span> : t))}</p>
       </div>
-      <a class="btn btn-primary" href={earlyAccess}>Get early access <span aria-hidden="true">→</span></a>
+      <a class="btn btn-primary" href={earlyAccess}>Email for early access</a>
     </div>
   </section>
 </Base>
 
+<script is:inline src="/mock.js" defer></script>
 <script>
   import { startSkySea } from "../skysea";
   const canvas = document.querySelector<HTMLCanvasElement>(".sky-canvas");

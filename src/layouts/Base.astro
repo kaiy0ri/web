@@ -3,15 +3,11 @@ import "../styles.css";
 import { site } from "../site";
 import { getChanges } from "../changelog";
 import Logo from "../components/Logo.astro";
+import { whaleArt } from "../skysea";
 
 const latest = (await getChanges())[0];
 const earlyAccess = `mailto:${site.email}?subject=Kaiyori%20early%20access`;
-const whale = [
-  "   .  '  .",
-  " .-'\"\"\"-.__",
-  "( o      __)>",
-  " '-.___.-'",
-].join("\n");
+const whale = whaleArt(64); // the sky whale from src/skysea.ts, drawn as text at build time in true proportion
 
 interface Props {
   title?: string;
@@ -41,10 +37,10 @@ const graph = JSON.stringify(ld ? [org, ld] : org).replace(/</g, "\\u003c");
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <meta name="description" content={description} />
-    <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
-    <link rel="icon" href="/icon-48.png" type="image/png" sizes="48x48" />
-    <link rel="icon" href="/icon.png" type="image/png" sizes="512x512" />
-    <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
+    <link rel="icon" href="/favicon.svg?v=k2" type="image/svg+xml" />
+    <link rel="icon" href="/icon-48.png?v=k2" type="image/png" sizes="48x48" />
+    <link rel="icon" href="/icon.png?v=k2" type="image/png" sizes="512x512" />
+    <link rel="apple-touch-icon" href="/apple-touch-icon.png?v=k2" />
     <meta property="og:type" content={type} />
     <meta property="og:site_name" content={site.brand.name} />
     <meta property="og:url" content={url} />
@@ -52,6 +48,7 @@ const graph = JSON.stringify(ld ? [org, ld] : org).replace(/</g, "\\u003c");
     <meta property="og:description" content={description} />
     <meta property="og:image" content="https://kamllistos.com/og.png" />
     <meta name="twitter:card" content="summary_large_image" />
+    <link rel="preload" href="/fonts/schibsted-grotesk.woff2" as="font" type="font/woff2" crossorigin />
     <link rel="canonical" href={url} />
     <link rel="sitemap" href="/sitemap.xml" />
     <script type="application/ld+json" set:html={graph} />
@@ -61,20 +58,23 @@ const graph = JSON.stringify(ld ? [org, ld] : org).replace(/</g, "\\u003c");
   </head>
   <body>
     <nav class="nav glass" aria-label="Main">
+      <span class="glass-band" aria-hidden="true"></span>
       <div class="nav-inner">
-        <a class="nav-brand" href="/" aria-label={`${site.brand.name} home`}><Logo size={26} /><span>{site.brand.name}</span></a>
+        <a class="nav-brand" href="/" aria-label={`${site.brand.name} home`}><Logo size={28} /><span>{site.brand.name}</span></a>
         <div class="nav-menu">
+          <span class="nav-hl" aria-hidden="true"></span>
           <details class="nav-dd">
             <summary>Product</summary>
-            <div class="nav-panel">
+            <div class="nav-panel glass">
+              <span class="glass-band" aria-hidden="true"></span>
               <a href="/#how">How it works</a>
-              <a href="/search/">Security database</a>
-              <a href="/products/">Toolkit</a>
+              <a href={earlyAccess}>Early access</a>
             </div>
           </details>
           <details class="nav-dd">
             <summary>Resources</summary>
-            <div class="nav-panel">
+            <div class="nav-panel glass">
+              <span class="glass-band" aria-hidden="true"></span>
               <a href="/docs/">Docs</a>
               <a href="/changelog/">Changelog</a>
               <a href="/stack/">Stack</a>
@@ -85,11 +85,12 @@ const graph = JSON.stringify(ld ? [org, ld] : org).replace(/</g, "\\u003c");
         </div>
         <div class="nav-end">
           <div class="theme" role="group" aria-label="Colour theme">
+            <span class="theme-thumb" aria-hidden="true"></span>
             <button type="button" data-theme-set="system" aria-pressed="true">Auto</button>
             <button type="button" data-theme-set="light" aria-pressed="false">Light</button>
             <button type="button" data-theme-set="dark" aria-pressed="false">Dark</button>
           </div>
-          <a class="nav-cta" href={earlyAccess}>Get early access <span aria-hidden="true">→</span></a>
+          <a class="nav-cta" href={earlyAccess}>Early access</a>
         </div>
       </div>
     </nav>
@@ -111,38 +112,16 @@ const graph = JSON.stringify(ld ? [org, ld] : org).replace(/</g, "\\u003c");
           ))}
         </div>
       </div>
-      <div class="f-cols">
-        <div>
-          <h2>Product</h2>
-          <a href="/#how">How it works</a>
-          <a href="/search/">Security database</a>
-          <a href="/products/">Toolkit</a>
-          <a href={earlyAccess}>Early access</a>
-        </div>
-        <div>
-          <h2>Resources</h2>
-          <a href="/docs/">Docs</a>
-          <a href="/changelog/">Changelog</a>
-          <a href="/stack/">Stack</a>
-          <a href="https://camtoan.me/blog">Blog</a>
-        </div>
-        <div>
-          <h2>Company</h2>
-          <a href="https://camtoan.me">About</a>
-          <a href={`mailto:${site.email}`}>Contact</a>
-          <a href="/security/">Security &amp; disclosure</a>
-        </div>
-        <div>
-          <h2>Legal</h2>
-          <a href="/legal/">Legal &amp; privacy</a>
-          <a href="/legal/privacy-policy/">Privacy policy</a>
-          <a href="/legal/terms/">Terms</a>
-        </div>
-      </div>
+      <ul class="f-links" aria-label="Site links">
+        <li><a href="/#how">How it works</a><a href={earlyAccess}>Early access</a></li>
+        <li><a href="/docs/">Docs</a><a href="/changelog/">Changelog</a><a href="/stack/">Stack</a><a href="https://camtoan.me/blog">Blog</a></li>
+        <li><a href="https://camtoan.me">About</a><a href={`mailto:${site.email}`}>Contact</a><a href="/security/">Security</a></li>
+        <li><a href="/legal/">Legal &amp; privacy</a><a href="/legal/privacy-policy/">Privacy</a><a href="/legal/terms/">Terms</a></li>
+      </ul>
+      <pre class="f-whale" aria-hidden="true" set:html={whale} />
       <div class="f-bottom">
-        <pre class="f-whale" aria-hidden="true">{whale}</pre>
-        <span>© {new Date().getFullYear()} {site.brand.name} · built by {site.name}</span>
-        {latest && <a class="updated" href="/changelog/" data-updated={latest.date}>Last update: {new Date(latest.date).toLocaleDateString("en-US", { dateStyle: "medium", timeZone: "America/Edmonton" })}</a>}
+        <span>© {new Date().getFullYear()} {site.brand.name}. Built by {site.name}.</span>
+        {latest && <a class="updated" href="/changelog/">Last change {new Date(latest.date).toLocaleDateString("en-US", { dateStyle: "medium", timeZone: "America/Edmonton" })}</a>}
       </div>
     </footer>
     <script is:inline src="/site.js" defer></script>

@@ -6,21 +6,20 @@ import { site } from "../../site";
 const docs = (await getCollection("docs")).sort((a, b) => a.data.order - b.data.order);
 ---
 
-<Base title={`Docs — ${site.brand.name}`} description="Plain-English documentation for how kamllistos.com is built and secured. No keys, tokens or account details.">
-  <section class="hero stagger">
-    <p class="eyebrow">Docs</p>
-    <h1>How it's<span>built & secured.</span></h1>
+<Base title={`Docs | ${site.brand.name}`} description="Plain-English documentation for how kamllistos.com is built and secured. No keys, tokens or account details.">
+  <section class="hero">
+    <h1>How this site is built and secured</h1>
     <p class="lead">Plain-English documentation for the tools behind this site. It explains how each control works. It never includes keys, tokens or account details.</p>
   </section>
-  <section class="band band-gray">
-    <div class="tiles">
+  <section class="band">
+    <ul class="rows rows-2">
       {docs.map((d) => (
-        <a class="tile tile-link reveal" href={`/docs/${d.id}/`}>
-          <h3>{d.data.title}</h3>
+        <li class="row">
+          <h2><a class="row-link" href={`/docs/${d.id}/`}>{d.data.title}</a></h2>
           <p>{d.data.description}</p>
-        </a>
+        </li>
       ))}
-    </div>
+    </ul>
     <p class="center"><a class="more" href="/stack/">See the full stack</a></p>
   </section>
 </Base>

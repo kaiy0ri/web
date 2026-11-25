@@ -12,17 +12,15 @@ for (const c of changes) {
 }
 ---
 
-<Base title={`Changelog — ${site.brand.name}`} description="Every change to kamllistos.com in plain English, built automatically from the site's public Git history.">
-  <section class="hero stagger">
-    <p class="eyebrow">Changelog</p>
-    <h1>Every change,<span>in order.</span></h1>
+<Base title={`Changelog | ${site.brand.name}`} description="Every change to kamllistos.com in plain English, built automatically from the site's public Git history.">
+  <section class="hero">
+    <h1>Changelog</h1>
     <p class="lead">Built automatically from this site's public Git history. Newest first.</p>
-    {changes[0] && <p class="updated-big"><span class="updated" data-updated={changes[0].date}>Last update: {day(changes[0].date)}</span></p>}
   </section>
-  <section class="band band-gray">
+  <section class="band">
     <div class="changelog">
       {[...groups].map(([date, list]) => (
-        <section class="cl-day reveal">
+        <section class="cl-day">
           <h2 class="cl-date">{date}</h2>
           <ul>
             {list.map((c) => (

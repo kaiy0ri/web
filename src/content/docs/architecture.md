@@ -2,7 +2,7 @@
 title: Architecture
 description: How this site is put together, from a change in Git to a page in your browser.
 order: 0
-updated: 2026-11-09
+updated: 2026-11-24
 ---
 
 ## The big picture
@@ -34,15 +34,15 @@ kamllistos.com is a **static site**. Every page is built ahead of time into plai
 | Part | What it does | Where it lives |
 | --- | --- | --- |
 | Pages | Astro turns text and data into plain HTML and CSS at build time | `src/pages/`, `src/layouts/` |
-| Header, footer and logo | One shared layout: dropdown menu (no script needed to open it), big link footer, whale logo mark | `src/layouts/Base.astro`, `src/components/Logo.astro` |
+| Header, footer and logo | One shared layout: dropdown menu (no script needed to open it), a plain footer with one row of links and a small ASCII whale, stepped-K logo mark | `src/layouts/Base.astro`, `src/components/Logo.astro` |
 | Site text | Names, headline and contact details | `src/site.ts` |
-| Security feature database | The data behind the search page and the glossary pages | `src/db.json` |
+| Fonts | Schibsted Grotesk and Spline Sans Mono, both free under the SIL Open Font License, cut down to Latin characters and served from this site. No font requests go to anyone else | `public/fonts/` |
 | Docs and legal pages | Written in Markdown | `src/content/docs/`, `src/content/legal/` |
 | Changelog | Generated from the Git history | `src/changelog.ts` |
 | REST API | Read-only JSON on `/api`, answering GET requests only | `worker/index.ts` |
 | Security headers | Content-Security-Policy, HSTS and the rest | `public/_headers` |
-| Browser scripts | Search, theme toggle, the glass effect, small page behaviours. No third-party scripts. | `public/*.js` |
-| Home page whale | The sky (clouds and whale) is drawn in ASCII by a small hand-written canvas script, no library | `src/skysea.ts` |
+| Browser scripts | Theme toggle, the liquid glass on the header and its menus (a lens sized to each one bends the page behind it toward the rim in Chromium browsers; Firefox and Safari get clear blur with a thicker-looking rim; both get the same light rim and motion; content boxes are plain surfaces), small page behaviours. No third-party scripts. | `public/*.js` |
+| Home page whale | The sky (clouds and whale) is drawn in ASCII by a small hand-written canvas script, no library. The footer shows the same whale as plain text, rendered once when the site is built | `src/skysea.ts` |
 
 ## What sits around the site
 
@@ -53,7 +53,6 @@ kamllistos.com is a **static site**. Every page is built ahead of time into plai
 | Proton Mail | Email, with SPF, DKIM and DMARC on the domain |
 | Upptime | The [status page](https://status.camtoan.me), which checks uptime every 5 minutes |
 | camtoan.me | The owner's personal site, a separate repo on GitHub Pages. The blog and services pages live there; old `/blog` and `/services` links redirect to them. |
-| Gumroad | Checkout for products. Payments never touch this site. |
 
 Each one is labelled honestly on the [stack](/stack/) page. What each can see about visitors is on [Third-party disclosure](/legal/third-party-disclosure/).
 

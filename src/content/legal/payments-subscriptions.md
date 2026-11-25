@@ -3,14 +3,14 @@ title: Payments & subscriptions
 description: How paying works today, and the rules for any future subscription.
 order: 14
 status: in-effect
-updated: 2026-11-09
+updated: 2026-11-24
 ---
 
 ## Today
 
 **This site takes no payments itself.** There's no checkout here and no card details ever touch it.
 
-**Products** are sold through [Gumroad](https://gumroad.com). Gumroad runs the checkout, takes the payment, handles sales tax and sends the receipt. Prices are shown on each product's page before you pay. I see your name, email and what you bought, never your card number. For a refund, email [official@camtoan.me](mailto:official@camtoan.me) and I'll handle it through Gumroad.
+**No products are sold here.** Kaiyori is at the idea stage and has no price yet. If you bought a product earlier through [Gumroad](https://gumroad.com), Gumroad keeps the purchase record, and you can email [official@camtoan.me](mailto:official@camtoan.me) about it.
 
 **Services** are quoted and agreed in writing before any work starts. Prices are in Canadian dollars. The quote states the price, what's included and how to pay.
 

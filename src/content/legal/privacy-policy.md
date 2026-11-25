@@ -3,12 +3,12 @@ title: Privacy policy
 description: What this site knows about you (very little), who else sees it, and your rights.
 order: 1
 status: in-effect
-updated: 2026-11-09
+updated: 2026-11-24
 ---
 
 ## The short version
 
-kamllistos.com is a static website. It has no accounts, no sign-up forms, no analytics scripts, no advertising and no tracking cookies. I only learn who you are if you email me or buy something.
+kamllistos.com is a static website. It has no accounts, no sign-up forms, no analytics scripts, no advertising and no tracking cookies. I only learn who you are if you email me or hire me for a service.
 
 This site is run by Cam Toan Do, a sole operator based in Calgary, Alberta, Canada. Contact: [official@camtoan.me](mailto:official@camtoan.me).
 
@@ -20,18 +20,17 @@ This site is run by Cam Toan Do, a sole operator based in Calgary, Alberta, Cana
 | You use the theme toggle | Your choice of light or dark, saved in your own browser | Nobody. It never leaves your device. See [Cookies](/legal/cookies/). |
 | You call the public API | The same technical request data as a page visit | Cloudflare. The API stores nothing. |
 | You email me | Your email address and whatever you write | Proton Mail, my email provider |
-| You buy or download a product | Name, email, payment and tax details | Gumroad, which runs the checkout. I see your name, email and what you bought, never your card number. |
 | You hire me for a service | Whatever we agree is needed for the work | Agreed in writing before work starts |
 
-Links to other sites (Gumroad, Substack, GitHub, Credly and others) take you to their sites, where their own privacy policies apply.
+Links to other sites (Substack, GitHub, Credly and others) take you to their sites, where their own privacy policies apply.
 
 ## What I use it for
 
-To answer you, deliver what you bought or hired me for, keep the site secure and running, and keep the records the law requires. Nothing else. I don't sell personal information and I don't use it for advertising. The reasons in law are on the [Legal basis](/legal/legal-basis/) page.
+To answer you, do the work you hired me for, keep the site secure and running, and keep the records the law requires. Nothing else. I don't sell personal information and I don't use it for advertising. The reasons in law are on the [Legal basis](/legal/legal-basis/) page.
 
 ## Who else sees it
 
-Only the service providers that run the site, email and checkout. The full list is on [Third-party disclosure](/legal/third-party-disclosure/). Some of them store data outside Canada.
+Only the service providers that run the site and email. The full list is on [Third-party disclosure](/legal/third-party-disclosure/). Some of them store data outside Canada.
 
 ## Your rights
 

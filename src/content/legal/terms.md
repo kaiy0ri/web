@@ -1,9 +1,9 @@
 ---
 title: Terms & conditions
-description: The rules for using this site, its free database and its API.
+description: The rules for using this site and its API.
 order: 2
 status: in-effect
-updated: 2026-11-09
+updated: 2026-11-24
 ---
 
 ## Using this site
@@ -12,7 +12,7 @@ By using kamllistos.com you agree to these terms. If you don't agree, please don
 
 ## What this site is, and isn't
 
-- **General information, not professional advice.** The security feature database, docs and API are general guidance. They aren't a security assessment of your app or business, and they aren't legal advice.
+- **General information, not professional advice.** The docs and API are general guidance. They aren't a security assessment of your app or business, and they aren't legal advice.
 - **No client relationship.** Reading the site, using the API or emailing me doesn't make you a client. That only happens when we agree to a service in writing.
 - **You're responsible for what you build.** Prompts and example code are starting points. AI tools produce output I don't control. Test everything before you rely on it, and get a professional review for anything that matters.
 - **Only test what you're allowed to.** Use what you learn here on systems you own or have written permission to test. Accessing someone else's system without permission is a crime in Canada and most other places.
@@ -27,7 +27,6 @@ To the fullest extent the law allows:
 
 - I'm not liable for indirect or consequential loss, including lost profits, lost data, business interruption or the cost of a security incident, that comes from using or relying on the site.
 - For anything free, my total liability is limited to CA$100.
-- For a paid product, my total liability is limited to what you paid for that product.
 
 **Your legal rights are not affected.** Some consumer protection laws give you rights that can't be signed away. Nothing in these terms limits those rights, or liability that can't legally be limited.
 
@@ -41,9 +40,9 @@ If you break these terms or the law while using the site, and that leads to a cl
 - The [REST API](/docs/rest-api/) is public and read-only. Use it reasonably. I may rate-limit or block abusive traffic.
 - Content is protected by copyright. What you may and may not reuse is on the [Intellectual property](/legal/intellectual-property/) page.
 
-## Products and services
+## Services
 
-- **Products** are sold through Gumroad. Checkout, payment and receipts follow Gumroad's terms as well as the [Payments](/legal/payments-subscriptions/) page.
+- **Nothing is sold on this site.** How paying works is on the [Payments](/legal/payments-subscriptions/) page.
 - **Services** (health checks, documentation, reviews, retainers) are each agreed in writing before work starts. That written agreement sets the scope, price, timeline and liability, and it overrides this page where they differ.
 
 ## Other sites
