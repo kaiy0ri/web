@@ -7,7 +7,7 @@ const pages = (await getCollection("legal")).sort((a, b) => a.data.order - b.dat
 const label = { "in-effect": "In effect", standby: "Standby" };
 ---
 
-<Base title={`Legal & privacy — ${site.brand.name}`} description="This site collects almost nothing: no accounts, no forms, no tracking. Each page says what is true today and the plan if that changes.">
+<Base title={`Legal & privacy | ${site.brand.name}`} description="This site collects almost nothing: no accounts, no forms, no tracking. Each page says what is true today and the plan if that changes.">
   <section class="hero">
     <h1>Legal and privacy, in plain English</h1>
     <p class="lead">This site collects almost nothing: no accounts, no forms, no tracking. Each page says what's true today and what would have to happen before that changes. <span class="status status-in-effect">in effect</span> applies now. <span class="status status-standby">standby</span> is a plan that's ready for when it's needed.</p>

@@ -26,7 +26,7 @@ export const stack: { group: string; items: Tech[] }[] = [
       { name: "SAST (CodeQL)", status: "in-use", what: "Scans the code for security bugs on every change and weekly.", doc: "codeql" },
       { name: "Dependabot", status: "in-use", what: "Alerts on vulnerable dependencies and opens update pull requests.", doc: "dependabot" },
       { name: "OWASP Top 10", status: "in-use", what: "Every risk mapped to how this site handles it.", doc: "owasp-top-10" },
-      { name: "Security headers & TLS", status: "in-use", what: "Strict CSP, HSTS and friends — verified every hour.", doc: "owasp-top-10" },
+      { name: "Security headers & TLS", status: "in-use", what: "Strict CSP, HSTS and other headers, checked every hour.", doc: "owasp-top-10" },
     ],
   },
   {
@@ -45,7 +45,7 @@ export const stack: { group: string; items: Tech[] }[] = [
       { name: "Docker", status: "planned", what: "Package the Python tool so it runs the same everywhere." },
       { name: "SQL & databases", status: "planned", what: "Only if a feature genuinely needs stored data." },
       { name: "SIEM (Splunk / ELK)", status: "lab", what: "A home-lab project and write-up, not part of this site." },
-      { name: "Kubernetes", status: "lab", what: "A home-lab project — overkill for a static site." },
+      { name: "Kubernetes", status: "lab", what: "A home-lab project. Too much for a static site." },
     ],
   },
 ];
