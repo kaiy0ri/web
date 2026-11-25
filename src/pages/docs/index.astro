@@ -11,7 +11,7 @@ const docs = (await getCollection("docs")).sort((a, b) => a.data.order - b.data.
     <h1>How this site is built and secured</h1>
     <p class="lead">Plain-English documentation for the tools behind this site. It explains how each control works. It never includes keys, tokens or account details.</p>
   </section>
-  <section class="band band-gray">
+  <section class="band">
     <ul class="rows rows-2">
       {docs.map((d) => (
         <li class="row">

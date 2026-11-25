@@ -10,7 +10,7 @@ import { stack, statusLabel } from "../stack";
     <p class="lead">Every tool here is labelled honestly: in use, planned, or a separate lab project. Click through for the docs.</p>
   </section>
   {stack.map((g, i) => (
-    <section class={`band ${i % 2 === 0 ? "band-gray" : ""}`}>
+    <section class="band">
       <h2 class="center">{g.group}</h2>
       <ul class="rows rows-4">
         {g.items.map((t) => (
