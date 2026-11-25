@@ -7,13 +7,13 @@ updated: 2026-11-24
 
 ## The big picture
 
-kamllistos.com is a **static site**. Every page is built ahead of time into plain files. There's no database, no login and no server of mine to break into. The only code that runs when you visit is a small read-only API.
+kaiyori.dev is a **static site**. Every page is built ahead of time into plain files. There's no database, no login and no server of mine to break into. The only code that runs when you visit is a small read-only API. The old address, kamllistos.com, permanently redirects every page to the same page on kaiyori.dev.
 
 ```
  Write          Build & check              Serve                    Visit
 ┌────────┐    ┌──────────────────┐    ┌──────────────────┐    ┌───────────────┐
 │ GitHub │───▶│ GitHub Actions   │    │ Cloudflare       │───▶│ Your browser  │
-│ (main) │    │ build · checks   │    │ Workers          │    │ kamllistos.com│
+│ (main) │    │ build · checks   │    │ Workers          │    │ kaiyori.dev   │
 └───┬────┘    │ CodeQL scan      │    │ static files     │    └───────────────┘
     │         └──────────────────┘    │ + /api (read-only)│            ▲
     │                                 └──────────────────┘            │
@@ -49,7 +49,7 @@ kamllistos.com is a **static site**. Every page is built ahead of time into plai
 | Service | Role |
 | --- | --- |
 | GitHub | Code, history, build checks, code scanning, dependency updates |
-| Cloudflare | Hosting, DNS and the domain registration for kamllistos.com |
+| Cloudflare | Hosting, DNS and the domain registrations for kaiyori.dev and the old kamllistos.com |
 | Proton Mail | Email, with SPF, DKIM and DMARC on the domain |
 | Upptime | The [status page](https://status.camtoan.me), which checks uptime every 5 minutes |
 | camtoan.me | The owner's personal site, a separate repo on GitHub Pages. The blog and services pages live there; old `/blog` and `/services` links redirect to them. |

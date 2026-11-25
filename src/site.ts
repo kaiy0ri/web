@@ -4,7 +4,7 @@ export const site = {
   headline: "Idea to MVP.\nEven better.",
   email: "official@camtoan.me",
 
-  // The SaaS brand (idea stage, not built or launched). The site stays on kamllistos.com for now.
+  // The SaaS brand (idea stage, not built or launched). The site lives on kaiyori.dev (formerly kamllistos.com, which redirects).
   brand: {
     name: "Kaiyori",
     pronounce: "kai-YO-ri",
@@ -16,7 +16,7 @@ export const site = {
   pgp: { file: "/pgp.asc", fingerprint: "9083 9B9E C1CD 87EB C933  EB78 49A2 57EE 9CAE 466F" },
 
   links: [
-    { label: "GitHub", url: "https://github.com/kamllistos" },
+    { label: "GitHub", url: "https://github.com/kaiy0ri" },
     { label: "Substack", url: "https://substack.com/@camtoando" },
   ],
 };

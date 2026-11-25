@@ -22,8 +22,8 @@ const org = {
   "@context": "https://schema.org",
   "@type": "Organization",
   name: site.brand.name,
-  url: "https://kamllistos.com/",
-  logo: "https://kamllistos.com/icon.png",
+  url: "https://kaiyori.dev/",
+  logo: "https://kaiyori.dev/icon.png",
   description: site.brand.description,
   founder: { "@type": "Person", name: site.name, url: "https://camtoan.me" },
   sameAs: site.links.map((l) => l.url),
@@ -46,7 +46,7 @@ const graph = JSON.stringify(ld ? [org, ld] : org).replace(/</g, "\\u003c");
     <meta property="og:url" content={url} />
     <meta property="og:title" content={title} />
     <meta property="og:description" content={description} />
-    <meta property="og:image" content="https://kamllistos.com/og.png" />
+    <meta property="og:image" content="https://kaiyori.dev/og.png" />
     <meta name="twitter:card" content="summary_large_image" />
     <link rel="preload" href="/fonts/schibsted-grotesk.woff2" as="font" type="font/woff2" crossorigin />
     <link rel="canonical" href={url} />

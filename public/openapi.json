@@ -3,14 +3,14 @@
   "info": {
     "title": "Kaiyori API",
     "version": "1.0.0",
-    "description": "Small, public, read-only REST API behind kamllistos.com. No authentication, no user data. GET only.",
+    "description": "Small, public, read-only REST API behind kaiyori.dev. No authentication, no user data. GET only.",
     "contact": {
       "email": "official@camtoan.me"
     }
   },
   "servers": [
     {
-      "url": "https://kamllistos.com"
+      "url": "https://kaiyori.dev"
     }
   ],
   "paths": {

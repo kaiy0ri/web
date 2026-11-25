@@ -33,7 +33,7 @@ export const stack: { group: string; items: Tech[] }[] = [
     group: "APIs",
     items: [
       { name: "REST API", status: "in-use", what: "Public read-only endpoints for site status and the changelog.", doc: "rest-api", link: { label: "Try /api", url: "/api" } },
-      { name: "Postman", status: "in-use", what: "A tested collection (16 assertions) run hourly with Newman.", doc: "rest-api", link: { label: "Collection", url: "/postman/kamllistos-api.postman_collection.json" } },
+      { name: "Postman", status: "in-use", what: "A tested collection (16 assertions) run hourly with Newman.", doc: "rest-api", link: { label: "Collection", url: "/postman/kaiyori-api.postman_collection.json" } },
       { name: "OpenAPI", status: "in-use", what: "Machine-readable description of every endpoint.", link: { label: "openapi.json", url: "/openapi.json" } },
     ],
   },

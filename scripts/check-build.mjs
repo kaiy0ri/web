@@ -20,7 +20,7 @@ const sitemap = readFileSync(join(DIST, "sitemap.xml"), "utf8");
 for (const file of html) {
   if (file.endsWith("404.html")) continue;
   const path = "/" + file.slice(DIST.length + 1).replace(/index\.html$/, "");
-  if (!sitemap.includes(`<loc>https://kamllistos.com${path}</loc>`)) fail(`${file}: missing from sitemap.xml (add it in src/pages/sitemap.xml.ts)`);
+  if (!sitemap.includes(`<loc>https://kaiyori.dev${path}</loc>`)) fail(`${file}: missing from sitemap.xml (add it in src/pages/sitemap.xml.ts)`);
 }
 if (!existsSync(join(DIST, "llms.txt"))) fail("dist/llms.txt missing");
 
@@ -79,7 +79,7 @@ for (const id of LEGAL) {
 const REVIEWED = [];
 const TRIPWIRES = [
   { name: "form", in: html, pattern: /<form[\s>]/i, pages: "privacy-policy, legal-basis, data-retention" },
-  { name: "third-party-embed", in: html, pattern: /<(script|iframe|img|link)\b[^>]*\s(src|href)="(https?:)?\/\/(?!kamllistos\.com)[^"]*"/i, pages: "third-party-disclosure, cookies, data-processing-agreements" },
+  { name: "third-party-embed", in: html, pattern: /<(script|iframe|img|link)\b[^>]*\s(src|href)="(https?:)?\/\/(?!kaiyori\.dev)[^"]*"/i, pages: "third-party-disclosure, cookies, data-processing-agreements" },
   { name: "cookie", in: files(DIST).filter((f) => f.endsWith(".js")), pattern: /document\.cookie/, pages: "cookies" },
 ];
 for (const t of TRIPWIRES) {

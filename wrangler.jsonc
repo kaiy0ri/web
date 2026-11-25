@@ -3,9 +3,10 @@
 {
   "name": "camtoan-me",
   // Domains this Worker answers on (Cloudflare creates them on deploy).
+  // kamllistos.com (old address) is not here: a Cloudflare Redirect Rule on that zone sends it to kaiyori.dev.
   // camtoan.me is not here: it's the personal site, hosted on GitHub Pages (camtoan-do/website).
   "routes": [
-    { "pattern": "kamllistos.com", "custom_domain": true }
+    { "pattern": "kaiyori.dev", "custom_domain": true }
   ],
   "compatibility_date": "2026-10-13",
   "main": "./worker/index.ts",

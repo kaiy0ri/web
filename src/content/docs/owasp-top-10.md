@@ -7,7 +7,7 @@ updated: 2026-10-17
 
 ## What it is
 
-The **OWASP Top 10** is the most widely used list of the biggest security risks for web applications, published by the nonprofit Open Worldwide Application Security Project. Below is each risk in the 2025 edition, and how kamllistos.com handles it, including where it simply doesn't apply.
+The **OWASP Top 10** is the most widely used list of the biggest security risks for web applications, published by the nonprofit Open Worldwide Application Security Project. Below is each risk in the 2025 edition, and how kaiyori.dev handles it, including where it simply doesn't apply.
 
 | Risk | How it's handled here |
 | --- | --- |
@@ -24,6 +24,6 @@ The **OWASP Top 10** is the most widely used list of the biggest security risks 
 
 ## Verify it yourself
 
-- Headers: [securityheaders.com](https://securityheaders.com/?q=kamllistos.com&followRedirects=on) · [Mozilla Observatory](https://developer.mozilla.org/en-US/observatory/analyze?host=kamllistos.com)
-- TLS: [SSL Labs](https://www.ssllabs.com/ssltest/analyze.html?d=kamllistos.com)
+- Headers: [securityheaders.com](https://securityheaders.com/?q=kaiyori.dev&followRedirects=on) · [Mozilla Observatory](https://developer.mozilla.org/en-US/observatory/analyze?host=kaiyori.dev)
+- TLS: [SSL Labs](https://www.ssllabs.com/ssltest/analyze.html?d=kaiyori.dev)
 - Code: [public repository](https://github.com/kaiy0ri/web)

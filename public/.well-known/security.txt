@@ -1,6 +1,6 @@
 Contact: mailto:official@camtoan.me
 Expires: 2027-10-15T00:00:00.000Z
-Encryption: https://kamllistos.com/pgp.asc
-Policy: https://kamllistos.com/security
+Encryption: https://kaiyori.dev/pgp.asc
+Policy: https://kaiyori.dev/security
 Preferred-Languages: en
-Canonical: https://kamllistos.com/.well-known/security.txt
+Canonical: https://kaiyori.dev/.well-known/security.txt

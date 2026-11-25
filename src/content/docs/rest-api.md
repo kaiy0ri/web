@@ -7,11 +7,11 @@ updated: 2026-11-22
 
 ## What it is
 
-A **REST API** lets programs ask a website for data over HTTP and get structured answers back (JSON). The Kaiyori API exposes the site's public data: site status and the changelog. It runs on Cloudflare Workers, which runs code at the network edge, and only for paths under `/api/`. Everything else on kamllistos.com stays static files.
+A **REST API** lets programs ask a website for data over HTTP and get structured answers back (JSON). The Kaiyori API exposes the site's public data: site status and the changelog. It runs on Cloudflare Workers, which runs code at the network edge, and only for paths under `/api/`. Everything else on kaiyori.dev stays static files.
 
 ## Endpoints
 
-Base URL: `https://kamllistos.com`
+Base URL: `https://kaiyori.dev`
 
 | Method | Path | Returns |
 | --- | --- | --- |
@@ -22,12 +22,12 @@ Base URL: `https://kamllistos.com`
 Try it from a terminal:
 
 ```bash
-curl https://kamllistos.com/api/changelog?limit=5
+curl https://kaiyori.dev/api/changelog?limit=5
 ```
 
 ## Postman
 
-- **Collection:** [download it](/postman/kamllistos-api.postman_collection.json) and import it into Postman (File → Import). It has 4 requests with 10 automated tests, covering correct responses, security headers, and rejection of bad input.
+- **Collection:** [download it](/postman/kaiyori-api.postman_collection.json) and import it into Postman (File → Import). It has 4 requests with 10 automated tests, covering correct responses, security headers, and rejection of bad input.
 - **OpenAPI spec:** [`/openapi.json`](/openapi.json) describes every endpoint in a standard format that Postman and other tools can import.
 - **Automated:** the same collection runs **every hour** against the live API with Newman, Postman's command-line runner, as part of the [live checks](/docs/github-actions/).
 

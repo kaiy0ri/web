@@ -1,7 +1,7 @@
 import { defineConfig } from "astro/config";
 
 export default defineConfig({
-  site: "https://kamllistos.com",
+  site: "https://kaiyori.dev",
   // Emit CSS as files (not inline) so the strict Content-Security-Policy in public/_headers holds.
   build: { inlineStylesheets: "never" },
   // Syntax highlighting emits inline style="" attributes, which the strict CSP blocks.

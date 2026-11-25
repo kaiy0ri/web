@@ -1,13 +1,13 @@
 {
   "info": {
     "name": "Kaiyori API",
-    "description": "Public read-only API behind kamllistos.com. Docs: https://kamllistos.com/docs/rest-api/",
+    "description": "Public read-only API behind kaiyori.dev. Docs: https://kaiyori.dev/docs/rest-api/",
     "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
   },
   "variable": [
     {
       "key": "baseUrl",
-      "value": "https://kamllistos.com"
+      "value": "https://kaiyori.dev"
     }
   ],
   "item": [
