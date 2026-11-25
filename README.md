@@ -1,4 +1,4 @@
-# Kamllistos
+# Kaiyori
 
 [![CI](https://github.com/kaiy0ri/web/actions/workflows/ci.yml/badge.svg)](https://github.com/kaiy0ri/web/actions/workflows/ci.yml)
 [![Live checks](https://github.com/kaiy0ri/web/actions/workflows/live.yml/badge.svg)](https://github.com/kaiy0ri/web/actions/workflows/live.yml)
@@ -6,14 +6,14 @@
 
 The personal website of **Cam Toan Do**, cybersecurity coordinator. It offers practical security help for small businesses and individuals.
 
-**Live:** https://kamllistos.com
+**Live:** https://kaiyori.dev
 
 The site itself is a small portfolio project. It's a static site hardened like production infrastructure, and you can check every claim it makes.
 
 ## Architecture
 
 ```
-GitHub (main) ──push──▶ Cloudflare Workers build (Astro) ──▶ Cloudflare edge ──▶ https://kamllistos.com
+GitHub (main) ──push──▶ Cloudflare Workers build (Astro) ──▶ Cloudflare edge ──▶ https://kaiyori.dev
      │                                                                   ▲
      ├── CI: build + checks on every push / PR                           │
      └── Live checks: every hour + after each deploy ────────────────────┘
@@ -32,11 +32,11 @@ DNS: Cloudflare (domain registered at Namecheap)   ·   Email: Proton Mail (SPF,
 
 - **Small attack surface.** There's no server, database, login or third-party script.
 - **Strict headers** ([`public/_headers`](public/_headers)): a `Content-Security-Policy` (`default-src 'self'`) that allows no inline code, HSTS, `X-Frame-Options: DENY`, `nosniff`, `Referrer-Policy` and `Permissions-Policy`.
-- **Responsible disclosure:** [`/security`](https://kamllistos.com/security) and [`security.txt`](https://kamllistos.com/.well-known/security.txt) (RFC 9116).
-- **Encrypted contact:** [PGP key](https://kamllistos.com/pgp.asc), fingerprint `9083 9B9E C1CD 87EB C933 EB78 49A2 57EE 9CAE 466F`.
+- **Responsible disclosure:** [`/security`](https://kaiyori.dev/security) and [`security.txt`](https://kaiyori.dev/.well-known/security.txt) (RFC 9116).
+- **Encrypted contact:** [PGP key](https://kaiyori.dev/pgp.asc), fingerprint `9083 9B9E C1CD 87EB C933 EB78 49A2 57EE 9CAE 466F`.
 - **Email anti-spoofing:** SPF, DKIM and DMARC are set on the domain.
 
-You can verify these yourself: [securityheaders.com](https://securityheaders.com/?q=kamllistos.com&followRedirects=on) · [Mozilla Observatory](https://developer.mozilla.org/en-US/observatory/analyze?host=kamllistos.com) · [SSL Labs](https://www.ssllabs.com/ssltest/analyze.html?d=kamllistos.com)
+You can verify these yourself: [securityheaders.com](https://securityheaders.com/?q=kaiyori.dev&followRedirects=on) · [Mozilla Observatory](https://developer.mozilla.org/en-US/observatory/analyze?host=kaiyori.dev) · [SSL Labs](https://www.ssllabs.com/ssltest/analyze.html?d=kaiyori.dev)
 
 ## Reliability checks
 
@@ -47,15 +47,15 @@ You can verify these yourself: [securityheaders.com](https://securityheaders.com
 
 Each live run writes a results table to its run summary on the [Actions tab](https://github.com/kaiy0ri/web/actions/workflows/live.yml). A failed run emails the owner.
 
-**Status page:** [status.camtoan.me](https://status.camtoan.me) shows uptime history and response times. It's built with [Upptime](https://upptime.js.org) in [kamllistos/status](https://github.com/kamllistos/status). It checks every 5 minutes, and outages open and close GitHub issues automatically.
+**Status page:** [status.camtoan.me](https://status.camtoan.me) shows uptime history and response times. It's built with [Upptime](https://upptime.js.org) in [kaiy0ri/status](https://github.com/kaiy0ri/status). It checks every 5 minutes, and outages open and close GitHub issues automatically.
 
 ## Docs, API & changelog
 
-- **Public docs:** [kamllistos.com/docs](https://kamllistos.com/docs/) — Architecture, Git & GitHub, GitHub Actions, CodeQL, Dependabot, REST API & Postman, OWASP Top 10.
-- **Legal & privacy:** [kamllistos.com/legal](https://kamllistos.com/legal/) — privacy, terms, cookies, retention, breach procedure and more, each labelled in effect / standby.
-- **Stack:** [kamllistos.com/stack](https://kamllistos.com/stack/) — every tool, honestly labelled in use / planned / lab.
-- **REST API:** read-only JSON on [`/api`](https://kamllistos.com/api) ([`worker/index.ts`](worker/index.ts)), described by [`openapi.json`](public/openapi.json) and tested hourly with the [Postman collection](public/postman/kamllistos-api.postman_collection.json).
-- **Changelog:** [kamllistos.com/changelog](https://kamllistos.com/changelog/), generated from this repo's commit history.
+- **Public docs:** [kaiyori.dev/docs](https://kaiyori.dev/docs/) — Architecture, Git & GitHub, GitHub Actions, CodeQL, Dependabot, REST API & Postman, OWASP Top 10.
+- **Legal & privacy:** [kaiyori.dev/legal](https://kaiyori.dev/legal/) — privacy, terms, cookies, retention, breach procedure and more, each labelled in effect / standby.
+- **Stack:** [kaiyori.dev/stack](https://kaiyori.dev/stack/) — every tool, honestly labelled in use / planned / lab.
+- **REST API:** read-only JSON on [`/api`](https://kaiyori.dev/api) ([`worker/index.ts`](worker/index.ts)), described by [`openapi.json`](public/openapi.json) and tested hourly with the [Postman collection](public/postman/kaiyori-api.postman_collection.json).
+- **Changelog:** [kaiyori.dev/changelog](https://kaiyori.dev/changelog/), generated from this repo's commit history.
 
 ## Project structure
 
@@ -97,4 +97,4 @@ Pushing to `main` deploys automatically.
 
 ## Contact
 
-[official@camtoan.me](mailto:official@camtoan.me) · Found a security issue? See [/security](https://kamllistos.com/security).
+[official@camtoan.me](mailto:official@camtoan.me) · Found a security issue? See [/security](https://kaiyori.dev/security).

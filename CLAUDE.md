@@ -1,15 +1,15 @@
-# Kaiyori (kamllistos.com) — project notes
+# Kaiyori (kaiyori.dev) — project notes
 
-Kaiyori (pronounced kai-YO-ri) = kai, from kaizen (改善, continuous improvement) + yori (より, "more than"): keep making the product better, step by step. Text in `site.brand.meaning`. It is a SaaS for product management that turns an idea into an MVP. **Idea stage, not built or launched**: the site says so plainly (home `#how` lead and closing "Stage: idea" line), offers early access by email only, and has no fake customers, metrics, pricing, login or signup. Built by Cam Toan Do (Cybersecurity Coordinator, Calgary). The domain stays kamllistos.com for now; GitHub org/repo names also keep the old name.
+Kaiyori (pronounced kai-YO-ri) = kai, from kaizen (改善, continuous improvement) + yori (より, "more than"): keep making the product better, step by step. Text in `site.brand.meaning`. It is a SaaS for product management that turns an idea into an MVP. **Idea stage, not built or launched**: the site says so plainly (home `#how` lead and closing "Stage: idea" line), offers early access by email only, and has no fake customers, metrics, pricing, login or signup. Built by Cam Toan Do (Cybersecurity Coordinator, Calgary). The site lives on kaiyori.dev (moved from kamllistos.com in Nov 2026). GitHub org is `kaiy0ri` (renamed from `kamllistos`; GitHub redirects old repo URLs).
 Owner has no coding background: explain plainly, keep things simple, be honest.
 
 ## Stack (all free except domain + Proton)
 - Astro static site → Cloudflare Workers static assets (`wrangler.jsonc`), deploys on push to `main`.
-- Domains: **kamllistos.com** = this site (the business). **camtoan.me** = owner's personal site, hosted on GitHub Pages from camtoan-do/website (not this Worker); also keeps email + status page.
+- Domains: **kaiyori.dev** = this site (the business). **kamllistos.com** = old address: not on the Worker; a Cloudflare Single Redirect rule on the kamllistos.com zone 301s apex + www, every path, query string kept, to `https://kaiyori.dev` (needs a proxied placeholder `AAAA 100::` DNS record, else the rule never fires). `.dev` is HSTS-preloaded (HTTPS only), fine behind Cloudflare. Worker is still named `camtoan-me` (renaming creates a new Worker and breaks the Workers Builds link; leave it). **camtoan.me** = owner's personal site, hosted on GitHub Pages from camtoan-do/website (not this Worker); also keeps email + status page.
 - Public read-only REST API on `/api/*` (`worker/index.ts`, GET only): `/api`, `/api/health`, `/api/changelog`. Spec `public/openapi.json`; Postman collection `public/postman/` (run hourly via Newman in live checks).
-- DNS: Cloudflare. camtoan.me registered at Namecheap (nameservers seamus/tegan, auto-renew on, expires 2027-07-08); kamllistos.com registered at Cloudflare.
+- DNS: Cloudflare. camtoan.me registered at Namecheap (nameservers seamus/tegan, auto-renew on, expires 2027-07-08); kaiyori.dev and kamllistos.com registered at Cloudflare.
 - Email: Proton Mail, official@camtoan.me. MX/SPF/DKIM(3 CNAMEs)/DMARC must stay **DNS only** in Cloudflare.
-- Status page: status.camtoan.me (Upptime, repo kamllistos/status, CNAME → kamllistos.github.io, DNS only).
+- Status page: status.camtoan.me (Upptime, repo kaiy0ri/status, CNAME → kamllistos.github.io (old org name, still resolves; `check-live.mjs` asserts it. Optional: repoint to kaiy0ri.github.io and update the check), DNS only).
 - Blog: lives on camtoan.me/blog (repo camtoan-do/website, refreshed daily from Substack by a GitHub Action there). `/blog*` here redirects to it. Services also live on camtoan.me/services (`/services` redirects).
 - Netlify: old host, kept briefly as fallback; to be deleted.
 
@@ -39,6 +39,7 @@ Owner has no coding background: explain plainly, keep things simple, be honest.
 - Public docs must never include secrets, token values, account IDs or private contact details.
 
 ## Open items
+- Domain move to kaiyori.dev (Cam, in Cloudflare, in order): add kaiyori.dev as a custom domain on Worker `camtoan-me` (or let the deploy add it) → www.kaiyori.dev → apex redirect rule → Single Redirect on kamllistos.com zone (apex + www → `https://kaiyori.dev` + path, keep query) → merge to main → if kamllistos.com is still a Worker custom domain, remove it and add proxied `AAAA @ 100::` + `AAAA www 100::` → Search Console: add kaiyori.dev, submit sitemap, Change of Address from kamllistos.com → keep kamllistos.com registered (auto-renew) for at least a year.
 - Enable DNSSEC (Cloudflare → DS record in Namecheap).
 - Delete Netlify project after a stable week.
 - Optional: blameless postmortem of the cutover outage; Lambda "website security check" tool.
