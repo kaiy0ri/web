@@ -15,7 +15,7 @@ const docs = (await getCollection("docs")).sort((a, b) => a.data.order - b.data.
     <ul class="rows rows-2">
       {docs.map((d) => (
         <li class="row">
-          <h3><a class="row-link" href={`/docs/${d.id}/`}>{d.data.title}</a></h3>
+          <h2><a class="row-link" href={`/docs/${d.id}/`}>{d.data.title}</a></h2>
           <p>{d.data.description}</p>
         </li>
       ))}

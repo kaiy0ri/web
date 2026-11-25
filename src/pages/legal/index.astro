@@ -16,7 +16,7 @@ const label = { "in-effect": "In effect", standby: "Standby" };
     <ul class="rows">
       {pages.map((p) => (
         <li class="row">
-          <h3><a class="row-link" href={`/legal/${p.id}/`}>{p.data.title}</a></h3>
+          <h2><a class="row-link" href={`/legal/${p.id}/`}>{p.data.title}</a></h2>
           <p>{p.data.description}</p>
           <span class={`status status-${p.data.status}`}>{label[p.data.status]}</span>
         </li>
