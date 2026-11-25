@@ -3,12 +3,12 @@ title: Terms & conditions
 description: The rules for using this site and its API.
 order: 2
 status: in-effect
-updated: 2026-11-24
+updated: 2026-11-25
 ---
 
 ## Using this site
 
-By using kamllistos.com you agree to these terms. If you don't agree, please don't use the site.
+By using kaiyori.dev you agree to these terms. If you don't agree, please don't use the site.
 
 ## What this site is, and isn't
 

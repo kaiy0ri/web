@@ -3,12 +3,12 @@ title: Privacy policy
 description: What this site knows about you (very little), who else sees it, and your rights.
 order: 1
 status: in-effect
-updated: 2026-11-24
+updated: 2026-11-25
 ---
 
 ## The short version
 
-kamllistos.com is a static website. It has no accounts, no sign-up forms, no analytics scripts, no advertising and no tracking cookies. I only learn who you are if you email me or hire me for a service.
+kaiyori.dev is a static website. It has no accounts, no sign-up forms, no analytics scripts, no advertising and no tracking cookies. I only learn who you are if you email me or hire me for a service.
 
 This site is run by Cam Toan Do, a sole operator based in Calgary, Alberta, Canada. Contact: [official@camtoan.me](mailto:official@camtoan.me).
 

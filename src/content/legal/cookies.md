@@ -3,12 +3,12 @@ title: Cookies & consent
 description: This site sets no cookies. Here's what it stores instead, and the plan if that changes.
 order: 3
 status: in-effect
-updated: 2026-11-09
+updated: 2026-11-25
 ---
 
 ## Today: no cookies, no banner
 
-kamllistos.com sets **no cookies**. That's why you don't see a cookie banner: there's nothing to ask your consent for.
+kaiyori.dev sets **no cookies**. That's why you don't see a cookie banner: there's nothing to ask your consent for.
 
 The only thing saved in your browser is one item in local storage:
 

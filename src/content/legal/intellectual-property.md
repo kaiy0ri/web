@@ -3,12 +3,12 @@ title: Intellectual property
 description: Who owns what on this site, and what you may reuse.
 order: 12
 status: in-effect
-updated: 2026-11-24
+updated: 2026-11-25
 ---
 
 ## What's mine
 
-Unless stated otherwise, the text, design, documentation and code on kamllistos.com are © Cam Toan Do. "Kaiyori" is the name the site is published under.
+Unless stated otherwise, the text, design, documentation and code on kaiyori.dev are © Cam Toan Do. "Kaiyori" is the name the site is published under.
 
 ## What you may do
 

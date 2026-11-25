@@ -3,7 +3,7 @@ title: Third-party disclosure
 description: Every outside company that could see information about you through this site.
 order: 9
 status: in-effect
-updated: 2026-11-24
+updated: 2026-11-25
 ---
 
 ## The promise
@@ -21,7 +21,7 @@ I don't sell personal information. I don't share it for advertising. It only goe
 
 - **No analytics, advertising or social media trackers.** None are installed, and the site's security policy blocks third-party scripts.
 - **Fonts, scripts and images are served from this site**, so your browser doesn't contact anyone else to load a page.
-- **GitHub** builds the site and hosts the status page. It never receives visitor data from kamllistos.com.
+- **GitHub** builds the site and hosts the status page. It never receives visitor data from kaiyori.dev.
 
 ## When I'd disclose without asking
 
