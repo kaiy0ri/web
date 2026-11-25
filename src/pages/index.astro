@@ -137,6 +137,7 @@ const checks = [
                     <li><span><b>{c.name}</b> {c.text}</span><span class={c.ok ? "mock-ok" : "mock-fix"}>{c.ok ? "Passed" : "Fix first"}</span></li>
                   ))}
                 </ul>
+                <p class="mock-note mock-end">{checks.filter((c) => c.ok).length} passed, {checks.filter((c) => !c.ok).length} to fix before launch.</p>
               </div>
             </div>
 

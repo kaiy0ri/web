@@ -752,7 +752,8 @@ footer .updated:hover { color: var(--accent-text); text-decoration: underline; }
 .mock-stages [role="tab"] + [role="tab"] { border-left: 1px solid var(--line); }
 .mock-stages [role="tab"]:first-child { border-radius: 3px 0 0 3px; }
 .mock-stages [role="tab"]:last-child { border-radius: 0 3px 3px 0; }
-.mock-stages .past { color: var(--ink); }
+/* Stages before the selected one read as done: a 2px accent rule along their bottom edge. */
+.mock-stages .past { color: var(--ink); background: linear-gradient(var(--accent), var(--accent)) bottom / 100% 2px no-repeat; }
 .mock-stages [aria-selected="true"] { background: var(--ink); color: var(--bg); }
 .tabs-on .mock-stages [role="tab"] { cursor: pointer; }
 .tabs-on .mock-stages [aria-selected="false"]:hover { color: var(--ink); background: color-mix(in srgb, var(--ink) 7%, transparent); }
@@ -772,6 +773,10 @@ footer .updated:hover { color: var(--accent-text); text-decoration: underline; }
 .tabs-on .mock-body { grid-area: 1 / 1; }
 .tabs-on .mock-body[hidden] { display: grid; visibility: hidden; }
 .mock-spec, .mock-tasks { min-width: 0; }
+/* Every view shares the tallest one's height; on Secure the summary line sits at the bottom, not mid-air. */
+.mock-spec { display: flex; flex-direction: column; align-items: flex-start; }
+.mock-spec > .mock-checks { align-self: stretch; }
+.mock-end { margin-top: auto !important; padding-top: 16px; }
 .mock-spec p { margin: 0; color: var(--muted); }
 .mock-spec .mock-h { margin-top: 12px; color: var(--ink); font-weight: 700; }
 .mock-cap { margin: 0 0 8px; font: 400 12px/1.2 var(--mono); color: var(--muted); }
