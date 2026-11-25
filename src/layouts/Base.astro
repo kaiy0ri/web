@@ -7,7 +7,7 @@ import { whaleArt } from "../skysea";
 
 const latest = (await getChanges())[0];
 const earlyAccess = `mailto:${site.email}?subject=Kaiyori%20early%20access`;
-const whale = whaleArt(90); // the sky whale from src/skysea.ts, drawn as text at build time in true proportion
+const whale = whaleArt(64); // the sky whale from src/skysea.ts, drawn as text at build time in true proportion
 
 interface Props {
   title?: string;
@@ -112,36 +112,16 @@ const graph = JSON.stringify(ld ? [org, ld] : org).replace(/</g, "\\u003c");
           ))}
         </div>
       </div>
-      <div class="f-cols">
-        <div>
-          <h2>Product</h2>
-          <a href="/#how">How it works</a>
-          <a href={earlyAccess}>Early access</a>
-        </div>
-        <div>
-          <h2>Resources</h2>
-          <a href="/docs/">Docs</a>
-          <a href="/changelog/">Changelog</a>
-          <a href="/stack/">Stack</a>
-          <a href="https://camtoan.me/blog">Blog</a>
-        </div>
-        <div>
-          <h2>Company</h2>
-          <a href="https://camtoan.me">About</a>
-          <a href={`mailto:${site.email}`}>Contact</a>
-          <a href="/security/">Security &amp; disclosure</a>
-        </div>
-        <div>
-          <h2>Legal</h2>
-          <a href="/legal/">Legal &amp; privacy</a>
-          <a href="/legal/privacy-policy/">Privacy policy</a>
-          <a href="/legal/terms/">Terms</a>
-        </div>
-      </div>
+      <ul class="f-links" aria-label="Site links">
+        <li><a href="/#how">How it works</a><a href={earlyAccess}>Early access</a></li>
+        <li><a href="/docs/">Docs</a><a href="/changelog/">Changelog</a><a href="/stack/">Stack</a><a href="https://camtoan.me/blog">Blog</a></li>
+        <li><a href="https://camtoan.me">About</a><a href={`mailto:${site.email}`}>Contact</a><a href="/security/">Security</a></li>
+        <li><a href="/legal/">Legal &amp; privacy</a><a href="/legal/privacy-policy/">Privacy</a><a href="/legal/terms/">Terms</a></li>
+      </ul>
+      <pre class="f-whale" aria-hidden="true" set:html={whale} />
       <div class="f-bottom">
-        <pre class="f-whale" aria-hidden="true" set:html={whale} />
-        <span>© {new Date().getFullYear()} {site.brand.name} · built by {site.name}</span>
-        {latest && <a class="updated" href="/changelog/" data-updated={latest.date}>Last update: {new Date(latest.date).toLocaleDateString("en-US", { dateStyle: "medium", timeZone: "America/Edmonton" })}</a>}
+        <span>© {new Date().getFullYear()} {site.brand.name}. Built by {site.name}.</span>
+        {latest && <a class="updated" href="/changelog/">Last change {new Date(latest.date).toLocaleDateString("en-US", { dateStyle: "medium", timeZone: "America/Edmonton" })}</a>}
       </div>
     </footer>
     <script is:inline src="/site.js" defer></script>

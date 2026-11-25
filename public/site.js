@@ -1,15 +1,6 @@
 // Site-wide behaviour, loaded on every page (external file — strict CSP).
-// "Days since last update" in the footer, and the header dropdowns.
+// The header dropdowns.
 (() => {
-  // --- "X days since last update" (computed in the browser so it never goes stale) ---
-  for (const el of document.querySelectorAll(".updated[data-updated]")) {
-    const then = new Date(el.dataset.updated);
-    if (isNaN(then)) continue;
-    const days = Math.max(0, Math.floor((Date.now() - then.getTime()) / 864e5));
-    el.textContent = days === 0 ? "Updated today" : days === 1 ? "1 day since last update" : `${days} days since last update`;
-    el.title = `Last update: ${then.toLocaleString()}`;
-  }
-
   // --- Header dropdowns (<details>): only one open at a time; close on outside click, Escape or choosing a link ---
   const dds = [...document.querySelectorAll(".nav-dd")];
   dds.forEach((d) => d.addEventListener("toggle", () => {

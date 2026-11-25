@@ -689,29 +689,38 @@ a.tile:hover {
   html { scroll-padding-top: 110px; }
 }
 
-/* Footer: logo and socials, four link columns, then the small print. */
-footer.site-footer { display: block; text-align: left; padding: clamp(24px, 4vw, 44px) var(--gutter) 20px; font-family: var(--sans); }
+/* Footer: no card, a full-width hairline on top. Logo and socials, one row of links in hairline-divided groups (no
+   headings), the sky whale in miniature, then the small print with the date of the last change. */
+footer.site-footer {
+  display: block; width: auto; margin: clamp(56px, 9vw, 120px) 0 0; border-radius: 0; background: none; box-shadow: none !important;
+  border-top: 1px solid var(--line); text-align: left; font-family: var(--sans);
+  padding: clamp(24px, 4vw, 40px) max(var(--gutter), calc((100% - 1080px) / 2)) 20px;
+}
 .f-top, .f-bottom { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 14px 24px; }
-.f-top { padding-bottom: 22px; border-bottom: 1px solid var(--rule); }
 .f-brand { display: inline-flex; align-items: center; gap: 10px; color: var(--ink); font-weight: 800; font-size: 21px; letter-spacing: -.02em; text-decoration: none; }
 footer .f-brand:hover { color: var(--ink); }
 .f-social { display: flex; gap: 8px; }
-.f-social a { display: grid; place-items: center; min-width: 38px; height: 38px; padding: 0 10px; border-radius: 12px; box-shadow: inset 0 0 0 1px var(--rule); }
-.f-social a:hover { box-shadow: inset 0 0 0 1px var(--accent); }
-.f-cols { display: grid; grid-template-columns: repeat(4, 1fr); gap: 28px 24px; padding: clamp(24px, 3.5vw, 36px) 0; }
-.f-cols a { display: block; padding: 5px 0; font-size: 14px; text-decoration: none; }
-footer .f-cols h2 { margin: 0 0 10px; font: 400 11px/1 var(--mono); letter-spacing: .12em; text-transform: uppercase; color: var(--accent-text); }
-.f-bottom { padding-top: 18px; border-top: 1px solid var(--rule); font: 12px var(--mono); }
-/* The sky whale in miniature (whaleArt in src/skysea.ts): dim and mid characters keep the body's shading. It gets its own
-   row. Cells match the hero sky (9px, line-height 1.15, the ratio whaleArt draws for) and shrink only to keep all
-   98 columns (58.8em) inside the footer. */
-.f-bottom { container-type: inline-size; }
-.f-whale { flex: 0 0 100%; margin: 0 0 6px; font: min(9px, 100cqi / 59)/1.15 var(--mono); color: var(--accent); }
+.f-social a { display: grid; place-items: center; min-width: 38px; height: 38px; padding: 0 10px; border-radius: 10px; box-shadow: inset 0 0 0 1px var(--rule) !important; }
+.f-social a:hover { box-shadow: inset 0 0 0 1px var(--accent) !important; }
+.f-links { display: flex; flex-wrap: wrap; margin: clamp(20px, 3vw, 32px) 0 0; padding: 0; list-style: none; row-gap: 10px; }
+.f-links li { display: flex; flex-wrap: wrap; gap: 6px 18px; padding: 0 18px; border-left: 1px solid var(--line); }
+.f-links li:first-child { padding-left: 0; border-left: 0; }
+.f-links a { font-size: 14px; color: var(--ink); text-decoration: none; }
+.f-links a:hover { color: var(--accent-text); text-decoration: underline; text-underline-offset: 4px; }
+/* The sky whale in miniature (whaleArt(64) in src/skysea.ts, 78 columns, 46.8em): dim and mid characters keep the body's
+   shading. Cells match the hero sky (9px, line-height 1.15, the ratio whaleArt draws for) and shrink only to fit. */
+.site-footer { container-type: inline-size; }
+.f-whale { margin: clamp(28px, 4vw, 44px) 0 10px; font: min(9px, 100cqi / 47)/1.15 var(--mono); color: var(--accent); }
 .f-whale i { font-style: normal; }
 .f-whale .w1 { opacity: .55; } /* the hero's floor on paper, so the belly still shows in the light theme */
 .f-whale .w2 { opacity: .78; }
-@media (max-width: 860px) { .f-cols { grid-template-columns: repeat(2, 1fr); } }
-@media (max-width: 480px) { .f-cols { grid-template-columns: 1fr; } }
+.f-bottom { padding-top: 16px; border-top: 1px solid var(--rule); font: 12px var(--mono); color: var(--muted); }
+footer .updated { color: var(--muted); text-decoration: none; }
+footer .updated:hover { color: var(--accent-text); text-decoration: underline; }
+@media (max-width: 560px) {
+  .f-links { flex-direction: column; row-gap: 12px; }
+  .f-links li, .f-links li:first-child { padding: 0; border-left: 0; }
+}
 
 /* Home: sky hero with a product mock, a stepped path, a split "why" list, a closing line. Sans for reading, mono for tiny labels. */
 .landing, .sec { font-family: var(--sans); }

@@ -16,7 +16,6 @@ for (const c of changes) {
   <section class="hero">
     <h1>Every change,<span>in order.</span></h1>
     <p class="lead">Built automatically from this site's public Git history. Newest first.</p>
-    {changes[0] && <p class="updated-big"><span class="updated" data-updated={changes[0].date}>Last update: {day(changes[0].date)}</span></p>}
   </section>
   <section class="band band-gray">
     <div class="changelog">
