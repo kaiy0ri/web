@@ -35,13 +35,13 @@
 @media (prefers-color-scheme: dark) {
   :root:not([data-theme="light"]) {
     --sky-ink: color-mix(in srgb, var(--accent) 85%, var(--bg)); --sky-ink-hot: color-mix(in srgb, var(--accent) 60%, white);
-    --bg: #121211; --ink: #ecebe7; --muted: #9a9995; --accent: #ff5a2e; --accent-text: var(--accent);
+    --bg: #121211; --ink: #ecebe7; --muted: #9a9995; --accent: #ff5a2e; --accent-text: #ff7a52;
     --line: rgba(236, 235, 231, .22); --rule: rgba(236, 235, 231, .07);
   }
 }
 :root[data-theme="dark"] {
   --sky-ink: color-mix(in srgb, var(--accent) 85%, var(--bg)); --sky-ink-hot: color-mix(in srgb, var(--accent) 60%, white);
-  --bg: #121211; --ink: #ecebe7; --muted: #9a9995; --accent: #ff5a2e; --accent-text: var(--accent);
+  --bg: #121211; --ink: #ecebe7; --muted: #9a9995; --accent: #ff5a2e; --accent-text: #ff7a52;
   --line: rgba(236, 235, 231, .22); --rule: rgba(236, 235, 231, .07);
 }
 :root[data-theme="light"] { color-scheme: light; }
